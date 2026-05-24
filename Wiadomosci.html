@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Librus – Wiadomości</title>
+<link rel="icon" type="image/x-icon" href="favicon.png">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#333}
+/* Znajdź i podmień ten fragment */
+
+.layout{display:flex;height:calc(100vh - 56px)}
+.sidebar{width:260px;background:#fff;border-right:1px solid #ddd;padding:15px}
+.compose-btn {
+  width: 100%;
+  background: #123e61; /* Nowy kolor granatowy */
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+.header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: #f1eadf; border-bottom: 1px solid #d8dde3; gap: 20px; }
+    .logo { display: flex; align-items: center; margin-right: auto; }
+    .logo img { height: 65px; margin-right: 10px; }
+    .logo span { font-size: 22px; color: #123e61; font-weight: bold; }
+    .menu-header { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; flex-grow: 1; }
+    .menu-header .menu-item a { display: block; padding: 10px 18px; background: #ffffff; border: 1px solid #cfd5db; border-radius: 4px; text-decoration: none; color: #333; font-size: 13px; white-space: nowrap; }
+    .menu-header .menu-item a:hover { background: #e9edf2; }
+.main{flex:1;background:#fff;display:flex;flex-direction:column}
+.list{flex:1;overflow:auto}
+.row{display:grid;grid-template-columns:220px 1fr 90px;gap:10px;padding:12px 15px;border-bottom:1px solid #eee;cursor:pointer}
+.row.unread .sender,.row.unread .subject{font-weight:bold}
+.row:hover{background:#f9fafb}
+.sender{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.subject{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.date{text-align:right;font-size:13px;color:#666}
+.view{padding:20px;display:none}
+.view h2{margin-top:0}
+.compose{padding:20px;display:none;max-width:900px}
+.field{margin-bottom:15px}
+.field label{font-weight:bold;display:block;margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px}
+.field textarea{height:160px}
+.send-btn {
+  background: #123e61; /* Nowy kolor granatowy */
+  color: #fff;
+  border: 0;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.back{margin-bottom:15px;cursor:pointer;color:#2f80ed}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center}
+.modal-box{background:#fff;width:420px;max-height:80vh;overflow:auto;border-radius:6px;padding:20px}
+.tree .group{margin:6px 0}
+.tree .group-header{display:flex;align-items:center;gap:6px;cursor:pointer}
+.tree ul{list-style:none;padding-left:26px;display:none}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.top-btn{
+  color:#333;
+  text-decoration:none;
+  background:#ffffff;
+  padding:6px 12px;
+  border-radius:4px;
+  font-size:14px;
+}
+
+.top-btn:hover{
+  background:#7c8fa6;
+}
+
+.top-right{
+  font-size:14px;
+  opacity:0.95;
+}
+.user-info {
+  font-size: 12px;
+  color: #555;
+  text-align: right;
+  flex-shrink: 0;
+  min-width: 150px;
+}
+.menu { 
+  list-style: none; 
+  padding: 0; 
+  margin: 0; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; /* Odstęp między przyciskami */
+}
+
+/* Zamiana elementów listy w granatowe przyciski */
+.menu li { 
+  background: #123e61; /* Twój granatowy kolor */
+  color: white; 
+  padding: 12px 15px; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  text-align: center; 
+  font-weight: bold; 
+  transition: background 0.3s;
+  border: 1px solid #0d2d46;
+}
+
+/* Efekt po najechaniu myszką */
+.menu li:hover { 
+  background: #1a5685; 
+}
+
+/* Styl dla aktywnego przycisku (wybranego) */
+.menu li.active { 
+  background: #f1eadf; /* Kolor piaskowy dla wyróżnienia, co jest wybrane */
+  color: #123e61; 
+  border: 2px solid #123e61;
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <img src="21 maj 2025, 16_13_32.png" alt="P-Librus logo">
+    <span>P-Librus</span>
+  </div>
+  <div class="menu-header">
+    <div class="menu-item"><a href="Lekcja.html">Lekcja</a></div>
+    <div class="menu-item"><a href="Oceny.html">Oceny</a></div>
+    <div class="menu-item"><a href="Zachowanie.html">Zachowanie</a></div>
+    <div class="menu-item"><a href="Zastepstwa.html">Zastępstwa</a></div>
+    <div class="menu-item"><a href="Organizacja.html">Organizacja</a></div>
+    <div class="menu-item"><a href="Wiadomosci.html" style="background:#eef2f5; font-weight:bold;">Wiadomości</a></div>
+    <div class="menu-item"><a href="Ogloszenia.html">Ogłoszenia</a></div>
+    <div class="menu-item"><a href="Terminarz.html">Terminarz</a></div>
+  </div>
+<div class="user-info">
+    Jesteś zalogowany jako: <strong>Piotr Rejmentowski (nauczyciel)</strong>
+  </div>
+</div>
+
+<div class="layout">
+<aside class="sidebar">
+<button class="compose-btn" onclick="openCompose()">✉ UTWÓRZ WIADOMOŚĆ</button>
+<ul class="menu">
+<li class="active" onclick="showInbox(this)">📥 Odebrane</li>
+<li onclick="showSent(this)">📤 Wysłane</li>
+</ul>
+</aside>
+<main class="main">
+<div class="list" id="list"></div>
+<div class="view" id="view"></div>
+<div class="compose" id="compose">
+<div class="field">
+<label>Tryb</label>
+<select id="mode">
+<option value="toParents">Wyślij</option>
+<option value="toMe">Stwórz do mnie</option>
+</select>
+</div>
+<div class="field" id="senderField" style="display:none">
+  <label>Rola nadawcy</label>
+  <select id="senderRole" onchange="loadSenders()">
+    <option value="">— wybierz —</option>
+    <option value="Sekretariat">Sekretariat</option>
+    <option value="Nauczyciel">Nauczyciel</option>
+    <option value="Wychowawca">Wychowawca</option>
+    <option value="Pedagog">Pedagog/Psycholog</option>
+    <option value="Dyrektor">Dyrektor</option>
+	<option value="Klasa_6A">Klasa 6A</option>
+	<option value="Klasa_6B">Klasa 6B</option>
+	<option value="Klasa_7DE">Klasa 7DE</option>
+	<option value="Klasa_7G">Klasa 7G</option>
+	<option value="Klasa_8H">Klasa 8H</option>
+	<option value="Klasa_1C">Klasa 1C</option>
+	<option value="Klasa_2L">Klasa 2L</option>
+  </select>
+
+  <label style="margin-top:10px">Osoba</label>
+  <select id="senderPerson" disabled>
+    <option>— najpierw wybierz rolę —</option>
+  </select>
+</div>
+
+<div class="field">
+<label>Odbiorcy</label>
+<button onclick="openModal()">Wybierz odbiorców</button>
+<div id="chosen"></div>
+</div>
+<div class="field"><label>Temat</label><input id="subject"></div>
+<div class="field"><label>Treść</label><textarea id="body"></textarea></div>
+<button class="send-btn" onclick="sendMsg()">WYŚLIJ</button>
+</div>
+</main>
+</div>
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-box">
+<h3>Odbiorcy wiadomości</h3>
+<div class="tree">
+<div class="group">
+<div class="group-header" onclick="toggleGroup(this)">
+<input type="checkbox" onchange="toggleAll(this)"> Wychowawcy
+</div>
+<ul>
+<li><label><input type="checkbox" value="Maciej Bojnek"> Maciej Bojnek (6A)</label></li>
+<li><label><input type="checkbox" value="Patryk Prosiak"> Patryk Prosiak (6B)</label></li>
+<li><label><input type="checkbox" value="Julia Bośniak"> Julia Bośniak (7G)</label></li>
+<li><label><input type="checkbox" value="Martyna Wilska"> Martyna Wilska (7DE)</label></li>
+<li><label><input type="checkbox" value="Anna Łezka"> Anna Łezka (8H)</label></li>
+<li><label><input type="checkbox" value="Justyna Born"> Justyna Born (1C)</label></li>
+<li><label><input type="checkbox" value="Zuzanna Filipińska"> Zuzanna Filipińska (2L)</label></li>
+</ul>
+</div>
+<div class="group">
+<div class="group-header" onclick="toggleGroup(this)">
+<input type="checkbox" onchange="toggleAll(this)"> Nauczyciele
+</div>
+<ul>
+<li><label><input type="checkbox" value="Patryk Prosiak">Patryk Prosiak (Matematyka, Fizyka)</label></li>
+<li><label><input type="checkbox" value="Julia Bośniak">Julia Bośniak (Chemia)</label></li>
+<li><label><input type="checkbox" value="Martyna Wilska">Martyna Wilska (Edukacja dla bezpieczeństwa, Doradztwo zawodowe)</label></li>
+<li><label><input type="checkbox" value="Maja Oloj">Maja Oloj (Informatyka, Język angielski)</label></li>
+<li><label><input type="checkbox" value="Justyna Born">Justyna Born (Język angielski)</label></li>
+<li><label><input type="checkbox" value="Patrycja Mińska">Patrycja Mińska (Muzyka, Świetlica)</label></li>
+<li><label><input type="checkbox" value="Agata Majewska">Agata Majewska (Katachetka religii)</label></li>
+<li><label><input type="checkbox" value="Maciej Bojnek">Maciej Bojnek (Historia, Wiedza o społeczeństwie)</label></li>
+<li><label><input type="checkbox" value="Anna Łezka">Anna Łezka (Język polski, Matematyka)</label></li>
+<li><label><input type="checkbox" value="Maria Oksejska">Maria Oksejska (Język niemiecki)</label></li>
+<li><label><input type="checkbox" value="Zuzanna Filipińska">Zuzanna Filipińska (Język hiszpański)</label></li>
+<li><label><input type="checkbox" value="Julia Komuniak">Julia Komuniak (Język francuski)</label></li>
+<li><label><input type="checkbox" value="Krzysztof Sowa">Krzysztof Sowa (Wychowanie fizyczne)</label></li>
+<li><label><input type="checkbox" value="Paweł Krak">Paweł Krak (Wychowanie fizyczne)</label></li>
+<li><label><input type="checkbox" value="Milena Bośniak">Milena Bośniak (Plastyka, Technika)</label></li>
+<li><label><input type="checkbox" value="Martyna Polecsa">Martyna Polecsa (Geografia)</label></li>
+<li><label><input type="checkbox" value="Pomela Muk">Pomela Muk (Biologia, Przyroda)</label></li>
+<li><label><input type="checkbox" value="Piotr Rejmentowski">Piotr Rejmentowski (Język piotrowski)</label></li>
+
+</ul>
+</div>
+<div class="group"><label><input type="checkbox"> Rada rodziców</label></div>
+<div class="group"><label><input type="checkbox"> Pedagog/Psycholog</label></div>
+<div class="group"><label><input type="checkbox"> Administrator szkoły</label></div>
+<div class="group">
+<div class="group-header" onclick="toggleGroup(this)">
+<input type="checkbox" onchange="toggleAll(this)"> Sekretariat
+</div>
+<ul>
+<li><label><input type="checkbox" value="Katarzyna Krak"> Katarzyna Krak</label></li>
+<li><label><input type="checkbox" value="Milena Wół"> Milena Wół</label></li>
+<li><label><input type="checkbox" value="Patrycja Nowak"> Patrycja Nowak</label></li>
+</ul>
+</div>
+<div class="group"><label><input type="checkbox"> Firma P-Librus Pomoc Techniczna</label></div>
+<div class="group"><label><input type="checkbox"> Grupy odbiorców</label></div>
+
+
+
+
+
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 6A
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Jagoda"> Jagoda</label></li>
+    <li><label><input type="checkbox" value="Lena"> Lena</label></li>
+    <li><label><input type="checkbox" value="Szymon"> Szymon</label></li>
+	  <li><label><input type="checkbox" value="Antek"> Antek</label></li>
+    <li><label><input type="checkbox" value="Rodzic Jagody"> Rodzic Jagody</label></li>
+    <li><label><input type="checkbox" value="Rodzic Leny"> Rodzic Leny</label></li>
+    <li><label><input type="checkbox" value="Rodzic Szymona"> Rodzic Szymona</label></li>
+	  <li><label><input type="checkbox" value="Rodzic Antka"> Rodzic Antka</label></li>
+  </ul>
+</div>
+
+
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 6B
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Ewelina"> Ewelina</label></li>
+    <li><label><input type="checkbox" value="Tomek"> Tomek</label></li>
+    <li><label><input type="checkbox" value="Agata"> Agata</label></li>
+	  <li><label><input type="checkbox" value="Tadeusz"> Tadeusz</label></li>
+    <li><label><input type="checkbox" value="Rodzic Eweliny"> Rodzic Eweliny</label></li>
+    <li><label><input type="checkbox" value="Rodzic Tomka"> Rodzic Tomka</label></li>
+    <li><label><input type="checkbox" value="Rodzic Agaty"> Rodzic Agaty</label></li>
+	  <li><label><input type="checkbox" value="Rodzic Tadeusza"> Rodzic Tadeusza</label></li>
+  </ul>
+</div>
+
+
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 7DE
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Ola"> Ola</label></li>
+    <li><label><input type="checkbox" value="Maria"> Maria</label></li>
+    <li><label><input type="checkbox" value="Marta"> Marta</label></li>
+	<li><label><input type="checkbox" value="Wojtek"> Wojtek</label></li>
+    <li><label><input type="checkbox" value="Krzysiek"> Krzysiek</label></li>
+    <li><label><input type="checkbox" value="Mirek"> Mirek</label></li>
+    <li><label><input type="checkbox" value="Rodzic Oli"> Rodzic Oli</label></li>
+    <li><label><input type="checkbox" value="Rodzic Marii"> Rodzic Marii</label></li>
+    <li><label><input type="checkbox" value="Rodzic Marty"> Rodzic Marty</label></li>
+	<li><label><input type="checkbox" value="Rodzic Wojtka"> Rodzic Wojtka</label></li>
+    <li><label><input type="checkbox" value="Rodzic Krzyśka"> Rodzic Krzyśka</label></li>
+    <li><label><input type="checkbox" value="Rodzic Mirka"> Rodzic Mirka</label></li>
+  </ul>
+</div>
+
+
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 7G
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Ela"> Ela</label></li>
+    <li><label><input type="checkbox" value="Ola"> Ola</label></li>
+    <li><label><input type="checkbox" value="Marylka"> Marylka</label></li>
+	  <li><label><input type="checkbox" value="Marta"> Marta</label></li>
+    <li><label><input type="checkbox" value="Rodzic Eli"> Rodzic Eli</label></li>
+    <li><label><input type="checkbox" value="Rodzic Oli"> Rodzic Oli</label></li>
+    <li><label><input type="checkbox" value="Rodzic Marylki"> Rodzic Marylki</label></li>
+	  <li><label><input type="checkbox" value="Rodzic Marty"> Rodzic Marty</label></li>
+  </ul>
+</div>
+  
+
+
+
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 8H
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Andrzej"> Andrzej</label></li>
+    <li><label><input type="checkbox" value="Maciej"> Maciej</label></li>
+    <li><label><input type="checkbox" value="Patryk"> Patryk</label></li>
+    <li><label><input type="checkbox" value="Rodzic Andrzeja"> Rodzic Andrzeja</label></li>
+    <li><label><input type="checkbox" value="Rodzic Macieja"> Rodzic Macieja</label></li>
+    <li><label><input type="checkbox" value="Rodzic Patryka"> Rodzic Patryka</label></li>
+  </ul>
+</div>
+
+
+
+
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 1C
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Wiesia"> Wiesia</label></li>
+    <li><label><input type="checkbox" value="Alina"> Alina</label></li>
+    <li><label><input type="checkbox" value="Halina"> Halina</label></li>
+    <li><label><input type="checkbox" value="Bożena"> Bożena</label></li>
+    <li><label><input type="checkbox" value="Rodzic Wiesi"> Rodzic Wiesi</label></li>
+    <li><label><input type="checkbox" value="Rodzic Aliny"> Rodzic Aliny</label></li>
+    <li><label><input type="checkbox" value="Rodzic Haliny"> Rodzic Haliny</label></li>
+    <li><label><input type="checkbox" value="Rodzic Bożeny"> Rodzic Bożeny</label></li>
+  </ul>
+</div>
+
+
+
+
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 2L
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Paweł"> Paweł</label></li>
+    <li><label><input type="checkbox" value="Ola"> Ola</label></li>
+    <li><label><input type="checkbox" value="Natalia"> Natalia</label></li>
+    <li><label><input type="checkbox" value="Karol"> Karol</label></li>
+    <li><label><input type="checkbox" value="Rodzic Pawła"> Rodzic Pawła</label></li>
+    <li><label><input type="checkbox" value="Rodzic Oli"> Rodzic Oli</label></li>
+    <li><label><input type="checkbox" value="Rodzic Natalii"> Rodzic Natalii</label></li>
+    <li><label><input type="checkbox" value="Rodzic Karola"> Rodzic Karola</label></li>
+  </ul>
+</div>
+
+</div>
+<br>
+<button onclick="closeModal()">ZAMKNIJ</button>
+</div>
+</div>
+<script>
+let inbox=JSON.parse(localStorage.getItem('inbox')||'[]');
+let sent=JSON.parse(localStorage.getItem('sent')||'[]');
+let selected=[];
+const list=document.getElementById('list');
+const view=document.getElementById('view');
+mode.onchange=()=>senderField.style.display=mode.value==='toMe'?'block':'none';
+function renderInbox(){list.innerHTML='';inbox.forEach((m,i)=>{list.innerHTML+=`<div class="row ${m.read?'':'unread'}" onclick="openMsg(${i})"><div class="sender">${m.from}</div><div class="subject">${m.subject}</div><div class="date">${m.date}</div></div>`})}
+function renderSent(){list.innerHTML='';sent.forEach(m=>{list.innerHTML+=`<div class="row"><div class="sender">${m.to}</div><div class="subject">${m.subject}</div><div class="date">${m.date}</div></div>`})}
+function openMsg(i){const m=inbox[i];m.read=true;localStorage.setItem('inbox',JSON.stringify(inbox));list.style.display='none';view.style.display='block';view.innerHTML=`<div class="back" onclick="backToList()">← Powrót</div><h2>${m.subject}</h2><p><b>Od:</b> ${m.from}</p><p>${m.body||'(brak treści)'}</p>`}
+function backToList(){view.style.display='none';list.style.display='block';renderInbox()}
+function showInbox(el){setActive(el);compose.style.display='none';view.style.display='none';list.style.display='block';renderInbox()}
+function showSent(el){setActive(el);compose.style.display='none';view.style.display='none';list.style.display='block';renderSent()}
+function setActive(el){document.querySelectorAll('.menu li').forEach(li=>li.classList.remove('active'));el.classList.add('active')}
+function openCompose(){compose.style.display='block';list.style.display='none';view.style.display='none'}
+function openModal(){modal.style.display='flex'}
+function closeModal(){modal.style.display='none';selected=[...modal.querySelectorAll('input[value]:checked')].map(i=>i.value);chosen.innerText=selected.join(', ')}
+function toggleGroup(h){const ul=h.nextElementSibling;ul.style.display=ul.style.display==='block'?'none':'block'}
+function toggleAll(cb){const ul=cb.parentElement.nextElementSibling;ul.querySelectorAll('input').forEach(i=>i.checked=cb.checked)}
+function sendMsg(){const d=new Date().toLocaleDateString('pl-PL');if(mode.value==='toMe'){inbox.unshift({from: senderPerson.value
+,subject:subject.value,body:body.value,date:d,read:false})}else{sent.unshift({to:selected.join(', ')||'Rodzice',subject:subject.value,date:d})}
+localStorage.setItem('inbox',JSON.stringify(inbox));localStorage.setItem('sent',JSON.stringify(sent));alert('Wiadomość wysłana (symulacja)');subject.value=body.value='';showInbox(document.querySelector('.menu li'))}
+renderInbox();
+function loadSenders() {
+  const role = senderRole.value;
+  senderPerson.innerHTML = "";
+
+  if (!role) {
+    senderPerson.innerHTML = "<option>— najpierw wybierz rolę —</option>";
+    senderPerson.disabled = true;
+    return;
+  }
+
+  peopleByRole[role].forEach(p => {
+    const opt = document.createElement("option");
+    opt.textContent = p;
+    opt.value = p;
+    senderPerson.appendChild(opt);
+  });
+
+  senderPerson.disabled = false;
+}
+
+const peopleByRole = {
+  Sekretariat: [
+    "Katarzyna Krak",
+    "Milena Wół",
+    "Patrycja Nowak"
+  ],
+  Nauczyciel: [
+    "Patryk Prosiak (Matematyka i Fizyka)", "Julia Bośniak (Chemia)", "Martyna Wilska (Edukacja dla bezpieczeństwa i doradztwo zawodowe)", "Maja Oloj (Informatyka i język angielski)", "Justyna Born (Język angielski)", "Patrycja Mińska (Muzyka)", "Agata Majewska (Religia)", "Maciej Bojnek (Historia, Wiedza o społeczeństwie)", "Anna Łezka (Język polski i matematyka)", "Maria Oksejska (Język niemiecki)", "Zuzanna Filipińska (Język hiszpański)", "Julia Komuniak (Język francuski)", "Krzysztof Sowa (Wychowanie fizyczne)", "Paweł Krak (Wychowanie fizyczne)", "Milena Bośniak (Plastyka i technika)", "Martyna Polecsa (Geografia)", "Pomela Muk (Biologia i przyroda)"
+  ],
+  Wychowawca: [
+    "Maciej Bojnek (6A)",
+"Patryk Prosiak (6B)",
+"Martyna Wilska (7DE)",
+"Julia Bośniak (7G)",
+"Anna Łezka (8H)",
+"Justyna Born (1C)",
+"Zuzanna Filipińska (2L)"
+  ],
+  Pedagog: [
+    "Pedagog szkolny",
+    "Psycholog szkolny"
+  ],
+  Dyrektor: [
+    "Kuba Rejmentowski (Dyrektor)", "Maja Oloj (Wicedyrektor)"
+  ],
+  Klasa_6A: [
+  "Jagoda",
+  "Lena",
+  "Szymon",
+  "Antek",
+  "Rodzic Jagody",
+  "Rodzic Leny",
+  "Rodzic Szymona",
+  "Rodzic Antka"
+],
+
+Klasa_6B: [
+  "Ewelina",
+  "Tomek",
+  "Agata",
+  "Tadeusz",
+  "Rodzic Eweliny",
+  "Rodzic Tomka",
+  "Rodzic Agaty",
+  "Rodzic Tadeusza"
+],
+
+Klasa_7DE: [
+  "Ola",
+  "Maria",
+  "Marta",
+  "Wojtek",
+  "Krzysiek",
+  "Mirek",
+  "Rodzic Oli",
+  "Rodzic Marii",
+  "Rodzic Marty",
+  "Rodzic Wojtka",
+  "Rodzic Krzyśka",
+  "Rodzic Mirka"
+],
+
+Klasa_7G: [
+  "Ela",
+  "Ola",
+  "Marylka",
+  "Marta",
+  "Rodzic Eli",
+  "Rodzic Oli",
+  "Rodzic Marylki",
+  "Rodzic Marty"
+],
+
+Klasa_8H: [
+  "Andrzej",
+  "Maciej",
+  "Patryk",
+  "Rodzic Andrzeja",
+  "Rodzic Macieja",
+  "Rodzic Patryka"
+],
+
+Klasa_1C: [
+  "Wiesia",
+  "Alina",
+  "Halina",
+  "Bożena",
+  "Rodzic Wiesi",
+  "Rodzic Aliny",
+  "Rodzic Haliny",
+  "Rodzic Bożeny"
+],
+
+Klasa_2L: [
+  "Paweł",
+  "Ola",
+  "Natalia",
+  "Karol",
+  "Rodzic Pawła",
+  "Rodzic Oli",
+  "Rodzic Natalii",
+  "Rodzic Karola"
+],
+
+
+};
+
+</script>
+<footer style="text-align: center; padding: 20px; background-color: #f0f0f0;">
+  <div style="margin-bottom: 10px;">
+    <img src="teamppp.png" alt="Team P" style="width: 100px; margin: 0 20px;">
+    <img src="21 maj 2025, 16_13_32.png" alt="p-librus" style="width: 100px; margin: 0 20px;">
+    <img src="stpschool.png" alt="STP School" style="width: 100px; margin: 0 20px;">
+  </div>
+  <p style="font-size: 14px; color: #555;">P-Librus © 2026</p>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+

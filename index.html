@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Logowanie - P-Librus</title>
+<link rel="icon" type="image/x-icon" href="favicon.png">
+<style>
+    /* Tło strony - identyczne jak na zdjęciu (jasny szary) */
+    body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #dcdcdc; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    flex-direction: column; /* DODAJ TO */
+}
+
+    .container {
+        width: 550px; /* Szerokość zbliżona do tej ze zdjęcia */
+        background: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Beżowy pasek u góry z logiem */
+    .header-bar {
+        background-color: #efebdd; /* Kolor beżowy dopasowany do tła logo */
+        padding: 5px;
+        text-align: center;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .header-bar img {
+        height: 110px; /* Rozmiar loga P-Librus */
+        width: auto;
+    }
+
+    .login-content {
+        padding: 40px 60px;
+    }
+
+    h2 {
+        font-size: 28px;
+        font-weight: normal;
+        margin: 0 0 30px 0;
+        color: #000;
+    }
+
+    p.instruction {
+        color: #666;
+        font-size: 15px;
+        margin-bottom: 20px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-size: 15px;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #bdd3eb; /* Jasnoniebieska obramówka jak na zdjęciu */
+        background-color: #f0f7ff; /* Bardzo jasny błękit wewnątrz pól */
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+
+    /* Przycisk ZALOGUJ SIĘ - zielony, po prawej stronie */
+    .btn-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    button {
+        background-color: #8cb400; /* Charakterystyczny zielony kolor ze zdjęcia */
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+
+    button:hover {
+        background-color: #7a9c00;
+    }
+
+    .links {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+    .links a {
+        color: #1e63b6;
+        text-decoration: underline;
+        font-size: 14px;
+    }
+
+    /* Sekcja dolna - logowanie pracownicze */
+    .worker-section {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+
+    .worker-link {
+        color: #333;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    .worker-link img {
+        margin-right: 8px;
+        width: 20px;
+    }
+
+    .worker-link span {
+        text-decoration: underline;
+        color: #1e63b6;
+        margin-left: 4px;
+    }
+
+    .error-msg {
+        color: red;
+        font-size: 12px;
+        margin-top: 4px;
+        display: none;
+    }
+	footer {
+    margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<br><br><br><br><br><br><br><br><br><br>
+<div class="container">
+    <div class="header-bar">
+        <img src="21 maj 2025, 16_13_32.png" alt="Logo P-Librus">
+    </div>
+
+    <div class="login-content">
+        <h2>Zaloguj się</h2>
+        
+        <p class="instruction">Proszę podać nazwę użytkownika i hasło</p>
+
+        <div class="input-group">
+            <label>Nazwa użytkownika:</label>
+            <input type="text" id="username">
+            <div id="user-err" class="error-msg">Nazwa użytkownika jest wymagana</div>
+        </div>
+
+        <div class="input-group">
+            <label>Hasło:</label>
+            <input type="password" id="password">
+            <div id="pass-err" class="error-msg">Hasło jest wymagane</div>
+        </div>
+
+        <div class="btn-container">
+            <button onclick="showFakeErrors()">Zaloguj się</button>
+        </div>
+
+        <div class="links">
+            <a href="#">Przywracanie dostępu do konta</a>
+        </div>
+
+        <div class="worker-section">
+            <div class="worker-link" onclick="window.location.href='Logowanie pracownicze.html'">
+                👥 Logowanie za pomocą <span>konta pracowniczego</span>
+            </div>
+			
+			<p style="font-size: 14px; color: #555;">P-Librus © 2026</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showFakeErrors() {
+        // Zawsze pokazuje błędy jak na zdjęciu
+        document.getElementById('user-err').style.display = 'block';
+        document.getElementById('pass-err').style.display = 'block';
+        document.querySelectorAll('input').forEach(i => i.style.backgroundColor = '#fff0f0');
+    }
+</script>
+<footer style="text-align: center; padding: 20px; background-color: #dcdcdc;">
+  <div style="margin-bottom: 10px;">
+     <p style="font-size: 15px; color: #555;">Moduł informatycznych usług teamu P</p>
+    <img src="teamppp.png" alt="Team P" style="width: 100px; margin: 0 20px;">
+  </div>
+  <p style="font-size: 14px; color: #555;">Team P © 2026</p>
+</footer>
+</body>
+</html>

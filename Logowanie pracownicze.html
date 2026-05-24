@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P-Librus - Logowanie pracownicze</title>
+	<link rel="icon" type="image/x-icon" href="Pracownicze.png">
+    <style>
+        body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* Jaśniejsza wersja tła technicznego */
+    background-color: #222222; 
+    background-image: 
+        radial-gradient(circle at center, rgba(80, 80, 80, 0.4) 0%, rgba(20, 20, 20, 0.9) 100%),
+        repeating-linear-gradient(45deg, rgba(255,255,255, 0.05) 0px, rgba(255,255,255, 0.05) 1px, transparent 1px, transparent 10px),
+        repeating-linear-gradient(-45deg, rgba(255,255,255, 0.05) 0px, rgba(255,255,255, 0.05) 1px, transparent 1px, transparent 10px);
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+        .logo-container {
+    width: 440px;
+    background-color: rgba(255, 255, 255, 0.15); /* Półprzezroczysty szary */
+    padding: 10px 0; /* Zmniejszono z 30px na 10px, co obniżyło prostokąt */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    backdrop-filter: blur(5px);
+    border-radius: 2px; /* Opcjonalnie: lekko zaokrąglone rogi jak na screenie */
+}
+
+        .logo-text {
+            color: #fff;
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .login-card {
+            width: 440px;
+            background: white;
+            border-top: 5px solid #0067da;
+            padding: 35px;
+            box-sizing: border-box;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        h2 {
+            margin: 0 0 25px 0;
+            font-size: 22px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        /* Styl zablokowanego loginu */
+        input:disabled {
+            background-color: #f5f5f5;
+            color: #777;
+            border: 1px solid #ddd;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .error-msg {
+            color: #d93025;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        #code-area {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .warning-text {
+            color: #d93025;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            background-color: #0067da;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0051a8;
+        }
+
+        .code-input {
+            letter-spacing: 8px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            border: 2px solid #0067da;
+        }
+    </style>
+</head>
+<body>
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <div class="logo-container">
+    <img src="PLIBRUS BEZTLA.png" alt="Logo P-Librus" style="height: 130px; width: auto; display: block;">
+</div>
+
+    <div class="login-card">
+        <h2 id="title">Zaloguj się jako pracownik</h2>
+
+        <div class="input-group" id="login-group">
+    <label id="user-label">Login:</label> <input type="text" id="user-input">
+    <div id="err" class="error-msg">Niepoprawny login lub hasło</div>
+</div>
+
+        <div class="input-group" id="pass-group">
+    <label>Hasło:</label>
+    <div style="position: relative;">
+        <input type="password" id="pass-input">
+        <span id="togglePassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 18px; color: #777;">
+            👁️
+        </span>
+    </div>
+</div>
+
+        <button id="btn-next" onclick="nextStep()">Dalej</button>
+
+        <div id="code-area">
+            
+            
+            <div class="input-group">
+                <label>Wprowadź kod z aplikacji mobilnej</label>
+                <input type="text" id="code-input" class="code-input" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            </div>
+
+            <button onclick="finalAction()">Zaloguj</button>
+        </div>
+    </div>
+
+    <script>
+        function nextStep() {
+    const user = document.getElementById('user-input');
+    const pass = document.getElementById('pass-input');
+    const passGroup = document.getElementById('pass-group');
+    const btn = document.getElementById('btn-next');
+    const codeArea = document.getElementById('code-area');
+    const err = document.getElementById('err');
+    const title = document.getElementById('title');
+    const userLabel = document.getElementById('user-label'); // Pobieramy etykietę
+
+    const OK_LOGIN = "stp.p.rejmentowski";
+    const OK_PASS = "piotrrejmstp5883";
+
+    if (user.value === OK_LOGIN && pass.value === OK_PASS) {
+        passGroup.style.display = "none";
+        btn.style.display = "none";
+        err.style.display = "none";
+
+        // --- KLUCZOWE ZMIANY ---
+        userLabel.innerText = "Wybrany użytkownik:"; // Zmienia napis nad polem
+        user.value = "Piotr Rejmentowski";         // Zmienia tekst wewnątrz pola
+        user.disabled = true;                      // Blokuje pole ("za szybą")
+        // -----------------------
+
+        title.innerText = "Weryfikacja konta";
+        codeArea.style.display = "block";
+    } else {
+        err.style.display = "block";
+        user.style.borderColor = "#d93025";
+    }
+}
+
+        function finalAction() {
+    const code = document.getElementById('code-input').value;
+    
+    if(code.length === 6) { // Sprawdzamy, czy kod ma 6 cyfr
+        // Opcjonalnie: krótki komunikat przed przekierowaniem
+        alert("Autoryzacja pomyślna! Następuje przekierowanie...");
+        
+        // PRZEKIEROWANIE:
+        // Jeśli plik jest w tym samym folderze:
+        window.location.href = "Home.html"; 
+        
+        // Jeśli chcesz przekierować na pełny adres URL:
+        // window.location.href = "https://twoja-strona.pl/dashboard";
+    } else {
+        alert("Proszę wpisać poprawny 6-cyfrowy kod!");
+    }
+}
+		const togglePassword = document.querySelector('#togglePassword');
+const password = document.querySelector('#pass-input');
+
+togglePassword.addEventListener('click', function () {
+    // Przełączanie typu pola: password <-> text
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    
+    // Opcjonalna zmiana ikony przy kliknięciu
+    this.textContent = type === 'password' ? '👁️' : '🔒';
+});
+    </script>
+<footer style="text-align: center; padding: 20px;">
+  <div style="margin-bottom: 10px;">
+     <p style="font-size: 15px; color: #555;">Moduł informatycznych usług teamu P</p>
+    <img src="11111.png" alt="Team P" style="width: 100px; margin: 0 20px;">
+  </div>
+  <p style="font-size: 14px; color: #555;">Team P © 2026</p>
+</footer>
+</body>
+</html>

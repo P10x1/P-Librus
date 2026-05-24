@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/x-icon" href="favicon.png">
+  <title>P-Librus - Terminarz</title>
+  <style>
+    body { font-family: Inter, "Segoe UI", sans-serif; background: #eef1f5; margin: 0; padding: 0; color: #333; }
+    .header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: #f1eadf; border-bottom: 1px solid #d8dde3; gap: 20px; }
+    .logo { display: flex; align-items: center; margin-right: auto; }
+    .logo img { height: 65px; margin-right: 10px; }
+    .logo span { font-size: 22px; color: #123e61; font-weight: bold; }
+    .menu-header { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; flex-grow: 1; }
+    .menu-header .menu-item a { display: block; padding: 10px 18px; background: #ffffff; border: 1px solid #cfd5db; border-radius: 4px; text-decoration: none; color: #333; font-size: 13px; }
+    
+    .box { background: #ffffff; border: 1px solid #d7dce1; border-radius: 7px; margin: 20px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    h2 { margin-top: 0; margin-bottom: 18px; font-size: 18px; color: #444; }
+
+    .controls { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; }
+    select, input, textarea { padding: 8px; border: 1px solid #cfd5db; border-radius: 4px; font-size: 13px; }
+    
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: #d8dde3; border: 1px solid #d8dde3; }
+    .weekday { background: #f8f9fa; padding: 10px; text-align: center; font-weight: bold; font-size: 12px; color: #666; }
+    .day { background: white; min-height: 120px; padding: 5px; position: relative; }
+    .day.today { background: #fff9e6; }
+    .day-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .day-number { font-weight: bold; font-size: 14px; }
+
+    /* PRZYCISKI PLUS Z TŁEM */
+    .btn-plus { 
+      background: #e2e8f0; color: #123e61; border: 1px solid #cbd5e1; 
+      border-radius: 4px; width: 24px; height: 24px; font-size: 18px; 
+      cursor: pointer; display: flex; align-items: center; justify-content: center; 
+      transition: 0.2s; 
+    }
+    .btn-plus:hover { background: #123e61; color: white; }
+
+    /* WYDARZENIA */
+    .event-item { font-size: 10px; padding: 4px 6px; margin-bottom: 3px; border-radius: 3px; cursor: pointer; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .event-sprawdzian { background: #d9534f; }
+    .event-kartkowka { background: #f0ad4e; }
+    .event-odpowiedz { background: #5bc0de; }
+    .event-zaliczone { background: #5cb85c !important; text-decoration: line-through; opacity: 0.8; }
+    
+    /* NIEBECNOŚĆ - JASNO CZERWONE TŁO */
+    .event-nieobecnosc { background: #f8d7da; color: #721c24; border: 1px solid #f5c2c7; font-weight: 500; }
+
+    .btn-action { background: #123e61; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
+    /* MODALE */
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+    .modal-content { background: white; width: 400px; margin: 8% auto; padding: 25px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+    .modal-content label { display: block; margin-top: 12px; font-weight: bold; font-size: 12px; }
+    .modal-footer { margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end; }
+  /* WYDARZENIA - KOLORYSTYKA */
+.event-item { font-size: 10px; padding: 4px 6px; margin-bottom: 3px; border-radius: 3px; cursor: pointer; color: white; font-weight: 500; }
+
+.event-praca-klasowa { background: #b00020 !important; } /* Ciemna czerwień */
+.event-sprawdzian { background: #ff69b4 !important; }   /* Różowy */
+.event-kartkowka { background: #f0ad4e !important; }    /* Pomarańczowy */
+.event-odpowiedz { background: #5bc0de !important; }     /* Niebieski */
+.event-projekt { background: #FFA500 !important; }
+.event-dzien-wolny { background: #85A67A !important; }
+.event-inne { background: #D3D3D3 !important; }
+.event-wydarzenie { background: #D3D3D3 !important; }
+.event-egzamin-probny { background: #500000 !important; }
+.event-egzamin-glowny { background: #500000 !important; }
+
+/* NIEBECNOŚĆ I ZASTĘPSTWO */
+.event-nieobecnosc { background: #f8d7da !important; color: #721c24 !important; border: 1px solid #f5c2c7; }
+.event-zastepstwo { background: #d4edda !important; color: #155724 !important; border: 1px solid #c3e6cb; } /* Zielone tło */
+
+.event-zaliczone { background: #5cb85c !important; text-decoration: line-through; opacity: 0.6; }
+  
+  .event-comment-text {
+  display: block;
+  font-size: 11px; /* Większa, czytelna czcionka */
+  margin-top: 4px;
+  padding-top: 3px;
+  border-top: 1px solid rgba(255,255,255,0.4);
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.3;
+}
+
+/* Styl dla etykiety wewnątrz komentarza */
+.comment-label {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 9px;
+  display: block;
+  margin-bottom: 1px;
+}
+
+.event-nieobecnosc .event-comment-text, 
+.event-zastepstwo .event-comment-text {
+  border-top: 1px solid rgba(0,0,0,0.1);
+  color: #333;
+}
+.user-info {
+  font-size: 12px;
+  color: #555;
+  text-align: right;
+  flex-shrink: 0;
+  min-width: 150px;
+}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <img src="21 maj 2025, 16_13_32.png" alt="P-Librus">
+    <span>P-Librus</span>
+  </div>
+  <div class="menu-header">
+    <div class="menu-item"><a href="Lekcja.html">Lekcja</a></div>
+    <div class="menu-item"><a href="Oceny.html">Oceny</a></div>
+    <div class="menu-item"><a href="Zachowanie.html">Zachowanie</a></div>
+    <div class="menu-item"><a href="Zastepstwa.html">Zastępstwa</a></div>
+    <div class="menu-item"><a href="Organizacja.html">Organizacja</a></div>
+    <div class="menu-item"><a href="Wiadomosci.html">Wiadomości</a></div>
+    <div class="menu-item"><a href="Ogloszenia.html">Ogłoszenia</a></div>
+    <div class="menu-item"><a href="Terminarz.html" style="background:#eef2f5; font-weight:bold;">Terminarz</a></div>
+  </div>
+<div class="user-info">
+    Jesteś zalogowany jako: <strong>Piotr Rejmentowski (nauczyciel)</strong>
+  </div>
+</div>
+
+<div class="box">
+  <div class="controls">
+    <select id="month-select"></select>
+    <select id="year-select"></select>
+  </div>
+  
+   <h2>📅 Terminarz – Piotr Rejmentowski</h2>
+  
+  <div class="calendar-grid" id="calendar-grid"></div>
+</div>
+
+<div id="eventModal" class="modal">
+  <div class="modal-content">
+  <h2 id="modal-title">Wpis kalendarza</h2>
+  <input type="hidden" id="ev-id">
+  <input type="hidden" id="ev-date">
+  
+  <label>Wybierz rodzaj wpisu:</label>
+  <div style="display: flex; gap: 10px; margin-bottom: 15px; margin-top: 5px;">
+    <button onclick="setEntryType('wydarzenie')" id="btn-type-ev" class="btn-action" style="flex:1; background:#123e61;">Wydarzenie</button>
+    <button onclick="setEntryType('nieobecnosc')" id="btn-type-abs" class="btn-action" style="flex:1; background:#6c757d;">Nieobecność nauczyciela</button>
+  </div>
+  
+  <input type="hidden" id="ev-main-type" value="wydarzenie">
+
+  <div id="fields-wydarzenie">
+    <label>Klasa:</label>
+    <select id="ev-class" style="width:100%">
+      <option>Szkoła</option><option>6A</option><option>6B</option><option>7G</option><option>7DE</option><option>8H</option><option>1C</option><option>2L</option>
+    </select>
+
+    <label>Przedmiot:</label>
+    <select id="ev-subject" style="width:100%">
+      <option>Język piotrowski</option><option>-</option>
+    </select>
+    
+    <label>Rodzaj:</label>
+    <select id="ev-type" style="width:100%">
+      <option value="sprawdzian">Sprawdzian</option>
+        <option value="kartkowka">Kartkówka</option>
+        <option value="odpowiedz">Odpowiedź ustna</option>
+		<option value="praca-klasowa">Praca klasowa</option>
+		<option value="projekt">Projekt</option>
+		<option value="dzien-wolny">Dzień wolny szkoły</option>
+		<option value="wydarzenie">Wydarzenie szkolne</option>
+		<option value="egzamin-probny">Egzamin próbny</option>
+		<option value="egzamin-glowny">Egzamin główny</option>
+		<option value="inne">Inne</option>
+    </select>
+  </div>
+
+  <div id="fields-nieobecnosc" style="display:none;">
+    <label>Typ wpisu:</label>
+    <select id="abs-sub-type" style="width:100%">
+      <option value="nieobecnosc">Nieobecność nauczyciela</option>
+    </select>
+    <label>Nazwisko nieobecnego nauczyciela:</label>
+    <select id="ev-teacher" style="width:100%">
+    <option value="">— wybierz nauczyciela —</option>
+<option value="Patryk Prosiak">Patryk Prosiak (Matematyka, Fizyka)</option>
+<option value="Julia Bośniak">Julia Bośniak (Chemia)</option>
+<option value="Martyna Wilska">Martyna Wilska (Edukacja dla bezpieczeństwa, Doradztwo zawodowe)</option>
+<option value="Maja Oloj">Maja Oloj (Informatyka, Język angielski)</option>
+<option value="Justyna Born">Justyna Born (Język angielski)</option>
+<option value="Patrycja Mińska">Patrycja Mińska (Muzyka, Świetlica)</option>
+<option value="Agata Majewska">Agata Majewska (Katachetka religii)</option>
+<option value="Maciej Bojnek">Maciej Bojnek (Historia, Wiedza o społeczeństwie)</option>
+<option value="Anna Łezka">Anna Łezka (Język polski, Matematyka)</option>
+<option value="Maria Oksejska">Maria Oksejska (Język niemiecki)</option>
+<option value="Zuzanna Filipińska">Zuzanna Filipińska (Język hiszpański)</option>
+<option value="Julia Komuniak">Julia Komuniak (Język francuski)</option>
+<option value="Krzysztof Sowa">Krzysztof Sowa (Wychowanie fizyczne)</option>
+<option value="Paweł Krak">Paweł Krak (Wychowanie fizyczne)</option>
+<option value="Milena Bośniak">Milena Bośniak (Plastyka, Technika)</option>
+<option value="Martyna Polecsa">Martyna Polecsa (Geografia)</option>
+<option value="Pomela Muk">Pomela Muk (Biologia, Przyroda)</option>
+<option value="Piotr Rejmentowski">Piotr Rejmentowski (Język piotrowski)</option>
+  </select>
+    <label>Informacja dodatkowa:</label>
+    <input type="text" id="ev-info" placeholder="Zalecane wpisywanie tego w Komentarz." style="width:100%">
+  </div>
+
+  <label>Komentarz:</label>
+  <textarea id="ev-comment" rows="3" style="width:100%; resize: none;"></textarea>
+
+  <div class="modal-footer">
+    <button onclick="closeModal('eventModal')">Anuluj</button>
+    <button class="btn-action" onclick="saveEntry()">Zapisz wpis</button>
+  </div>
+</div>
+</div>
+
+<div id="optionsModal" class="modal">
+  <div class="modal-content" style="text-align:center;">
+    <h2 id="opt-title">Opcje wpisu</h2>
+    <p id="opt-comment" style="font-size: 13px; color: #555; background: #f9f9f9; padding: 10px; border-radius: 4px;"></p>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <button id="btn-zalicz" class="btn-action" style="background:#28a745;" onclick="actionZalicz()">Zalicz / Cofnij</button>
+      <button class="btn-action" style="background:#ffc107; color: #333;" onclick="actionEdytuj()">Edytuj</button>
+      <button class="btn-action" style="background:#dc3545;" onclick="actionUsun()">Usuń</button>
+    </div>
+    <button onclick="closeModal('optionsModal')" style="margin-top:15px; border:none; background:none; color:#777; cursor:pointer;">Zamknij</button>
+  </div>
+</div>
+
+<script>
+  let dataStorage = JSON.parse(localStorage.getItem('lib_calendar_v3')) || [];
+  let currentId = null;
+
+  function init() {
+    const mSel = document.getElementById('month-select');
+    const ySel = document.getElementById('year-select');
+    const months = ["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"];
+    months.forEach((m, i) => mSel.innerHTML += `<option value="${i}">${m}</option>`);
+    for(let y=2024; y<=2026; y++) ySel.innerHTML += `<option value="${y}">${y}</option>`;
+    
+    const now = new Date();
+    mSel.value = now.getMonth();
+    ySel.value = now.getFullYear();
+    mSel.onchange = render; ySel.onchange = render;
+    render();
+  }
+
+  function render() {
+    const grid = document.getElementById('calendar-grid');
+    grid.innerHTML = '';
+    const m = parseInt(document.getElementById('month-select').value);
+    const y = parseInt(document.getElementById('year-select').value);
+
+    ["Pn","Wt","Śr","Cz","Pt","So","Nd"].forEach(d => grid.innerHTML += `<div class="weekday">${d}</div>`);
+
+    const firstDay = new Date(y, m, 1).getDay();
+    const offset = firstDay === 0 ? 6 : firstDay - 1;
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+
+    for(let i=0; i<offset; i++) grid.innerHTML += `<div class="day" style="background:#f9f9f9"></div>`;
+
+    for(let d=1; d<=daysInMonth; d++) {
+      const dateStr = `${y}-${(m+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
+      const dayDiv = document.createElement('div');
+      dayDiv.className = `day ${new Date().toISOString().slice(0,10) === dateStr ? 'today' : ''}`;
+      
+      dayDiv.innerHTML = `
+        <div class="day-header">
+          <span class="day-number">${d}</span>
+          <button class="btn-plus" onclick="openAddModal('${dateStr}')">+</button>
+        </div>
+      `;
+
+      dataStorage.filter(e => e.date === dateStr).forEach(ev => {
+  const evDiv = document.createElement('div');
+  let mainContent = "";
+
+  // Mapa nazw systemowych na pełne nazwy polskie
+  const nazwyWydarzen = {
+    "praca-klasowa": "Praca klasowa",
+    "sprawdzian": "Sprawdzian",
+    "kartkowka": "Kartkówka",
+    "odpowiedz": "Odpowiedź ustna",
+	"dzien-wolny": "Dzień wolny szkoły",
+	"egzamin-probny": "Egzamin próbny",
+	"egzamin-glowny": "Egzamin główny",
+	"wydarzenie": "Wydarzenie szkolne",
+	"inne": "Inne",
+	"projekt": "Projekt"
+  };
+
+  if (ev.mainType === 'nieobecnosc') {
+    evDiv.className = 'event-item event-nieobecnosc';
+    mainContent = `Nieobecność: ${ev.teacher}`;
+  } else if (ev.mainType === 'zastepstwo') {
+    evDiv.className = 'event-item event-zastepstwo';
+    mainContent = `Zastępstwo: ${ev.teacher}`;
+  } else {
+    evDiv.className = `event-item event-${ev.type} ${ev.zaliczone ? 'event-zaliczone' : ''}`;
+    
+    // Pobieramy ładną nazwę z mapy, jeśli nie ma - używamy surowej nazwy
+    const pelnaNazwa = nazwyWydarzen[ev.type] || ev.type;
+    
+    mainContent = `[${ev.klasa}] ${ev.subject} <br> <span style="font-size: 10px; text-transform: uppercase;">(${pelnaNazwa})</span>`;
+  }
+
+  const commentHtml = ev.comment 
+    ? `<span class="event-comment-text"><span class="comment-label">Komentarz:</span>${ev.comment}</span>` 
+    : "";
+  
+  evDiv.innerHTML = `<div style="font-weight:bold; line-height: 1.2;">${mainContent}</div>${commentHtml}`;
+  
+  evDiv.onclick = (e) => { e.stopPropagation(); openOptions(ev.id); };
+  dayDiv.appendChild(evDiv);
+});
+      grid.appendChild(dayDiv);
+    }
+  }
+
+  function toggleFields() {
+    const type = document.getElementById('ev-main-type').value;
+    document.getElementById('fields-wydarzenie').style.display = type === 'wydarzenie' ? 'block' : 'none';
+    document.getElementById('fields-nieobecnosc').style.display = type === 'nieobecnosc' ? 'block' : 'none';
+  }
+
+  function openAddModal(date) {
+    currentId = null;
+    document.getElementById('ev-id').value = "";
+    document.getElementById('ev-date').value = date;
+    document.getElementById('modal-title').textContent = "Dodaj wpis: " + date;
+    resetForm();
+    document.getElementById('eventModal').style.display = 'block';
+  }
+
+  function openOptions(id) {
+    currentId = id;
+    const ev = dataStorage.find(e => e.id === id);
+    document.getElementById('opt-title').textContent = ev.mainType === 'nieobecnosc' ? "Nieobecność" : ev.subject;
+    document.getElementById('opt-comment').textContent = ev.comment || (ev.mainType === 'nieobecnosc' ? ev.info : "Brak dodatkowego komentarza.");
+    document.getElementById('btn-zalicz').style.display = ev.mainType === 'nieobecnosc' ? 'none' : 'block';
+    document.getElementById('optionsModal').style.display = 'block';
+  }
+
+  function saveEntry() {
+  const id = document.getElementById('ev-id').value;
+  const mainChoice = document.getElementById('ev-main-type').value;
+  const subAbsType = document.getElementById('abs-sub-type').value;
+  
+  const newEntry = {
+    id: id ? parseInt(id) : Date.now(),
+    date: document.getElementById('ev-date').value,
+    // Jeśli wybrano nieobecność, zapisujemy czy to 'nieobecnosc' czy 'zastepstwo'
+    mainType: (mainChoice === 'nieobecnosc') ? subAbsType : 'wydarzenie',
+    comment: document.getElementById('ev-comment').value,
+    zaliczone: false
+  };
+
+  if (mainChoice === 'nieobecnosc') {
+    newEntry.teacher = document.getElementById('ev-teacher').value;
+    newEntry.info = document.getElementById('ev-info').value;
+  } else {
+    newEntry.subject = document.getElementById('ev-subject').value;
+    newEntry.type = document.getElementById('ev-type').value;
+    newEntry.klasa = document.getElementById('ev-class').value; // ZAPIS KLASY
+  }
+
+  if (id) {
+    const idx = dataStorage.findIndex(e => e.id == id);
+    newEntry.zaliczone = dataStorage[idx].zaliczone;
+    dataStorage[idx] = newEntry;
+  } else {
+    dataStorage.push(newEntry);
+  }
+
+  localStorage.setItem('lib_calendar_v3', JSON.stringify(dataStorage));
+  closeModal('eventModal');
+  render();
+}
+
+  function actionEdytuj() {
+    const ev = dataStorage.find(e => e.id === currentId);
+    document.getElementById('ev-id').value = ev.id;
+    document.getElementById('ev-date').value = ev.date;
+    document.getElementById('ev-main-type').value = ev.mainType;
+    document.getElementById('ev-comment').value = ev.comment;
+    
+    toggleFields();
+    if(ev.mainType === 'nieobecnosc') {
+      document.getElementById('ev-teacher').value = ev.teacher;
+      document.getElementById('ev-info').value = ev.info;
+    } else {
+      document.getElementById('ev-subject').value = ev.subject;
+      document.getElementById('ev-type').value = ev.type;
+    }
+
+    closeModal('optionsModal');
+    document.getElementById('modal-title').textContent = "Edytuj wpis";
+    document.getElementById('eventModal').style.display = 'block';
+  }
+
+  function actionZalicz() {
+    const idx = dataStorage.findIndex(e => e.id === currentId);
+    dataStorage[idx].zaliczone = !dataStorage[idx].zaliczone;
+    localStorage.setItem('lib_calendar_v3', JSON.stringify(dataStorage));
+    closeModal('optionsModal');
+    render();
+  }
+
+  function actionUsun() {
+    if(confirm("Czy na pewno usunąć?")) {
+      dataStorage = dataStorage.filter(e => e.id !== currentId);
+      localStorage.setItem('lib_calendar_v3', JSON.stringify(dataStorage));
+      closeModal('optionsModal');
+      render();
+    }
+  }
+
+  function resetForm() {
+    document.getElementById('ev-main-type').value = 'wydarzenie';
+    document.getElementById('ev-teacher').value = "";
+    document.getElementById('ev-info').value = "";
+    document.getElementById('ev-comment').value = "";
+    toggleFields();
+  }
+
+  function closeModal(mId) { document.getElementById(mId).style.display = 'none'; }
+
+  init();
+  
+  function setEntryType(type) {
+  document.getElementById('ev-main-type').value = type;
+  
+  // Zmiana kolorów przycisków, żeby było widać co wybrane
+  document.getElementById('btn-type-ev').style.background = (type === 'wydarzenie') ? '#123e61' : '#6c757d';
+  document.getElementById('btn-type-abs').style.background = (type === 'nieobecnosc') ? '#123e61' : '#6c757d';
+  
+  toggleFields(); // Ukrywa/pokazuje odpowiednie pola (już to masz w kodzie)
+}
+</script>
+
+<footer style="text-align: center; padding: 20px; background-color: #f0f0f0;">
+  <div style="margin-bottom: 10px;">
+    <img src="teamppp.png" alt="Team P" style="width: 100px; margin: 0 20px;">
+    <img src="21 maj 2025, 16_13_32.png" alt="p-librus" style="width: 100px; margin: 0 20px;">
+    <img src="stpschool.png" alt="STP School" style="width: 100px; margin: 0 20px;">
+  </div>
+  <p style="font-size: 14px; color: #555;">P-Librus © 2026</p>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

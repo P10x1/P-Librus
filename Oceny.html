@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>P-Librus - Oceny</title>
+  <link rel="icon" type="image/x-icon" href="favicon.png">
+  <style>
+  body {
+    font-family: Inter, 'Segoe UI', sans-serif;
+    background: #eef1f5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+
+  /* ===== HEADER (Zgodny z Twoim wyborem) ===== */
+  .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Rozsuwa logo, menu i usera */
+  padding: 10px 20px;
+  background: #f1eadf; 
+  border-bottom: 1px solid #d8dde3;
+  gap: 20px;
+}
+
+  .logo {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+  }
+
+  .logo img {
+    height: 65px;
+    margin-right: 10px;
+  }
+
+  .logo span {
+    font-size: 22px;
+    color: #134061;
+    font-weight: bold;
+  }
+
+  .user-info {
+    font-size: 12px;
+    color: #555;
+  }
+
+  /* ===== MENU ===== */
+  .menu-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center; /* Centruje przyciski menu */
+  flex-grow: 1; /* Zajmuje dostępną przestrzeń na środku */
+}
+
+.menu-header .menu-item a {
+  display: block;
+  padding: 10px 18px;
+  background: #ffffff;
+  border: 1px solid #cfd5db;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  font-size: 13px; /* Lekko mniejszy font, by się zmieściło */
+  white-space: nowrap;
+}
+
+  /* ===== SZEROKI I KRÓTKI KONTENER (Styl LEKCJA) ===== */
+  .container {
+    padding: 20px 30px;
+    background: #ffffff;
+    margin: 15px auto;
+    border-radius: 7px;
+    max-width: 95%; /* SZEROKI UKŁAD */
+    border: 1px solid #d7dce1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  h2 {
+    color: #444;
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #444;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 12px 0;
+    border: 1px solid #cfd5db;
+    border-radius: 4px;
+    font-size: 13px;
+    background: #fff;
+    box-sizing: border-box;
+  }
+
+  /* ===== SZARE PRZYCISKI (Jak w Lekcji) ===== */
+  button {
+    background: #123e61;
+    color: #e0dede;
+    border: 1px solid #c8ced6;
+    border-radius: 4px;
+    padding: 7px 15px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: normal;
+    margin-top: 10px;
+    transition: 0.15s;
+    width: auto;
+  }
+
+  button:hover {
+    background: #7c8fa6;
+  }
+
+  /* ===== TABELA OCEN (Płaska i szeroka) ===== */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 15px;
+    background: #fff;
+    border: 1px solid #d8dde3;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  th {
+    background: #eef2f5;
+    color: #444;
+    padding: 10px;
+    font-size: 13px;
+    border-bottom: 1px solid #d7dce1;
+    font-weight: bold;
+  }
+
+  td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #eceff2;
+    font-size: 13px;
+  }
+
+  /* ===== OCENY - KOLORY TYPÓW (Kwadratowe) ===== */
+  .grade {
+    display: inline-block;
+    padding: 3px 7px;
+    margin: 2px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 12px;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  /* ===== TYPY OCEN (KOLORY) ===== */
+  .typ-Sprawdzian       { background-color: #ffccbc; color: black; }
+  .typ-Pracaklasowa     { background-color: #ffe0b2; color: black; }
+  .typ-Kartkówka        { background-color: #fff59d; color: black; }
+  .typ-Projekt          { background-color: #b3e5fc; color: black; }
+  .typ-Prezentacja      { background-color: #d1c4e9; color: black; }
+  .typ-Pracanalekcji    { background-color: #dcedc8; color: black; }
+  .typ-Odpowiedźustna   { background-color: #f8bbd0; color: black; }
+  .typ-Zadanie          { background-color: #c8e6c9; color: black; }
+  .typ-Inne             { background-color: #90caf9; color: black; }
+  .typ-Przewidywana     { background-color: #cfd8dc; color: black; }
+  .typ-Roczna           { background-color: #b0bec5; color: black; }
+  .typ-Poprawa          { background-color: #ffab91; color: black; }
+  .typ-Aktywność        { background-color: #f0f4c3; color: black; }
+  .typ-Pracadomowa      { background-color: #e6ee9c; color: black; }
+  .typ-Półroczna        { background-color: #e0f7fa; color: black; }
+  .typ-Egzamin-próbny   { background-color: #E6DAF0; color: black; }
+  .typ-Egzamin-oficjalny { background-color: #E6DAF0; color: black; }
+
+  /* ===== MODAL (BEZ PRZYCISKU ZAMKNIJ) ===== */
+  /* ===== MODAL (Stała wielkość i przewijanie) ===== */
+  .modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+  background: white;
+  padding: 20px;
+  width: 90%;          /* Szeroki układ (poprzednia zmiana) */
+  max-width: 1200px;   /* Szeroki układ (poprzednia zmiana) */
+  
+  /* 🔽 TUTAJ ZMIENIAMY WYSOKOŚĆ NA WIĘKSZĄ 🔽 */
+  height: 650px;       /* Zmieniono z 500px na 650px */
+  
+  overflow-y: auto;       
+  border-radius: 4px;     
+  border: 1px solid #d7dce1;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+  /* Styl paska przewijania (opcjonalnie, żeby pasował do reszty) */
+  .modal-content::-webkit-scrollbar {
+    width: 8px;
+  }
+  .modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  .modal-content::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+  .modal-content::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+  }
+
+  .btn-plus {
+    all: unset;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 3px;
+    background-color: #123e61;
+    color: white;
+    cursor: pointer;
+  }
+
+  .ukryte { display: none; }
+/* Nowy zaokrąglony box sekcji formularza (identyczny jak w Zachowanie.html) */
+.form-section {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+/* Zapewnienie, że inputy wewnątrz układu flex nie rozciągają się bezwzględnie na 100% */
+.form-section input, .form-section select {
+  box-sizing: border-box;
+}
+/* Wygląd zablokowanego wyboru klasy (efekt za szkłem) */
+select#klasa:disabled {
+  background: rgba(240, 242, 245, 0.6) !important;
+  color: #666 !important;
+  cursor: not-allowed;
+  border: 1px solid #cbd5e1;
+  opacity: 0.8;
+  backdrop-filter: blur(4px); /* Efekt delikatnego rozmycia */
+}
+</style>
+
+</head>
+<body>
+
+</script>
+  <div class="header">
+  <div class="logo">
+    <img src="21 maj 2025, 16_13_32.png" alt="P-Librus logo">
+    <span>P-Librus</span>
+  </div>
+
+  <div class="menu-header">
+    <div class="menu-item"><a href="Lekcja.html">Lekcja</a></div>
+    <div class="menu-item"><a href="Oceny.html" style="background:#eef2f5; font-weight:bold;">Oceny</a></div>
+    <div class="menu-item"><a href="Zachowanie.html">Zachowanie</a></div>
+    <div class="menu-item"><a href="Zastepstwa.html">Zastępstwa</a></div>
+    <div class="menu-item"><a href="Organizacja.html">Organizacja</a></div>
+    <div class="menu-item"><a href="Wiadomosci.html">Wiadomości</a></div>
+    <div class="menu-item"><a href="Ogloszenia.html">Ogłoszenia</a></div>
+    <div class="menu-item"><a href="Terminarz.html">Terminarz</a></div>
+  </div>
+
+  <div class="user-info">
+    Jesteś zalogowany jako: <strong>Piotr Rejmentowski (nauczyciel)</strong>
+  </div>
+</div>
+
+ <div class="container" id="wybor-klasy">
+  <h2>Wybierz klasę</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Klasa</th>
+        <th>Półroczna</th>
+        <th>Przewidywana</th>
+        <th>Roczna</th>
+        <th>Akcja</th>
+      </tr>
+    </thead>
+    <tbody id="listaKlasTabela"></tbody>
+  </table>
+</div>
+
+
+
+
+<div id="modalOceny" class="modal">
+  <div class="modal-content">
+    <button class="close-modal" onclick="zamknijModal()">Zamknij</button>
+    <div id="panelOceny" class="container">
+	
+	  <h2>PANEL NAUCZYCIELA OCEN</h2>
+<br>
+<hr class="separator-line">
+<br>
+
+<div class="form-section">
+  <h4>Dodawanie seryjne</h4>
+  <button onclick="toggleFormOceny()">➕ Dodaj oceny seryjnie</button>
+  
+  <div id="formOceny" style="display:none; margin-top:15px;">
+      <label for="klasa">Klasa:</label>
+      <select id="klasa"></select>
+
+      <label for="typ">Typ oceny:</label>
+      <select id="typ">
+        <option>Sprawdzian</option>
+        <option>Praca klasowa</option>
+        <option>Kartkówka</option>
+        <option>Projekt</option>
+        <option>Prezentacja</option>
+        <option>Praca na lekcji</option>
+        <option>Odpowiedź ustna</option>
+        <option>Zadanie</option>
+        <option>Inne</option>
+        <option>Przewidywana</option>
+        <option>Roczna</option>
+        <option>Poprawa</option>
+        <option>Aktywność</option>
+        <option>Praca domowa</option>
+        <option>Egzamin-próbny</option>
+        <option>Egzamin-oficjalny</option>
+        <option>Półroczna</option>
+      </select>
+
+      <div style="display: flex; gap: 15px; align-items: flex-end; margin-bottom: 15px;">
+          <div style="flex: 1;">
+              <label>Ocena dla wszystkich:</label>
+              <input type="text" id="ocena-wszystkim" placeholder="np. 4+">
+          </div>
+          <div style="flex: 2;">
+              <label>Komentarz dla wszystkich:</label>
+              <input type="text" id="komentarz-wszystkim" placeholder="Wspólny komentarz...">
+          </div>
+          <button type="button" onclick="ustawWszystkim()" style="margin-bottom:14px;">Wstaw wszystkim poniżej</button>
+      </div>
+
+      <div id="students"></div>
+      
+      <button onclick="zapiszOceny()" class="btn-save" style="margin-top: 15px;">Zatwierdź i zapisz oceny</button>
+  </div>
+</div>
+
+<hr class="separator-line">
+  <h2>Lista ocen</h2>
+  <div id="tabeleKlas"></div>
+  
+  <label for="sortowanie">Sortuj oceny według:</label>
+  <select id="sortowanie" onchange="pokazTabele()">
+    <option value="domyślnie">Domyślnie</option>
+    <option value="data">Data</option>
+    <option value="typ">Kategoria</option>
+    <option value="ocena">Wartość oceny</option>
+  </select>
+</div>
+
+    </div> <!-- koniec panelOceny -->
+  </div> <!-- koniec modal-content -->
+</div> <!-- koniec modal -->
+
+  <!-- [Twój kod aż do <script>] -->
+
+<script>
+    const klasy = {
+	'6A-Język_Piotrowski': ['Jagoda', 'Lena', 'Szymon', 'Antek'],
+	'6B-Język_Piotrowski': ['Ewelina', 'Tomek', 'Agata', 'Tadeusz'],
+	'7DE-Język_Piotrowski': ['Wojtek', 'Krzysiek', 'Mirek', 'Ola', 'Maria', 'Marta'],
+	'7G-Język_Piotrowski': ['Ela', 'Ola', 'Marylka', 'Marta'],
+	'8H-Język_Piotrowski': ['Andrzej', 'Maciej', 'Patryk'],
+	'1C-Język_Piotrowski': ['Wiesia', 'Alina', 'Bożena', 'Halinka'],
+	'2L-Język_Piotrowski': ['Paweł', 'Ola', 'Natalia', 'Karol']
+    };
+  window.addEventListener('DOMContentLoaded', () => {
+
+
+const listaKlasTabela = document.getElementById('listaKlasTabela');
+
+
+Object.keys(klasy).forEach(nazwaKlasy => {
+  const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
+  const oceny = zapisane[nazwaKlasy] || [];
+
+  const maPolroczna = oceny.some(o => o.typ === 'Półroczna');
+  const maPrzewidywana = oceny.some(o => o.typ === 'Przewidywana');
+  const maRoczna = oceny.some(o => o.typ === 'Roczna');
+
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${nazwaKlasy}</td>
+    <td>${maPolroczna ? '✅' : '❌'}</td>
+    <td>${maPrzewidywana ? '✅' : '❌'}</td>
+    <td>${maRoczna ? '✅' : '❌'}</td>
+    <td><button class="wybierz-klase-btn" data-klasa="${nazwaKlasy}">Wybierz</button></td>
+  `;
+  listaKlasTabela.appendChild(tr);
+});
+
+    const ocenyMozliwe = ['BZ', 'NP', '-', '+', '1', '1+','2-','2','2+','3-', '3','3+', '4-', '4','4+', '5-','5', '5+', '6-','6','BRAK','%', '?'];
+    const selectKlasa = document.getElementById('klasa');
+    const studentsDiv = document.getElementById('students');
+    const tabeleKlasDiv = document.getElementById('tabeleKlas');
+
+    for (let klasa in klasy) {
+      const option = document.createElement('option');
+      option.value = klasa;
+      option.textContent = klasa;
+      selectKlasa.appendChild(option);
+    }
+
+    function pokazUczniow() {
+  const studentsDiv = document.getElementById('students');
+  studentsDiv.innerHTML = '';
+  const wybranaKlasa = document.getElementById('klasa').value;
+
+  if (!wybranaKlasa || !klasy[wybranaKlasa]) return;
+
+  let html = `<table>
+    <thead>
+      <tr>
+        <th style="width: 50px;">Wybierz</th>
+        <th>Uczeń</th>
+        <th>Ocena</th>
+        <th>Komentarz</th>
+      </tr>
+    </thead>
+    <tbody>`;
+
+  klasy[wybranaKlasa].forEach(uczen => {
+    html += `<tr>
+      <td><input type="checkbox" class="chk-u" data-uczen="${uczen}" checked></td>
+      <td><strong>${uczen}</strong></td>
+      <td><input type="text" class="ocena" data-uczen="${uczen}" placeholder="np. 4+" style="width:80px"></td>
+      <td><input type="text" class="komentarz" data-uczen="${uczen}" placeholder="Komentarz..."></td>
+    </tr>`;
+  });
+
+  html += `</tbody></table>`;
+  studentsDiv.innerHTML = html;
+}
+
+    function zapiszOceny() {
+  const typ = document.getElementById('typ').value;
+  const klasa = selectKlasa.value;
+
+  if (!klasa) return alert('Wybierz klasę');
+
+  const oceny = [];
+
+  // Zamiast iterować po wszystkich .ocena, sprawdzamy najpierw checkboxy chk-u:
+document.querySelectorAll('.chk-u').forEach(chk => {
+  if (chk.checked) {
+    const uczen = chk.dataset.uczen;
+    const ocenaInput = document.querySelector(`.ocena[data-uczen="${uczen}"]`);
+    const komentarzInput = document.querySelector(`.komentarz[data-uczen="${uczen}"]`);
+    
+    const ocena = ocenaInput ? ocenaInput.value : '';
+    const komentarz = komentarzInput ? komentarzInput.value : '';
+
+    if (ocena) {
+      oceny.push({
+        uczen,
+        ocena,
+        typ,
+        komentarz,
+        data: new Date().toLocaleDateString()
+      });
+    }
+  }
+});
+
+  const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
+  if (!zapisane[klasa]) zapisane[klasa] = [];
+
+  zapisane[klasa].push(...oceny);
+  localStorage.setItem('oceny', JSON.stringify(zapisane));
+
+  pokazUczniow();
+  pokazTabele();
+
+  alert('Oceny zapisane!');
+}
+
+    
+    function pokazTabele() {
+  const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
+  const wybranaKlasa = selectKlasa.value;
+  tabeleKlasDiv.innerHTML = '';
+
+  if (!zapisane[wybranaKlasa]) return;
+
+  const table = document.createElement('table');
+  table.classList.add('tabela-klasy');
+
+  let html = `<thead><tr>
+  <th>Uczeń</th>
+  <th>Oceny</th>
+  <th>Średnia</th>
+  <th>Proponowana</th>
+  <th>(I)</th>
+  <th>(II)</th>
+  <th>(R)</th>
+</tr></thead><tbody>`;
+
+
+
+  klasy[wybranaKlasa].forEach(uczen => {
+    let ocenyUcznia = zapisane[wybranaKlasa].filter(o => o.uczen === uczen);
+
+    // 🔽 SORTOWANIE 🔽
+    const sortuj = document.getElementById('sortowanie')?.value || 'domyślnie';
+    if (sortuj === 'data') {
+      ocenyUcznia.sort((a, b) => new Date(b.data.split('.').reverse().join('-')) - new Date(a.data.split('.').reverse().join('-')));
+    } else if (sortuj === 'typ') {
+      ocenyUcznia.sort((a, b) => a.typ.localeCompare(b.typ));
+    } else if (sortuj === 'ocena') {
+      const getVal = x => isNaN(parseInt(x.ocena)) ? 0 : parseInt(x.ocena);
+      ocenyUcznia.sort((a, b) => getVal(b) - getVal(a));
+    }
+
+    const polroczna = ocenyUcznia.find(o => o.typ === 'Półroczna')?.ocena || '';
+    const przewidywana = ocenyUcznia.find(o => o.typ === 'Przewidywana')?.ocena || '';
+    const roczna = ocenyUcznia.find(o => o.typ === 'Roczna')?.ocena || '';
+
+    const liczby = ocenyUcznia
+      .filter(o => !isNaN(parseInt(o.ocena)) && !['Przewidywana', 'Roczna', 'Półroczna'].includes(o.typ))
+      .map(o => parseInt(o.ocena));
+    const srednia = liczby.length ? (liczby.reduce((a, b) => a + b, 0) / liczby.length).toFixed(2) : '';
+let proponowana = '';
+if (srednia) {
+  const s = parseFloat(srednia);
+  if (s >= 5.66) proponowana = '6';
+  else if (s >= 4.66) proponowana = '5';
+  else if (s >= 3.66) proponowana = '4';
+  else if (s >= 2.66) proponowana = '3';
+  else if (s >= 1.66) proponowana = '2';
+  else proponowana = '1';
+}
+
+    const ocenyHTML = ocenyUcznia.map((o, idx) => {
+      const klasaTypu = `typ-${o.typ.replace(/\s/g, '')}`;
+      return `
+<span class="grade ${klasaTypu}"
+      data-typ="${o.typ}"
+      data-komentarz="${o.komentarz || 'Brak komentarza'}"
+      data-data="${o.data}"
+      style="cursor:pointer;"
+      onclick="edytujOcene('${wybranaKlasa}', '${uczen}', ${idx})">
+      ${o.ocena}${o.typ.toLowerCase() === 'poprawa' ? '*' : ''}
+</span>`;
+    }).join(' ');
+
+   html += `<tr>
+  <td>
+    ${uczen}
+    <button class="btn-plus" onclick="otworzModalJednegoUcznia('${uczen}')">+</button>
+  </td>
+  <td>${ocenyHTML}</td>
+  <td>${srednia}</td>
+  <td>${proponowana}</td>
+  <td>${polroczna}</td>
+  <td>${przewidywana}</td>
+  <td>${roczna}</td>
+</tr>`;
+
+
+  });
+
+  html += '</tbody>';
+  table.innerHTML = `<caption><strong>Klasa ${wybranaKlasa}</strong></caption>` + html;
+  tabeleKlasDiv.appendChild(table);
+}
+
+
+    selectKlasa.selectedIndex = 0;
+    pokazUczniow();
+    pokazTabele();
+
+        window.pokazUczniow = pokazUczniow;
+    window.pokazTabele = pokazTabele;
+    window.zapiszOceny = zapiszOceny;
+    window.edytujOcene = edytujOcene;
+  }); 
+  
+  document.addEventListener('click', e => {
+  if (e.target.classList.contains('wybierz-klase-btn')) {
+    const klasa = e.target.getAttribute('data-klasa');
+    otworzModal(klasa);
+  }
+});
+let uczenDoOceny = '';
+
+function otworzModalJednegoUcznia(uczen) {
+  uczenDoOceny = uczen;
+  document.getElementById('modal-uczen-nazwa').textContent = uczen;
+  document.getElementById('modalJednegoUcznia').style.display = 'flex';
+}
+
+function zamknijModalJednego() {
+  document.getElementById('modalJednegoUcznia').style.display = 'none';
+}
+
+function zapiszOceneJednego() {
+  const typ = document.getElementById('typ-jednego').value;
+  const komentarz = document.getElementById('komentarz-jednego').value;
+  const ocena = document.getElementById('ocena-jednego').value;
+  const klasa = document.getElementById('klasa').value;
+
+  if (!ocena) return alert('Wybierz ocenę.');
+
+  const nowaOcena = {
+    uczen: uczenDoOceny,
+    ocena,
+    typ,
+    komentarz,
+    data: new Date().toLocaleDateString()
+  };
+
+  const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
+  if (!zapisane[klasa]) zapisane[klasa] = [];
+  zapisane[klasa].push(nowaOcena);
+  localStorage.setItem('oceny', JSON.stringify(zapisane));
+
+  pokazTabele();
+  zamknijModalJednego();
+  alert('Ocena zapisana!');
+}
+window.addEventListener('DOMContentLoaded', () => {
+  const globalTooltip = document.getElementById("global-tooltip");
+
+  document.addEventListener("mouseover", e => {
+    if (e.target.classList.contains("grade")) {
+      const typ = e.target.dataset.typ;
+      const kom = e.target.dataset.komentarz;
+      const data = e.target.dataset.data;
+
+      globalTooltip.innerHTML = `
+        <strong>Ocena:</strong> ${e.target.textContent.trim()}<br>
+        <strong>Typ:</strong> ${typ}<br>
+        <strong>Data:</strong> ${data}<br>
+        <strong>Komentarz:</strong> ${kom}
+      `;
+
+      globalTooltip.style.opacity = 1;
+    }
+  });
+
+  document.addEventListener("mousemove", e => {
+    globalTooltip.style.left = e.pageX + 15 + "px";
+    globalTooltip.style.top = e.pageY + 15 + "px";
+  });
+
+  document.addEventListener("mouseout", e => {
+    if (e.target.classList.contains("grade")) {
+      globalTooltip.style.opacity = 0;
+    }
+  });
+});
+
+function toggleFormOceny() {
+  const form = document.getElementById('formOceny');
+
+  if (form.style.display === 'none') {
+    form.style.display = 'block';
+  } else {
+    form.style.display = 'none';
+  }
+}
+function ustawWszystkim() {
+  const ocena = document.getElementById('ocena-wszystkim').value;
+  const komentarz = document.getElementById('komentarz-wszystkim').value;
+
+  document.querySelectorAll('.ocena').forEach(input => {
+    input.value = ocena;
+  });
+
+  document.querySelectorAll('.komentarz').forEach(input => {
+    input.value = komentarz;
+  });
+}
+// 1. OTWIERANIE MODALU (Zastąp starą funkcję edytujOcene tym kodem)
+window.edytujOcene = function(klasa, uczen, index) {
+    const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
+    if (!zapisane[klasa]) return;
+
+    // Pobieramy oceny tego konkretnego ucznia
+    const ocenyUcznia = zapisane[klasa].filter(o => o.uczen === uczen);
+    const ocenaDoEdycji = ocenyUcznia[index];
+
+    if (!ocenaDoEdycji) return;
+
+    // Wypełniamy pola modalu danymi z pamięci
+    document.getElementById('edit-uczen').value = uczen;
+    document.getElementById('edit-index').value = index;
+    document.getElementById('edit-typ').value = ocenaDoEdycji.typ;
+    document.getElementById('edit-komentarz').value = ocenaDoEdycji.komentarz || '';
+    document.getElementById('edit-wartosc').value = ocenaDoEdycji.ocena;
+
+    // Wyświetlamy modal
+    document.getElementById('modalEdycjiOceny').style.display = 'flex';
+};
+
+// 2. ZAMYKANIE MODALU
+window.zamknijModalEdycji = function() {
+    document.getElementById('modalEdycjiOceny').style.display = 'none';
+};
+
+// 3. ZAPISYWANIE ZMIAN
+window.zapiszZmianyOceny = function() {
+    const klasa = document.getElementById('klasa').value; // Pobieramy aktualnie wybraną klasę
+    const uczen = document.getElementById('edit-uczen').value;
+    const index = parseInt(document.getElementById('edit-index').value);
+    
+    const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
+    
+    // Szukamy oceny w bazie
+    let licznik = 0;
+    const ocenaWLocalStorage = zapisane[klasa].find(o => {
+        if (o.uczen === uczen) {
+            if (licznik === index) return true;
+            licznik++;
+        }
+        return false;
+    });
+
+    if (ocenaWLocalStorage) {
+        // Podmieniamy dane na te z modalu
+        ocenaWLocalStorage.typ = document.getElementById('edit-typ').value;
+        ocenaWLocalStorage.komentarz = document.getElementById('edit-komentarz').value;
+        ocenaWLocalStorage.ocena = document.getElementById('edit-wartosc').value;
+        
+        localStorage.setItem('oceny', JSON.stringify(zapisane));
+        
+        // Odświeżamy tabelę, żeby od razu było widać nową ocenę
+        if (typeof pokazTabele === 'function') pokazTabele(); 
+        
+        window.zamknijModalEdycji();
+    }
+};
+</script>
+<footer style="text-align: center; padding: 20px; background-color: #f0f0f0;">
+  <div style="margin-bottom: 10px;">
+    <img src="teamppp.png" alt="Team P" style="width: 100px; margin: 0 20px;">
+    <img src="21 maj 2025, 16_13_32.png" alt="p-librus" style="width: 100px; margin: 0 20px;">
+    <img src="stpschool.png" alt="STP School" style="width: 100px; margin: 0 20px;">
+  </div>
+  <p style="font-size: 14px; color: #555;">P-Librus © 2026</p>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Firebase App (core SDK) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+<!-- Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
+
+<script>
+ window.otworzModal = (klasa) => {
+    const selectKlasa = document.getElementById('klasa');
+    selectKlasa.value = klasa;
+    selectKlasa.disabled = true; // 🔒 Blokuje możliwość zmiany klasy w modalu
+
+    document.getElementById('modalOceny').style.display = 'flex';
+
+    if (typeof pokazUczniow === 'function') pokazUczniow();
+    if (typeof pokazTabele === 'function') pokazTabele();
+  };
+
+  window.zamknijModal = () => {
+    const selectKlasa = document.getElementById('klasa');
+    selectKlasa.disabled = false; // 🔓 Odblokowuje przy zamykaniu
+    document.getElementById('modalOceny').style.display = 'none';
+  };
+</script>
+<div id="modalJednegoUcznia" class="modal">
+  <div class="modal-content">
+    <button class="close-modal" onclick="zamknijModalJednego()">Zamknij</button>
+    <h3>Dodaj ocenę dla <span id="modal-uczen-nazwa"></span></h3>
+
+    <label for="typ-jednego">Typ oceny:</label>
+    <select id="typ-jednego">
+      <option>Sprawdzian</option>
+      <option>Praca klasowa</option>
+      <option>Kartkówka</option>
+      <option>Projekt</option>
+      <option>Prezentacja</option>
+      <option>Praca na lekcji</option>
+      <option>Odpowiedź ustna</option>
+      <option>Zadanie</option>
+      <option>Inne</option>
+      <option>Przewidywana</option>
+      <option>Roczna</option>
+      <option>Poprawa</option>
+      <option>Aktywność</option>
+      <option>Praca domowa</option>
+      <option>Egzamin-próbny</option>
+	  <option>Egzamin-oficjalny</option>
+      <option>Półroczna</option>
+    </select>
+
+    <label for="komentarz-jednego">Komentarz:</label>
+    <textarea id="komentarz-jednego"></textarea>
+
+    <label for="ocena-jednego">Ocena:</label>
+    <select id="ocena-jednego">
+  <option value="">-</option>
+  <option value="BZ">BZ</option>
+  <option value="NP">NP</option>
+  <option value="-">-</option>
+  <option value="+">+</option>
+  <option value="1">1</option>
+  <option value="1+">1+</option>
+  <option value="2-">2-</option>
+  <option value="2">2</option>
+  <option value="2+">2+</option>
+  <option value="3-">3-</option>
+  <option value="3">3</option>
+  <option value="3+">3+</option>
+  <option value="4-">4-</option>
+  <option value="4">4</option>
+  <option value="4+">4+</option>
+  <option value="5-">5-</option>
+  <option value="5">5</option>
+  <option value="5+">5+</option>
+  <option value="6-">6-</option>
+  <option value="6">6</option>
+  <option value="BRAK">BRAK</option>
+  <option value="%">%</option>
+  <option value="?">?</option>
+</select>
+
+
+    <button onclick="zapiszOceneJednego()">Zapisz ocenę</button>
+  </div>
+</div>
+
+
+<div id="global-tooltip"></div>
+
+<style>
+#global-tooltip {
+  position: fixed;
+  background: #2a6f97;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  max-width: 320px;
+  z-index: 999999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.35);
+  white-space: normal;
+}
+</style>
+
+<div id="modalEdycjiOceny" class="modal">
+  <div class="modal-content">
+    <button onclick="zamknijModalEdycji()">Zamknij</button>
+    <h3>Edycja oceny</h3>
+    
+    <input type="hidden" id="edit-index">
+    <input type="hidden" id="edit-uczen">
+
+    <label>Typ oceny:</label>
+    <select id="edit-typ">
+      <option>Sprawdzian</option>
+      <option>Praca klasowa</option>
+      <option>Kartkówka</option>
+      <option>Projekt</option>
+      <option>Prezentacja</option>
+      <option>Praca na lekcji</option>
+      <option>Odpowiedź ustna</option>
+      <option>Zadanie</option>
+      <option>Inne</option>
+      <option>Przewidywana</option>
+      <option>Roczna</option>
+      <option>Poprawa</option>
+      <option>Aktywność</option>
+      <option>Praca domowa</option>
+      <option>Półroczna</option>
+    </select>
+
+    <label>Komentarz:</label>
+    <textarea id="edit-komentarz" style="width: 100%; height: 60px;"></textarea>
+
+    <label>Ocena:</label>
+    <input type="text" id="edit-wartosc" style="width: 100%; padding: 8px;">
+
+    <div style="margin-top: 15px;">
+      <button onclick="zapiszZmianyOceny()" style="background: #4caf50; color: white;">Zapisz zmiany</button>
+      <button onclick="zamknijModalEdycji()">Anuluj</button>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

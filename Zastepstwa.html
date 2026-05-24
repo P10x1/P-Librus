@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/x-icon" href="favicon.png">
+  <title>P-Librus - Zastępstwa</title>
+  <style>
+/* STYLE Z LEKCJA.HTML */
+body {
+  font-family: Inter, "Segoe UI", sans-serif;
+  background: #eef1f5;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #f1eadf; 
+  border-bottom: 1px solid #d8dde3;
+  gap: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+.logo img {
+  height: 65px;
+  margin-right: 10px;
+}
+
+.logo span {
+  font-size: 22px;
+  color: #123e61;
+  font-weight: bold;
+}
+
+.user-info {
+  font-size: 12px;
+  color: #555;
+}
+
+.menu-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.menu-header .menu-item a {
+  display: block;
+  padding: 10px 18px;
+  background: #ffffff;
+  border: 1px solid #cfd5db;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.lesson-box,
+.history-box {
+  background: #ffffff;
+  border: 1px solid #d7dce1;
+  border-radius: 7px;
+  margin: 20px;
+  padding: 22px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+h2, h3 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 18px;
+  color: #444;
+  font-weight: bold;
+}
+
+label {
+  display: block;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #444;
+}
+
+select,
+textarea,
+input[type="date"],
+input[type="text"] {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #cfd5db;
+  border-radius: 5px;
+  font-size: 13px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+button,
+.btn-nav,
+.btn-action {
+  background: #f7f8fa;
+  color: #333;
+  border: 1px solid #c8ced6;
+  border-radius: 5px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.15s;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #e9edf2;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #d8dde3;
+  border-radius: 7px;
+  overflow: hidden;
+  background: white;
+}
+
+.modern-table th {
+  background: #eef2f5;
+  color: #444;
+  padding: 10px;
+  border-bottom: 1px solid #d7dce1;
+  font-size: 13px;
+  text-align: center;
+}
+
+.modern-table td {
+  padding: 10px;
+  border-bottom: 1px solid #eceff2;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ROZBUDOWANA TABELA FREKWENCJI */
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+}
+
+.attendance-table th {
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 4px;
+    font-weight: bold;
+    color: #444;
+    text-align: center;
+}
+
+.attendance-table td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: center;
+}
+
+.col-name {
+    text-align: left !important;
+    padding-left: 10px !important;
+    font-size: 12px;
+}
+
+.info-panel {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <img src="21 maj 2025, 16_13_32.png" alt="P-Librus logo">
+    <span>P-Librus</span>
+  </div>
+
+  <div class="menu-header">
+    <div class="menu-item"><a href="Lekcja.html">Lekcja</a></div>
+    <div class="menu-item"><a href="Oceny.html">Oceny</a></div>
+    <div class="menu-item"><a href="Zachowanie.html">Zachowanie</a></div>
+    <div class="menu-item"><a href="Zastepstwa.html" style="background:#eef2f5; font-weight:bold;">Zastępstwa</a></div>
+    <div class="menu-item"><a href="Organizacja.html">Organizacja</a></div>
+    <div class="menu-item"><a href="Wiadomosci.html">Wiadomości</a></div>
+    <div class="menu-item"><a href="Ogloszenia.html">Ogłoszenia</a></div>
+    <div class="menu-item"><a href="Terminarz.html">Terminarz</a></div>
+  </div>
+
+  <div class="user-info">
+    Jesteś zalogowany jako: <strong>Piotr Rejmentowski (nauczyciel)</strong>
+  </div>
+</div>
+
+<div class="lesson-box" id="widok-planu">
+  <h2>📅 Twoje Zastępstwa</h2>
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+    <button id="prev-day" class="btn-nav">◀</button>
+    <input type="date" id="data-plan" />
+    <span id="dzien-tygodnia" style="font-weight:bold; font-size:16px; color:#2a6f97;"></span>
+    <button id="next-day" class="btn-nav">▶</button>
+  </div>
+
+  <table id="tabela-zastepstw" class="modern-table">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Klasa</th>
+        <th>Za nauczyciela</th>
+        <th>Z przedmiotu</th>
+        <th>Na przedmiot</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="lesson-box">
+  
+  <button onclick="toggleFormularzDodawania()" style="margin: 1px; background: #123e61; color: white;">
+  ➕ Pokaż / Ukryj formularz dodawania zastępstw
+</button>
+  
+  <div class="lesson-box" id="kontener-dodawania" style="display: none;">
+  <h2>Dodawanie / Edytowanie zastępstwa</h2>
+  <label>Dzień:</label>
+  <input type="date" id="zast-data" />
+
+  <label>Nauczyciel nieobecny:</label>
+  <select id="zast-nieobecny">
+    <option value="">— wybierz nauczyciela —</option>
+<option value="Patryk Prosiak">Patryk Prosiak (Matematyka, Fizyka)</option>
+<option value="Julia Bośniak">Julia Bośniak (Chemia)</option>
+<option value="Martyna Wilska">Martyna Wilska (Edukacja dla bezpieczeństwa, Doradztwo zawodowe)</option>
+<option value="Maja Oloj">Maja Oloj (Informatyka, Język angielski)</option>
+<option value="Justyna Born">Justyna Born (Język angielski)</option>
+<option value="Patrycja Mińska">Patrycja Mińska (Muzyka, Świetlica)</option>
+<option value="Agata Majewska">Agata Majewska (Katachetka religii)</option>
+<option value="Maciej Bojnek">Maciej Bojnek (Historia, Wiedza o społeczeństwie)</option>
+<option value="Anna Łezka">Anna Łezka (Język polski, Matematyka)</option>
+<option value="Maria Oksejska">Maria Oksejska (Język niemiecki)</option>
+<option value="Zuzanna Filipińska">Zuzanna Filipińska (Język hiszpański)</option>
+<option value="Julia Komuniak">Julia Komuniak (Język francuski)</option>
+<option value="Krzysztof Sowa">Krzysztof Sowa (Wychowanie fizyczne)</option>
+<option value="Paweł Krak">Paweł Krak (Wychowanie fizyczne)</option>
+<option value="Milena Bośniak">Milena Bośniak (Plastyka, Technika)</option>
+<option value="Martyna Polecsa">Martyna Polecsa (Geografia)</option>
+<option value="Pomela Muk">Pomela Muk (Biologia, Przyroda)</option>
+<option value="Piotr Rejmentowski">Piotr Rejmentowski (Język piotrowski)</option>
+  </select>
+
+<label>Klasa:</label>
+  <select id="zast-klasa">
+    <option value="6A-Język_Piotrowski">6A</option>
+    <option value="6B-Język_Piotrowski">6B</option>
+    <option value="7G-Język_Piotrowski">7G</option>
+    <option value="7DE-Język_Piotrowski">7DE</option>
+    <option value="8H-Język_Piotrowski">8H</option>
+    <option value="1C-Język_Piotrowski">1C</option>
+    <option value="2L-Język_Piotrowski">2L</option>
+  </select>
+
+  <label>Przedmiot (oryginalny):</label>
+  <select id="zast-przedmiot-oryg" style="width:100%">
+<option value="Matematyka">Matematyka</option>
+    <option value="Język polski">Język polski</option>
+    <option value="Biologia">Biologia</option>
+    <option value="Chemia">Chemia</option>
+    <option value="Historia">Historia</option>
+    <option value="Geografia">Geografia</option>
+    <option value="Edukacja dla bezpieczeństwa">Edukacja dla bezpieczeństwa</option>
+    <option value="Wiedza o społeczeństwie">Wiedza o społeczeństwie</option>
+    <option value="Fizyka">Fizyka</option>
+    <option value="Język angielski">Język angielski</option>
+    <option value="Drugi język obcy nowożytny">Drugi język obcy nowożytny</option>
+    <option value="Przyroda">Przyroda</option>
+    <option value="Doradztwo zawodowe">Doradztwo zawodowe</option>
+    <option value="Wychowanie fizyczne">Wychowanie fizyczne</option>
+    <option value="Edukacja zdrowotna">Edukacja zdrowotna</option>
+    <option value="Godzina wychowawcza">Godzina wychowawcza</option>
+    <option value="Zajęcia rozwijające zainteresowania">Zajęcia rozwijające zainteresowania</option>
+    <option value="Plastyka">Plastyka</option>
+    <option value="Muzyka">Muzyka</option>
+    <option value="Technika / Zajęcia praktyczno-techniczne">Technika / Zajęcia praktyczno-techniczne</option>
+    <option value="Religia">Religia</option>
+    <option value="Informatyka">Informatyka</option>
+    <option value="Zajęcia korekcyjne (wyrównawcze)">Zajęcia korekcyjne (wyrównawcze)</option>
+    <option value="Edukacja wczesnoszkolna">Edukacja wczesnoszkolna</option>
+	</select>
+
+  
+
+  <label>Zmiana przedmiotu na:</label>
+<select id="zast-przedmiot-nowy">
+  <optgroup label="Moje przedmioty">
+    <option value="Język piotrowski">Język piotrowski</option>
+	<option value="Edukacja dla bezpieczeństwa">Edukacja dla bezpieczeństwa</option>
+    <option value="Zajęcia rozwijające zainteresowania">Zajęcia rozwijające zainteresowania</option>
+    <option value="Zajęcia egzaminacyjne">Zajęcia egzaminacyjne</option>
+  </optgroup>
+  
+  <optgroup label="Inne przedmioty">
+    <option value="Matematyka">Matematyka</option>
+    <option value="Język polski">Język polski</option>
+    <option value="Biologia">Biologia</option>
+    <option value="Chemia">Chemia</option>
+    <option value="Historia">Historia</option>
+    <option value="Geografia">Geografia</option>
+    <option value="Edukacja dla bezpieczeństwa">Edukacja dla bezpieczeństwa</option>
+    <option value="Wiedza o społeczeństwie">Wiedza o społeczeństwie</option>
+    <option value="Fizyka">Fizyka</option>
+    <option value="Język angielski">Język angielski</option>
+    <option value="Drugi język obcy nowożytny">Drugi język obcy nowożytny</option>
+    <option value="Przyroda">Przyroda</option>
+    <option value="Doradztwo zawodowe">Doradztwo zawodowe</option>
+    <option value="Wychowanie fizyczne">Wychowanie fizyczne</option>
+    <option value="Edukacja zdrowotna">Edukacja zdrowotna</option>
+    <option value="Godzina wychowawcza">Godzina wychowawcza</option>
+    <option value="Zajęcia rozwijające zainteresowania">Zajęcia rozwijające zainteresowania</option>
+    <option value="Plastyka">Plastyka</option>
+    <option value="Muzyka">Muzyka</option>
+    <option value="Technika / Zajęcia praktyczno-techniczne">Technika / Zajęcia praktyczno-techniczne</option>
+    <option value="Religia">Religia</option>
+    <option value="Informatyka">Informatyka</option>
+    <option value="Zajęcia korekcyjne (wyrównawcze)">Zajęcia korekcyjne (wyrównawcze)</option>
+    <option value="Edukacja wczesnoszkolna">Edukacja wczesnoszkolna</option>
+  </optgroup>
+</select>
+
+  <button onclick="dodajZastepstwoDoPlanu()">Dodaj zastępstwo do planu</button>
+</div>
+</div>
+<div class="lesson-box" id="formularz-wpisu" style="display:none;">
+  <button onclick="powrotDoListy()">← Wróć do listy</button>
+  <h2>PANEL NAUCZYCIELA ZASTĘPSTW LEKCJI</h2>
+
+  <div class="info-panel">
+    <h3>Informacje o zastępstwie:</h3>
+    <p><strong>Dzień:</strong> <span id="view-dzien">—</span></p>
+    <p><strong>Nauczyciel nieobecny:</strong> <span id="view-nieobecny">—</span></p>
+    <p><strong>Przedmiot oryginalny:</strong> <span id="view-przedmiot">—</span></p>
+    <p><strong>Wychowawca klasy:</strong> <span id="view-wychowawca">—</span></p>
+  </div>
+
+<br><br>
+<hr class="separator-line">
+<br>
+  <label>Temat lekcji na zastępstwie:</label>
+  <input type="text" id="zast-temat-wpis" placeholder="Wpisz temat zastępstwa..." />
+
+  <label>Frekwencja:</label>
+  <div style="overflow-x: auto;">
+    <table class="attendance-table">
+      <thead>
+        <tr>
+          <th rowspan="2">Nr</th>
+          <th rowspan="2">Nazwisko i imię</th>
+          <th colspan="4" style="background: #f0f4f8;">PODSTAWOWE</th>
+          <th rowspan="2">Oceny</th>
+          <th colspan="7" style="background: #fdf2f2;">ZWOLNIENIA</th>
+        </tr>
+        <tr>
+          <th class="col-radio" title="Obecność">ob<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(0)"></th>
+          <th class="col-radio" title="Nieobecność nieusprawiedliwiona">nb<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(1)"></th>
+          <th class="col-radio" title="Nieobecność usprawiedliwiona">u<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(2)"></th>
+          <th class="col-radio" title="Spóźnienie">sp<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(3)"></th>
+          
+          <th class="col-radio" title="Zwolnienie">zw<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(4)"></th>
+          <th class="col-radio" title="Rekolekcje">rk<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(5)"></th>
+          <th class="col-radio" title="Indywidualne nauczanie">in<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(6)"></th>
+          <th class="col-radio" title="Sanatorium">sa<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(7)"></th>
+          <th class="col-radio" title="Wycieczka">wy<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(8)"></th>
+          <th class="col-radio" title="Konkurs">ko<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(9)"></th>
+          <th class="col-radio" title="Egzamin">eg<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(10)"></th>
+        </tr>
+      </thead>
+      <tbody id="tabela-obecnosci-body"></tbody>
+    </table>
+  </div>
+
+  <button onclick="zapiszWpisZastepstwa()" style="background:#3f8a4e; color:white; font-weight:bold; margin-top:20px; width:100%; padding:15px;">ZAPISZ ZASTĘPSTWO</button>
+</div>
+
+<script>
+const uczniowie = {
+  '6A-Język_Piotrowski': ['Jagoda', 'Lena', 'Szymon', 'Antek'],
+  '6B-Język_Piotrowski': ['Ewelina', 'Tomek', 'Agata', 'Tadeusz'],
+  '7G-Język_Piotrowski': ['Ela', 'Ola', 'Marylka', 'Marta'],
+  '7DE-Język_Piotrowski': ['Wojtek', 'Krzysiek', 'Mirek', 'Ola', 'Maria', 'Marta'],
+  '8H-Język_Piotrowski': ['Andrzej', 'Maciej', 'Patryk'],
+  '1C-Język_Piotrowski': ['Wiesia', 'Alina', 'Bożena', 'Halinka'],
+  '2L-Język_Piotrowski': ['Paweł', 'Ola', 'Natalia', 'Karol']
+};
+
+const daneDodatkoweKlas = {
+  '2L-Język_Piotrowski': { wychowawca: 'Zuzanna Filipińska' },
+  '7DE-Język_Piotrowski': { wychowawca: 'Martyna Wilska' },
+  '7G-Język_Piotrowski': { wychowawca: 'Julia Bośniak' },
+  '1C-Język_Piotrowski': { wychowawca: 'Justyna Born' },
+  '6B-Język_Piotrowski': { wychowawca: 'Patryk Prosiak' },
+  '8H-Język_Piotrowski': { wychowawca: 'Anna Łezka' },
+  '6A-Język_Piotrowski': { wychowawca: 'Maciej Bojnek' }
+};
+
+let currentDate = new Date();
+let edytowanyIndex = null;
+let edytowanaKlasa = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById("zast-data").value = today;
+  document.getElementById("data-plan").value = today;
+  pokazZastepstwa();
+});
+
+function dodajZastepstwoDoPlanu() {
+  const data = document.getElementById("zast-data").value;
+  const nieobecny = document.getElementById("zast-nieobecny").value;
+  const orygPrzedmiot = document.getElementById("zast-przedmiot-oryg").value;
+  const klasa = document.getElementById("zast-klasa").value;
+  const nowyPrzedmiot = document.getElementById("zast-przedmiot-nowy").value;
+
+  if(!nieobecny || !orygPrzedmiot) { alert("Uzupełnij dane!"); return; }
+
+  const klucz = `lekcje_${klasa}`;
+  const lekcje = JSON.parse(localStorage.getItem(klucz)) || [];
+
+  lekcje.push({
+    data: data,
+    klasa: klasa,
+    nieobecny: nieobecny,
+    przedmiotOryg: orygPrzedmiot,
+    temat: `ZASTĘPSTWO (${nowyPrzedmiot})`,
+    status: "zastepstwo",
+    wpisany: false
+  });
+
+  localStorage.setItem(klucz, JSON.stringify(lekcje));
+  alert("Zastępstwo dodane!");
+  
+  document.getElementById("kontener-dodawania").style.display = "none";
+  
+  pokazZastepstwa();
+}
+
+function pokazZastepstwa() {
+  const tabela = document.getElementById("tabela-zastepstw").querySelector("tbody");
+  tabela.innerHTML = "";
+  const wybranaData = document.getElementById("data-plan").value;
+
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith("lekcje_")) {
+      const lekcje = JSON.parse(localStorage.getItem(key)) || [];
+      lekcje.forEach((l, index) => {
+        if (l.status === "zastepstwo" && l.data === wybranaData) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${l.data}</td>
+            <td>${l.klasa.split('-')[0]}</td>
+            <td>${l.nieobecny}</td>
+            <td>${l.przedmiotOryg}</td>
+            <td>${l.temat}</td>
+            <td>
+              <button onclick="otworzWpisZastepstwa('${l.klasa}', ${index})" title="Wpisz frekwencję i temat">
+                ${l.wpisany ? '📝 Edytuj wpis' : '➕ Wpisz lekcję'}
+              </button>
+              <button onclick="edytujDaneZastepstwa('${l.klasa}', ${index})" style="background:#ffc107; border-color:#e0a800;" title="Zmień dane zastępstwa">✏️</button>
+              <button onclick="usunZastepstwo('${l.klasa}', ${index})" style="background:#dc3545; color:white; border-color:#bd2130;" title="Usuń zastępstwo">🗑️</button>
+            </td>
+          `;
+          tabela.appendChild(tr);
+        }
+      });
+    }
+  });
+}
+
+function otworzWpisZastepstwa(klasa, index) {
+  const lekcje = JSON.parse(localStorage.getItem(`lekcje_${klasa}`));
+  const l = lekcje[index];
+  edytowanyIndex = index;
+  edytowanaKlasa = klasa;
+
+  document.getElementById("widok-planu").style.display = "none";
+  document.getElementById("formularz-wpisu").style.display = "block";
+
+  document.getElementById("view-dzien").textContent = l.data;
+  document.getElementById("view-nieobecny").textContent = l.nieobecny;
+  document.getElementById("view-przedmiot").textContent = l.przedmiotOryg;
+  document.getElementById("view-wychowawca").textContent = daneDodatkoweKlas[klasa]?.wychowawca || "—";
+  document.getElementById("zast-temat-wpis").value = l.tematZrealizowany || "";
+
+  const tbody = document.getElementById("tabela-obecnosci-body");
+  tbody.innerHTML = "";
+  
+  (uczniowie[klasa] || []).forEach((uczen, i) => {
+    const tr = document.createElement("tr");
+    // Wartości value dla radio odpowiadają nazwom z tabeli
+    const statusy = ["ob", "nb", "u", "sp", "zw", "rk", "in", "sa", "wy", "ko", "eg"];
+    
+    let radioButtonsHtml = "";
+    statusy.forEach((s, sIdx) => {
+      radioButtonsHtml += `<td><input type="radio" name="fr_${i}" value="${s}" ${s === "ob" ? "checked" : ""}></td>`;
+      // Dodajemy pustą komórkę "Oceny" po statusie "sp" (index 3)
+      if(s === "sp") radioButtonsHtml += `<td>—</td>`;
+    });
+
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td class="col-name"><strong>${uczen}</strong></td>
+      ${radioButtonsHtml}
+    `;
+    tbody.appendChild(tr);
+
+    // Przywracanie zapisanego stanu
+    if (l.frekwencja && l.frekwencja[i]) {
+      const radios = tr.querySelectorAll(`input[name="fr_${i}"]`);
+      radios.forEach(r => { if(r.value === l.frekwencja[i].status) r.checked = true; });
+    }
+  });
+}
+
+function zaznaczWszystkim(colIndex) {
+    const tbody = document.getElementById("tabela-obecnosci-body");
+    const wiersze = tbody.querySelectorAll("tr");
+    wiersze.forEach(tr => {
+        const radios = tr.querySelectorAll('input[type="radio"]');
+        // colIndex przekazany z nagłówka (0-10) odpowiada kolejności radio w wierszu
+        if (radios[colIndex]) radios[colIndex].checked = true;
+    });
+}
+
+function zapiszWpisZastepstwa() {
+  const klucz = `lekcje_${edytowanaKlasa}`;
+  const lekcje = JSON.parse(localStorage.getItem(klucz));
+  const temat = document.getElementById("zast-temat-wpis").value;
+
+  if(!temat) { alert("Wpisz temat lekcji!"); return; }
+
+  const frekwencja = [];
+  (uczniowie[edytowanaKlasa] || []).forEach((uczen, i) => {
+    const status = document.querySelector(`input[name="fr_${i}"]:checked`).value;
+    frekwencja.push({ uczen, status });
+  });
+
+  lekcje[edytowanyIndex].tematZrealizowany = temat;
+  lekcje[edytowanyIndex].frekwencja = frekwencja;
+  lekcje[edytowanyIndex].wpisany = true;
+
+  localStorage.setItem(klucz, JSON.stringify(lekcje));
+  alert("Zapisano zastępstwo!");
+  powrotDoListy();
+}
+
+function powrotDoListy() {
+  document.getElementById("formularz-wpisu").style.display = "none";
+  document.getElementById("widok-planu").style.display = "block";
+  pokazZastepstwa();
+}
+
+// Kalendarz
+document.getElementById("prev-day").addEventListener("click", () => {
+  currentDate.setDate(currentDate.getDate() - 1);
+  document.getElementById("data-plan").value = currentDate.toISOString().split('T')[0];
+  pokazZastepstwa();
+});
+document.getElementById("next-day").addEventListener("click", () => {
+  currentDate.setDate(currentDate.getDate() + 1);
+  document.getElementById("data-plan").value = currentDate.toISOString().split('T')[0];
+  pokazZastepstwa();
+});
+document.getElementById("data-plan").addEventListener("change", (e) => {
+  currentDate = new Date(e.target.value);
+  pokazZastepstwa();
+});
+function toggleFormularzDodawania() {
+  const form = document.getElementById("kontener-dodawania");
+  if (form.style.display === "none") {
+    form.style.display = "block";
+  } else {
+    form.style.display = "none";
+  }
+}
+// --- FUNKCJA USUWANIA ---
+function usunZastepstwo(klasa, index) {
+  if (confirm("Czy na pewno chcesz usunąć to zastępstwo z planu?")) {
+    const klucz = `lekcje_${klasa}`;
+    let lekcje = JSON.parse(localStorage.getItem(klucz)) || [];
+    
+    // Usuwamy konkretny element z tablicy
+    lekcje.splice(index, 1);
+    
+    // Zapisujemy nową tablicę w pamięci
+    localStorage.setItem(klucz, JSON.stringify(lekcje));
+    
+    // Odświeżamy widok
+    pokazZastepstwa();
+  }
+}
+
+// --- FUNKCJA EDYCJI DANYCH (SZYBKA EDYCJA) ---
+function edytujDaneZastepstwa(klasa, index) {
+  const klucz = `lekcje_${klasa}`;
+  let lekcje = JSON.parse(localStorage.getItem(klucz)) || [];
+  const l = lekcje[index];
+
+  // Pokazujemy formularz dodawania (wykorzystujemy go jako edytor)
+  const formKontener = document.getElementById("kontener-dodawania");
+  formKontener.style.display = "block";
+  
+  // Wypełniamy pola aktualnymi danymi
+  document.getElementById("zast-data").value = l.data;
+  document.getElementById("zast-nieobecny").value = l.nieobecny;
+  document.getElementById("zast-przedmiot-oryg").value = l.przedmiotOryg;
+  document.getElementById("zast-klasa").value = l.klasa;
+  
+  // Zmieniamy funkcję przycisku "Dodaj" na "Zapisz zmiany" tymczasowo
+  const btn = formKontener.querySelector("button:last-of-type");
+  const oryginalnyTekst = btn.innerText;
+  const oryginalnyOnClick = btn.getAttribute("onclick");
+
+  btn.innerText = "ZAPISZ ZMIANY";
+  btn.style.background = "#28a745";
+  btn.style.color = "white";
+
+  btn.onclick = function() {
+    // Aktualizujemy dane w obiekcie
+    l.data = document.getElementById("zast-data").value;
+    l.nieobecny = document.getElementById("zast-nieobecny").value;
+    l.przedmiotOryg = document.getElementById("zast-przedmiot-oryg").value;
+    l.klasa = document.getElementById("zast-klasa").value;
+    
+    localStorage.setItem(klucz, JSON.stringify(lekcje));
+    
+    // Przywracamy przycisk do stanu pierwotnego
+    btn.innerText = oryginalnyTekst;
+    btn.onclick = new Function(oryginalnyOnClick);
+    btn.style = "";
+    
+    formKontener.style.display = "none";
+    alert("Zmiany zostały zapisane!");
+    pokazZastepstwa();
+  };
+}
+</script>
+<footer style="text-align: center; padding: 20px; background-color: #f0f0f0;">
+  <div style="margin-bottom: 10px;">
+    <img src="teamppp.png" alt="Team P" style="width: 100px; margin: 0 20px;">
+    <img src="21 maj 2025, 16_13_32.png" alt="p-librus" style="width: 100px; margin: 0 20px;">
+    <img src="stpschool.png" alt="STP School" style="width: 100px; margin: 0 20px;">
+  </div>
+  <p style="font-size: 14px; color: #555;">P-Librus © 2026</p>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

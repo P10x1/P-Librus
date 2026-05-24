@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>P-Librus - Strona początkowa</title>
+  <link rel="icon" type="image/x-icon" href="favicon.png">
+  <style>
+    body {
+  font-family: Inter, "Segoe UI", sans-serif;
+  background: #eef1f5;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* ===== HEADER ===== */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Rozsuwa logo, menu i usera */
+  padding: 10px 20px;
+  background: #f1eadf; 
+  border-bottom: 1px solid #d8dde3;
+  gap: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+.logo img {
+  height: 65px;
+  margin-right: 10px;
+}
+
+.logo span {
+  font-size: 22px;
+  color: #123e61;
+  font-weight: bold;
+}
+
+.user-info {
+  font-size: 12px;
+  color: #555;
+}
+    /* ===== MENU ===== */
+
+.menu-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center; /* Centruje przyciski menu */
+  flex-grow: 1; /* Zajmuje dostępną przestrzeń na środku */
+}
+
+.menu-header .menu-item a {
+  display: block;
+  padding: 10px 18px;
+  background: #ffffff;
+  border: 1px solid #cfd5db;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  font-size: 13px; /* Lekko mniejszy font, by się zmieściło */
+  white-space: nowrap;
+}
+	
+
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  line-height: 1;
+  cursor: pointer;
+  color: #ffffff;
+}	
+
+/* Styl dla nagłówków widgetów */
+.widget h3 {
+  font-size: 16px;
+  color: #2a2a2a;
+  margin-bottom: 10px;
+}
+
+/* Ogólne stylowanie kontenerów widgetów */
+.widget {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  padding: 22px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  font-size: 14px;
+}
+
+/* Styl przycisków */
+.widget button {
+  background-color: #f5f7f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.3s;
+}
+
+.widget button:hover {
+  background-color: #e0e3e6;
+}
+
+/* Styl inputów i textarea */
+.widget input[type="text"],
+.widget input[type="date"],
+.widget textarea {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+
+  </style>
+</head>
+<body>
+
+  </script>
+
+
+<script type="module">
+  // Importy z Firebase CDN
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    // twoja konfiguracja
+  };// Your web app's Firebase configuration (wklej tutaj swój config)
+  const firebaseConfig = {
+  apiKey: "AIzaSyDlSm_Cg8Pz0rPsExKro958vjRDUD_i95Y",
+  authDomain: "p-librus.firebaseapp.com",
+  projectId: "p-librus",
+  storageBucket: "p-librus.firebasestorage.app",
+  messagingSenderId: "1018564561209",
+  appId: "1:1018564561209:web:14fc2df790ca838837c0e8"
+};
+
+ 
+
+  // teraz możesz używać db, np. dodawanie i pobieranie dokumentów
+</script>
+<div class="header">
+  <div class="logo">
+    <img src="21 maj 2025, 16_13_32.png" alt="P-Librus logo">
+    <span>P-Librus</span>
+  </div>
+
+  <div class="menu-header">
+    <div class="menu-item"><a href="Lekcja.html">Lekcja</a></div>
+    <div class="menu-item"><a href="Oceny.html">Oceny</a></div>
+    <div class="menu-item"><a href="Zachowanie.html">Zachowanie</a></div>
+    <div class="menu-item"><a href="Zastepstwa.html">Zastępstwa</a></div>
+    <div class="menu-item"><a href="Organizacja.html">Organizacja</a></div>
+    <div class="menu-item"><a href="Wiadomosci.html">Wiadomości</a></div>
+    <div class="menu-item"><a href="Ogloszenia.html">Ogłoszenia</a></div>
+    <div class="menu-item"><a href="Terminarz.html">Terminarz</a></div>
+  </div>
+
+  <div class="user-info">
+    Jesteś zalogowany jako: <strong>Piotr Rejmentowski (nauczyciel)</strong>
+  </div>
+</div>
+<h4>Wersja P-Librus: 3.0</h4>
+
+<div id="diagram-container" style="text-align: center; margin: 10px 0; position: relative;">
+  <button onclick="toggleDiagram()" style="
+    margin-bottom: 10px;
+    background: #123e61;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: bold;">
+    👁️ Ukryj/Pokaż Diagram
+  </button>
+
+  <div id="diagram-content">
+    <img src="Dodaj podtytuł (1).png" alt="Diagram P-Librus" style="width: 100%; max-width: 1000px; height: auto; border: none;">
+  </div>
+</div>
+
+<script>
+  function toggleDiagram() {
+    const content = document.getElementById("diagram-content");
+    if (content.style.display === "none") {
+      content.style.display = "block";
+    } else {
+      content.style.display = "none";
+    }
+  }
+</script>
+
+<div style="margin: 20px;">
+  <h3>🗓️ Nadchodzące wydarzenia (7 dni)</h3>
+  <ul id="upcoming-events" style="list-style: none; padding: 0;"></ul>
+</div>
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div style="margin: 20px; display: flex; flex-wrap: wrap; gap: 20px;">
+
+  <!-- 📝 Notatki nauczyciela -->
+  <div class="widget" style="flex: 1; min-width: 250px;">
+
+    <h3>📝 Notatki nauczyciela</h3>
+    <textarea id="teacher-notes" placeholder="Wpisz swoje notatki..." style="width: 100%; height: 150px;"></textarea>
+    <button onclick="saveNotes()" style="margin-top: 10px;">💾 Zapisz</button>
+  </div>
+
+  <!-- ⏰ Zegar i data -->
+  <div class="widget" style="flex: 1; min-width: 250px;">
+
+    <h3>⏰ Czas i data</h3>
+    <div id="clock" style="font-size: 24px; font-weight: bold;"></div>
+    <div id="date" style="font-size: 18px;"></div>
+  </div>
+
+  <!-- 📅 Mini kalendarz z integracją -->
+<div class="widget" style="flex: 1; min-width: 250px;">
+
+  <h3>📅 Mini kalendarz</h3>
+  <input type="date" id="mini-calendar" style="width: 100%; padding: 5px;">
+  <ul id="calendar-events" style="list-style: none; padding: 10px 0 0 0; font-size: 14px;"></ul>
+</div>
+
+
+  <!-- ✅ Lista rzeczy do zrobienia -->
+  <div class="widget" style="flex: 1; min-width: 250px;">
+
+    <h3>✅ Lista rzeczy do zrobienia</h3>
+    <input type="text" id="todo-input" placeholder="Nowe zadanie..." style="width: 100%; padding: 5px;">
+    <button onclick="addTodo()" style="margin-top: 5px;">➕ Dodaj</button>
+    <ul id="todo-list" style="list-style: none; padding: 0; margin-top: 10px;"></ul>
+  </div>
+
+</div>
+
+<script>
+  // 📝 Notatki nauczyciela
+  const notesArea = document.getElementById("teacher-notes");
+  notesArea.value = localStorage.getItem("teacherNotes") || "";
+  function saveNotes() {
+    localStorage.setItem("teacherNotes", notesArea.value);
+    alert("Notatki zapisane!");
+  }
+
+  // ⏰ Zegar i data
+  function updateClock() {
+    const now = new Date();
+    document.getElementById("clock").textContent = now.toLocaleTimeString();
+    document.getElementById("date").textContent = now.toLocaleDateString();
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // ✅ Lista rzeczy do zrobienia
+  const todoInput = document.getElementById("todo-input");
+  const todoList = document.getElementById("todo-list");
+  let todos = JSON.parse(localStorage.getItem("todoItems") || "[]");
+  function renderTodos() {
+    todoList.innerHTML = "";
+    todos.forEach((item, index) => {
+      const li = document.createElement("li");
+      li.style.marginBottom = "5px";
+      li.innerHTML = `<input type="checkbox" ${item.done ? "checked" : ""} onchange="toggleTodo(${index})"> ${item.text} <button onclick="removeTodo(${index})">❌</button>`;
+      todoList.appendChild(li);
+    });
+    localStorage.setItem("todoItems", JSON.stringify(todos));
+  }
+  function addTodo() {
+    const text = todoInput.value.trim();
+    if (!text) return;
+    todos.push({ text, done: false });
+    todoInput.value = "";
+    renderTodos();
+  }
+  function toggleTodo(index) {
+    todos[index].done = !todos[index].done;
+    renderTodos();
+  }
+  function removeTodo(index) {
+    todos.splice(index, 1);
+    renderTodos();
+  }
+  renderTodos();
+</script>
+<script>
+  // Ładowanie nadchodzących wydarzeń (7 dni)
+  function loadUpcomingEvents() {
+    const events = JSON.parse(localStorage.getItem('events') || '[]');
+    const now = new Date();
+    const sevenDaysLater = new Date();
+    sevenDaysLater.setDate(now.getDate() + 7);
+
+    const upcoming = events
+      .map(ev => ({ ...ev, dateObj: new Date(ev.date) }))
+      .filter(ev => ev.dateObj >= now && ev.dateObj <= sevenDaysLater)
+      .sort((a, b) => a.dateObj - b.dateObj);
+
+    const ul = document.getElementById("upcoming-events");
+    ul.innerHTML = "";
+
+    if (upcoming.length === 0) {
+      ul.innerHTML = "<li>Brak wydarzeń w nadchodzącym tygodniu.</li>";
+      return;
+    }
+
+    upcoming.forEach(ev => {
+      const li = document.createElement("li");
+      li.style.marginBottom = "8px";
+      li.innerHTML = `<strong>${ev.date}</strong>: ${ev.subject} – ${ev.type} (${ev.className}) ${ev.comment ? `– <em>${ev.comment}</em>` : ""}`;
+      ul.appendChild(li);
+    });
+  }
+
+  // Mini kalendarz – wyświetlanie wydarzeń dla wybranego dnia
+  const miniCalendar = document.getElementById("mini-calendar");
+  const calendarEventsList = document.getElementById("calendar-events");
+
+  function loadCalendarEvents(selectedDate) {
+    const events = JSON.parse(localStorage.getItem('events') || '[]');
+    const filtered = events.filter(ev => ev.date === selectedDate);
+
+    calendarEventsList.innerHTML = "";
+    if (filtered.length === 0) {
+      calendarEventsList.innerHTML = "<li>Brak wydarzeń na ten dzień.</li>";
+      return;
+    }
+
+    filtered.forEach(ev => {
+      const li = document.createElement("li");
+      li.textContent = `${ev.subject} – ${ev.type} (${ev.className})`;
+      calendarEventsList.appendChild(li);
+    });
+  }
+
+  // Automatyczne ustawienie dzisiejszej daty
+  window.addEventListener("DOMContentLoaded", () => {
+    const today = new Date().toISOString().split("T")[0];
+    miniCalendar.value = today;
+    loadCalendarEvents(today);
+    loadUpcomingEvents();
+  });
+
+  // Reakcja na zmianę daty w mini kalendarzu
+  miniCalendar.addEventListener("change", (e) => {
+    loadCalendarEvents(e.target.value);
+  });
+</script>
+<footer style="text-align: center; padding: 20px; background-color: #f0f0f0;">
+  <div style="margin-bottom: 10px;">
+    <img src="teamppp.png" alt="Team P" style="width: 100px; margin: 0 20px;">
+    <img src="21 maj 2025, 16_13_32.png" alt="p-librus" style="width: 100px; margin: 0 20px;">
+    <img src="stpschool.png" alt="STP School" style="width: 100px; margin: 0 20px;">
+  </div>
+  <p style="font-size: 14px; color: #555;">P-Librus © 2026</p>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+</body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/x-icon" href="favicon.png">
+  <title>P-Librus - Ogłoszenia</title>
+  <style>
+    /* Kopiujemy style z Twojego projektu */
+    body { font-family: Inter, "Segoe UI", sans-serif; background: #eef1f5; margin: 0; padding: 0; color: #333; }
+    .header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: #f1eadf; border-bottom: 1px solid #d8dde3; gap: 20px; }
+    .logo { display: flex; align-items: center; margin-right: auto; }
+    .logo img { height: 65px; margin-right: 10px; }
+    .logo span { font-size: 22px; color: #123e61; font-weight: bold; }
+    .menu-header { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; flex-grow: 1; }
+    .menu-header .menu-item a { display: block; padding: 10px 18px; background: #ffffff; border: 1px solid #cfd5db; border-radius: 4px; text-decoration: none; color: #333; font-size: 13px; }
+    
+    .box { background: #ffffff; border: 1px solid #d7dce1; border-radius: 7px; margin: 20px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    h2 { margin-top: 0; margin-bottom: 18px; font-size: 18px; color: #444; }
+    
+    /* Ukryty formularz domyślnie */
+    #form-container { display: none; margin-bottom: 20px; border-top: 3px solid #123e61; }
+    
+    label { display: block; margin-top: 14px; margin-bottom: 6px; font-size: 13px; font-weight: bold; }
+    input, textarea, select { width: 100%; padding: 9px 10px; border: 1px solid #cfd5db; border-radius: 5px; font-size: 13px; box-sizing: border-box; }
+    
+    button { background: #f7f8fa; color: #333; border: 1px solid #c8ced6; border-radius: 5px; padding: 8px 14px; cursor: pointer; margin-top: 10px; }
+    button:hover { background: #e9edf2; }
+    
+    /* Przyciski specjalne */
+    .btn-main { background: #123e61; color: white; border: none; font-weight: bold; padding: 10px 20px; margin: 20px; }
+    .btn-main:hover { background: #1a5685; }
+    .btn-save { background: #3f8a4e; color: white; border: none; }
+    .btn-save:hover { background: #2d6639; }
+    .btn-delete { color: #b00020; border-color: #f5c2c7; }
+
+    .announcement-card { border-left: 5px solid #123e61; background: #fdfdfd; padding: 15px; margin-bottom: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .announcement-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .announcement-title { font-weight: bold; font-size: 16px; color: #123e61; }
+    .announcement-meta { font-size: 11px; color: #777; }
+    .announcement-content { font-size: 13px; line-height: 1.5; white-space: pre-wrap; }
+    .announcement-actions { margin-top: 10px; display: flex; gap: 10px; }
+	
+	.user-info {
+  font-size: 12px;
+  color: #555;
+  text-align: right;
+  flex-shrink: 0;
+  min-width: 150px;
+}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <img src="21 maj 2025, 16_13_32.png" alt="P-Librus logo">
+    <span>P-Librus</span>
+  </div>
+  <div class="menu-header">
+    <div class="menu-item"><a href="Lekcja.html">Lekcja</a></div>
+    <div class="menu-item"><a href="Oceny.html">Oceny</a></div>
+    <div class="menu-item"><a href="Zachowanie.html">Zachowanie</a></div>
+    <div class="menu-item"><a href="Zastepstwa.html">Zastępstwa</a></div>
+    <div class="menu-item"><a href="Organizacja.html">Organizacja</a></div>
+    <div class="menu-item"><a href="Wiadomosci.html">Wiadomości</a></div>
+    <div class="menu-item"><a href="Ogloszenia.html" style="background:#eef2f5; font-weight:bold;">Ogłoszenia</a></div>
+    <div class="menu-item"><a href="Terminarz.html">Terminarz</a></div>
+  </div>
+<div class="user-info">
+    Jesteś zalogowany jako: <strong>Piotr Rejmentowski (nauczyciel)</strong>
+  </div>
+</div>
+
+<button class="btn-main" onclick="toggleForm()">+ Dodaj nowe ogłoszenie</button>
+
+<div id="form-container" class="box">
+  <h2 id="form-title">Nowe ogłoszenie</h2>
+  <input type="hidden" id="edit-index" value="-1">
+  
+  <label>Tytuł ogłoszenia:</label>
+  <input type="text" id="post-title" placeholder="Wpisz tytuł...">
+  
+  <label>Treść ogłoszenia:</label>
+  <textarea id="post-content" rows="4" placeholder="Wpisz treść ogłoszenia..."></textarea>
+  
+  <label>Odbiorcy:</label>
+  <select id="post-target">
+    <option>Szkoła</option><option>6A</option><option>6B</option><option>7G</option><option>7DE</option><option>8H</option><option>1C</option><option>2L</option>
+  </select>
+
+  <button class="btn-save" onclick="zapiszOgloszenie()">Zapisz i publikuj</button>
+  <button onclick="toggleForm()">Anuluj</button>
+</div>
+
+<div class="box">
+  <h2>Aktualne ogłoszenia</h2>
+  <div id="lista-ogloszen"></div>
+</div>
+
+<script>
+  let ogloszenia = JSON.parse(localStorage.getItem('ogloszenia')) || [];
+
+  // FUNKCJA UKRYWANIA/POKAZYWANIA
+  function toggleForm() {
+    const form = document.getElementById('form-container');
+    if (form.style.display === 'none' || form.style.display === '') {
+      form.style.display = 'block';
+    } else {
+      form.style.display = 'none';
+      resetujFormularz(); // Czyścimy dane przy zamykaniu
+    }
+  }
+
+  function wyswietlOgloszenia() {
+    const kontener = document.getElementById('lista-ogloszen');
+    kontener.innerHTML = ogloszenia.length === 0 ? '<p style="color:#888;">Brak ogłoszeń.</p>' : '';
+
+    ogloszenia.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'announcement-card';
+      card.innerHTML = `
+        <div class="announcement-header">
+          <div class="announcement-title">${item.tytul}</div>
+          <div class="announcement-meta">${item.data} | Dla: ${item.odbiorca}</div>
+        </div>
+        <div class="announcement-content">${item.tresc}</div>
+        <div class="announcement-actions">
+          <button onclick="edytujOgloszenie(${index})">Edytuj</button>
+          <button class="btn-delete" onclick="usunOgloszenie(${index})">Usuń</button>
+        </div>
+      `;
+      kontener.appendChild(card);
+    });
+  }
+
+  function zapiszOgloszenie() {
+    const tytul = document.getElementById('post-title').value;
+    const tresc = document.getElementById('post-content').value;
+    const odbiorca = document.getElementById('post-target').value;
+    const editIndex = parseInt(document.getElementById('edit-index').value);
+
+    if (!tytul || !tresc) {
+      alert("Wypełnij wszystkie pola!");
+      return;
+    }
+
+    const dataTeraz = new Date().toLocaleString();
+
+    if (editIndex === -1) {
+      ogloszenia.unshift({ tytul, tresc, odbiorca, data: dataTeraz });
+    } else {
+      ogloszenia[editIndex] = { tytul, tresc, odbiorca, data: dataTeraz + " (edytowano)" };
+    }
+
+    localStorage.setItem('ogloszenia', JSON.stringify(ogloszenia));
+    toggleForm(); // Ukrywa formularz po zapisaniu
+    wyswietlOgloszenia();
+  }
+
+  function edytujOgloszenie(index) {
+    const item = ogloszenia[index];
+    document.getElementById('post-title').value = item.tytul;
+    document.getElementById('post-content').value = item.tresc;
+    document.getElementById('post-target').value = item.odbiorca;
+    document.getElementById('edit-index').value = index;
+
+    document.getElementById('form-title').textContent = "Edytuj ogłoszenie";
+    
+    // Pokazujemy formularz do edycji
+    document.getElementById('form-container').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  function usunOgloszenie(index) {
+    if (confirm("Usunąć to ogłoszenie?")) {
+      ogloszenia.splice(index, 1);
+      localStorage.setItem('ogloszenia', JSON.stringify(ogloszenia));
+      wyswietlOgloszenia();
+    }
+  }
+
+  function resetujFormularz() {
+    document.getElementById('post-title').value = "";
+    document.getElementById('post-content').value = "";
+    document.getElementById('post-target').value = "Wszyscy";
+    document.getElementById('edit-index').value = "-1";
+    document.getElementById('form-title').textContent = "Nowe ogłoszenie";
+  }
+
+  document.addEventListener('DOMContentLoaded', wyswietlOgloszenia);
+</script>
+<footer style="text-align: center; padding: 20px; background-color: #f0f0f0;">
+  <div style="margin-bottom: 10px;">
+    <img src="teamppp.png" alt="Team P" style="width: 100px; margin: 0 20px;">
+    <img src="21 maj 2025, 16_13_32.png" alt="p-librus" style="width: 100px; margin: 0 20px;">
+    <img src="stpschool.png" alt="STP School" style="width: 100px; margin: 0 20px;">
+  </div>
+  <p style="font-size: 14px; color: #555;">P-Librus © 2026</p>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

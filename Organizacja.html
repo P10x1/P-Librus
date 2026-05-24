@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/x-icon" href="favicon.png">
+  <title>P-Librus - Organizacja szkoły</title>
+  <style>
+    /* Style bazowe zgodne z Lekcja.html */
+    body { font-family: Inter, "Segoe UI", sans-serif; background: #eef1f5; margin: 0; padding: 0; color: #333; }
+    .header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: #f1eadf; border-bottom: 1px solid #d8dde3; gap: 20px; }
+    .logo { display: flex; align-items: center; margin-right: auto; }
+    .logo img { height: 65px; margin-right: 10px; }
+    .logo span { font-size: 22px; color: #123e61; font-weight: bold; }
+    .menu-header { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; flex-grow: 1; }
+    .menu-header .menu-item a { display: block; padding: 10px 18px; background: #ffffff; border: 1px solid #cfd5db; border-radius: 4px; text-decoration: none; color: #333; font-size: 13px; white-space: nowrap; }
+    .menu-header .menu-item a:hover { background: #e9edf2; }
+    
+    .box { background: #ffffff; border: 1px solid #d7dce1; border-radius: 7px; margin: 20px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    h2 { margin-top: 0; margin-bottom: 18px; font-size: 18px; color: #444; font-weight: bold; border-bottom: 2px solid #2a6f97; padding-bottom: 5px; }
+    
+    .modern-table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #d8dde3; border-radius: 7px; overflow: hidden; background: white; margin-bottom: 20px; }
+    .modern-table th { background: #eef2f5; color: #444; padding: 10px; border-bottom: 1px solid #d7dce1; font-size: 13px; text-align: left; }
+    .modern-table td { padding: 10px; border-bottom: 1px solid #eceff2; font-size: 13px; }
+    .modern-table tr:hover { background: #f8fafc; }
+
+    .btn-action { background: #2a6f97; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; transition: 0.2s; }
+    .btn-action:hover { background: #1a4a66; }
+
+    /* MODAL STYLE */
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+    .modal-content { background-color: #fff; margin: 10% auto; padding: 20px; border-radius: 8px; width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+    .close { color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+    .close:hover { color: #000; }
+
+    /* Dane szkoły style */
+    .school-info { display: flex; gap: 20px; align-items: center; }
+    .school-details p { margin: 4px 0; font-size: 14px; }
+
+    footer { text-align: center; padding: 20px; background: #f5f7f9; border-top: 1px solid #d7dce1; margin-top: 30px; }
+	.user-info {
+  font-size: 12px;
+  color: #555;
+  text-align: right;
+  flex-shrink: 0;
+  min-width: 150px;
+}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <img src="21 maj 2025, 16_13_32.png" alt="P-Librus logo">
+    <span>P-Librus</span>
+  </div>
+  <div class="menu-header">
+    <div class="menu-item"><a href="Lekcja.html">Lekcja</a></div>
+    <div class="menu-item"><a href="Oceny.html">Oceny</a></div>
+    <div class="menu-item"><a href="Zachowanie.html">Zachowanie</a></div>
+    <div class="menu-item"><a href="Zastepstwa.html">Zastępstwa</a></div>
+    <div class="menu-item"><a href="Organizacja.html" style="background:#eef2f5; font-weight:bold;">Organizacja</a></div>
+    <div class="menu-item"><a href="Wiadomosci.html">Wiadomości</a></div>
+    <div class="menu-item"><a href="Ogloszenia.html">Ogłoszenia</a></div>
+    <div class="menu-item"><a href="Terminarz.html">Terminarz</a></div>
+  </div>
+<div class="user-info">
+    Jesteś zalogowany jako: <strong>Piotr Rejmentowski (nauczyciel)</strong>
+  </div>
+</div>
+
+<div class="box">
+  <h2>🏫 Dane Szkoły</h2>
+  <div class="school-info">
+    <div class="school-details">
+      <p><strong>Nazwa:</strong> Szkoła podstawowa i ponadpodstawowa Teamu P w Olsztynie im. Piotra Rejmentowskiego (STP) </p>
+      <p><strong>Adres:</strong> Niedostępny</p>
+      <p><strong>Kontakt:</strong> stpschool@teamp.com</p>
+      <p><strong>Dyrektor:</strong> Kuba Rejmentowski</p>
+    </div>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 0 20px;">
+  <div class="box" style="margin: 0;">
+    <h2>👥 Moje Klasy</h2>
+    <table class="modern-table">
+      <thead>
+        <tr><th>Klasa</th><th>Przedmiot</th><th>Uczniów</th><th>Akcja</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>6A</strong></td><td>Język piotrowski</td><td>4</td><td><button class="btn-action" onclick="openModal('6A')">Lista</button></td></tr>
+        <tr>
+          <td><strong>6B</strong></td>
+          <td>Język piotrowski</td>
+          <td>4</td>
+          <td><button class="btn-action" onclick="openModal('6B')">Lista</button></td>
+        </tr>
+        <tr>
+          <td><strong>7G</strong></td>
+          <td>Język piotrowski</td>
+          <td>4</td>
+          <td><button class="btn-action" onclick="openModal('7G')">Lista</button></td>
+        </tr>
+        <tr>
+          <td><strong>7DE</strong></td>
+          <td>Język piotrowski</td>
+          <td>6</td>
+          <td><button class="btn-action" onclick="openModal('7DE')">Lista</button></td>
+        </tr>
+		<tr>
+          <td><strong>8H</strong></td>
+          <td>Język piotrowski</td>
+          <td>3</td>
+          <td><button class="btn-action" onclick="openModal('8H')">Lista</button></td>
+        </tr>
+		<tr>
+          <td><strong>1C</strong></td>
+          <td>Język piotrowski</td>
+          <td>4</td>
+          <td><button class="btn-action" onclick="openModal('1C')">Lista</button></td>
+        </tr>
+		<tr>
+          <td><strong>2L</strong></td>
+          <td>Język piotrowski</td>
+          <td>4</td>
+          <td><button class="btn-action" onclick="openModal('2L')">Lista</button></td>
+        </tr> </tbody>
+    </table>
+  </div>
+
+  <div class="box" style="margin: 0;">
+    <h2>📅 Ważne Daty</h2>
+    <table class="modern-table">
+      <thead><tr><th>Wydarzenie</th><th>Data</th></tr></thead>
+      <tbody>
+        <tr><td>Rozpoczęcie roku szkolnego</td><td>01 czerwca 2026</td></tr>
+        <tr><td>Wystawienie ocen półrocznych</td><td>24 - 30 czerwca 2026</td></tr>
+        <tr><td>Wystawienie ocen przewidywanych</td><td>20 - 26 lipca 2026</td></tr>
+        <tr><td>Wystawienie ocen rocznych</td><td>27 - 31 lipca 2026</td></tr>
+        <tr><td>Zakończenie roku szkolnego</td><td>31 lipca 2026</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px;">
+  
+
+  <div class="box" style="margin: 0;">
+    <h2>💼 Sekretariat i Administracja</h2>
+    <table class="modern-table">
+      <thead>
+        <tr><th>Pracownik sekretariatu</th><th>Stanowisko</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Katarzyna Krak</td><td>Główny sekretarz</td></tr>
+        <tr><td>Milena Wół</td><td>Sekretarz</td></tr>
+        <tr><td>Patrycja Nowak</td><td>Sekretarz</td></tr>
+      </tbody>
+	  <thead>
+        <tr><th>Administrator</th><th>Stanowisko</th></tr>
+      </thead>
+	  <tbody>
+        <tr><td>Piotr Rejmentowski</td><td>Główny administrator</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box" style="margin: 0; border-left: 5px solid #2a6f97;">
+    <h2>🔐 Ochrona Danych (IOD)</h2>
+    <div style="font-size: 13px; line-height: 1.5;">
+      <p><strong>Administratorem danych osobowych jest</strong> Szkoła podstawowa i ponadpodstawowa Teamu P w Olsztynie im. Piotra Rejmentowskiego (STP)</p>
+	  <p><strong>Podstawa prawna</strong> <br>1. Ustawa z dnia 7 września 1991 r. o systemie oświaty (Dz. U. 2018 poz. 1457) <br>2. Rozporządzenia Ministra Edukacji Narodowej z dnia 25 sierpnia 2017 r. w sprawie sposobu prowadzenia przez publiczne przedszkola, szkoły i placówki dokumentacji przebiegu nauczania, działalności wychowawczej i opiekuńczej oraz rodzajów tej dokumentacji (Dz. U. z 2017 r. poz. 1646)</p>
+      <div style="background: #f8fafc; padding: 10px; border-radius: 5px; border: 1px solid #d8dde3; margin-top: 5px;">
+        <small>⚠️ Nie udostępniaj haseł osobom trzecim!</small>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div>
+<div class="box">
+  <h2>👩‍🏫 Kadra Pedagogiczna</h2>
+  <table class="modern-table">
+    <thead>
+      <tr>
+        <th>Nauczyciel</th>
+        <th>Przedmiot nauczany</th>
+        <th>Wychowawca klasy</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+	<td>Kuba Rejmentowski</td>
+      <td>DYREKTOR SZKOŁY</td>
+	  <td>Brak</td>
+	  </tr>
+      <td>Patryk Prosiak</td>
+      <td>Matematyka, Fizyka</td>
+	  <td>6B</td>
+    </tr>
+    <tr>
+      <td>Julia Bośniak</td>
+      <td>Chemia</td>
+	  <td>7G</td>
+    </tr>
+    <tr>
+      <td>Martyna Wilska</td>
+      <td>Edukacja dla bezpieczeństwa, Doradztwo zawodowe</td>
+	  <td>7DE</td>
+    </tr>
+	<tr>
+      <td>Maja Oloj</td>
+      <td>Informatyka, Język angielski, WICEDYREKTOR SZKOŁY</td>
+	  <td>Brak</td>
+    </tr>
+	<tr>
+      <td>Justyna Born</td>
+      <td>Język angielski</td>
+	  <td>1C</td>
+    </tr>
+	<tr>
+      <td>Patrycja Mińska</td>
+      <td>Muzyka, Świetlica</td>
+	  <td>Brak</td>
+    </tr>
+	<tr>
+      <td>Agata Majewska</td>
+      <td>Katachetka religii</td>
+	  <td>Brak</td>
+    </tr>
+	<tr>
+      <td>Maciej Bojnek</td>
+      <td>Historia, Wiedza o społeczeństwie</td>
+	  <td>6A</td>
+    </tr>
+	<tr>
+      <td>Anna Łezka</td>
+      <td>Język polski, Matematyka</td>
+	  <td>8H</td>
+    </tr>
+	<tr>
+      <td>Maria Oksejska</td>
+      <td>Język niemiecki</td>
+	  <td>Brak</td>
+    </tr>
+	<tr>
+      <td>Zuzanna Filipińska</td>
+      <td>Język Hiszpański</td>
+	  <td>2L</td>
+    </tr>
+	<tr>
+      <td>Julia Komuniak</td>
+      <td>Język francuski</td>
+	  <td>Brak</td>
+    </tr>
+	<tr>
+      <td>Krzysztof Sowa</td>
+      <td>Wychowanie fizyczne</td>
+	  <td>Brak</td>
+    </tr>
+	<tr>
+      <td>Paweł Krak</td>
+      <td>Wychowanie fizyczne</td>
+	  <td>Brak</td>
+    </tr>
+	<tr>
+      <td>Milena Bośniak</td>
+      <td>Plastyka, Technika</td>
+	  <td>Brak</td>
+    </tr>
+	<tr>
+      <td>Martyna Polecsa</td>
+      <td>Geografia</td>
+	  <td>Brak</td>
+    </tr>
+	<tr>
+      <td>Pomela Muk</td>
+      <td>Biologia, Przyroda</td>
+	  <td>Brak</td>
+    </tr>
+	<tr>
+      <td>Piotr Rejmentowski</td>
+      <td>Język piotrowski</td>
+	  <td>Brak</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="studentModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="modalTitle">Lista uczniów</h3>
+      <span class="close" onclick="closeModal()">&times;</span>
+    </div>
+    <div id="modalBody" style="margin-top: 15px;">
+      </div>
+  </div>
+</div>
+
+<script>
+  // Przykładowe dane uczniów
+  const students = {
+    '2L': ['Paweł', 'Ola', 'Natalia', 'Karol'],
+	'7DE': ['Wojtek', 'Krzysiek', 'Mirek', 'Ola', 'Maria', 'Marta'],
+	'7G': ['Ela', 'Ola', 'Marylka', 'Marta'],
+    '1C': ['Wiesia', 'Alina', 'Bożena', 'Halinka'],
+    '6A': ['Jagoda', 'Lena', 'Szymon', 'Antek'],
+	'8H': ['Andrzej', 'Maciej', 'Patryk'],
+	'6B': ['Ewelina', 'Tomek', 'Agata', 'Tadeusz']
+  };
+
+  function openModal(klasa) {
+    const modal = document.getElementById("studentModal");
+    const title = document.getElementById("modalTitle");
+    const body = document.getElementById("modalBody");
+
+    title.innerText = "Lista uczniów klasy " + klasa;
+    
+    // Generowanie listy wewnątrz modala
+    let html = "<ul style='list-style: none; padding: 0;'>";
+    students[klasa].forEach((s, index) => {
+      html += `<li style='padding: 8px 0; border-bottom: 1px solid #eee;'>${index + 1}. ${s}</li>`;
+    });
+    html += "</ul>";
+    
+    body.innerHTML = html;
+    modal.style.display = "block";
+  }
+
+  function closeModal() {
+    document.getElementById("studentModal").style.display = "none";
+  }
+
+  // Zamknij po kliknięciu poza modalem
+  window.onclick = function(event) {
+    const modal = document.getElementById("studentModal");
+    if (event.target == modal) {
+      closeModal();
+    }
+  }
+</script>
+<footer style="text-align: center; padding: 20px; background-color: #f0f0f0;">
+  <div style="margin-bottom: 10px;">
+    <img src="teamppp.png" alt="Team P" style="width: 100px; margin: 0 20px;">
+    <img src="21 maj 2025, 16_13_32.png" alt="p-librus" style="width: 100px; margin: 0 20px;">
+    <img src="stpschool.png" alt="STP School" style="width: 100px; margin: 0 20px;">
+  </div>
+  <p style="font-size: 14px; color: #555;">P-Librus © 2026</p>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

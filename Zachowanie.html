@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>P-Librus - Zachowanie</title>
+  <link rel="icon" type="image/x-icon" href="favicon.png">
+  <style>
+  body {
+    font-family: Inter, 'Segoe UI', sans-serif;
+    background: #eef1f5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Rozsuwa logo, menu i usera */
+  padding: 10px 20px;
+  background: #f1eadf; 
+  border-bottom: 1px solid #d8dde3;
+  gap: 20px;
+}
+
+  .logo {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+  }
+
+  .logo img { height: 65px; margin-right: 10px; }
+  .logo span { font-size: 22px; color: #134061; font-weight: bold; }
+.menu-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center; /* Centruje przyciski menu */
+  flex-grow: 1; /* Zajmuje dostępną przestrzeń na środku */
+}
+
+.menu-header .menu-item a {
+  display: block;
+  padding: 10px 18px;
+  background: #ffffff;
+  border: 1px solid #cfd5db;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  font-size: 13px; /* Lekko mniejszy font, by się zmieściło */
+  white-space: nowrap;
+}
+
+.user-info {
+  font-size: 12px;
+  color: #555;
+  text-align: right;
+  flex-shrink: 0;
+  min-width: 150px;
+}
+
+  .container {
+    padding: 20px 30px;
+    background: #ffffff;
+    margin: 15px auto;
+    border-radius: 7px;
+    max-width: 95%;
+    border: 1px solid #d7dce1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  h2, h3, h4 { color: #444; margin-bottom: 15px; }
+
+  /* ===== TABELA ===== */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 15px;
+    border: 1px solid #d8dde3;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  th { background: #eef2f5; padding: 10px; font-size: 13px; border-bottom: 1px solid #d7dce1; font-weight: bold; }
+  td { padding: 8px; text-align: center; border-bottom: 1px solid #eceff2; font-size: 13px; }
+
+  /* ===== PUNKTY ===== */
+  .pts {
+    display: inline-block;
+    padding: 3px 7px;
+    margin: 2px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 12px;
+    border: 1px solid rgba(0,0,0,0.1);
+    cursor: pointer;
+  }
+  .pts-dodatnie { background-color: #c8e6c9; color: #2e7d32; }
+  .pts-ujemne { background-color: #ffcdd2; color: #c62828; }
+  .pts-neutralne { background-color: #eeeeee; color: #555; }
+
+  button {
+    background: #123e61;
+	color: #e0dede;
+    border: 1px solid #c8ced6;
+    border-radius: 4px;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.2s;
+  }
+  button:hover { background: #7c8fa6; }
+
+  .btn-save { background: #4caf50 !important; color: white; border: none; }
+
+  /* ===== MODALE ===== */
+  .modal {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: none; justify-content: center; align-items: center; z-index: 1000;
+  }
+
+  .modal-content {
+    background: white; padding: 25px; width: 90%; max-width: 950px;
+    max-height: 90vh; overflow-y: auto; border-radius: 7px; border: 1px solid #ccc;
+  }
+
+  input, select, textarea {
+    width: 100%; padding: 8px; margin: 5px 0 12px 0;
+    border: 1px solid #cfd5db; border-radius: 4px; font-size: 13px; box-sizing: border-box;
+  }
+
+  .form-section {
+    background: #f9f9f9; padding: 15px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 20px;
+  }
+
+  #global-tooltip {
+    position: fixed; background: #2a6f97; color: white; padding: 10px;
+    border-radius: 8px; font-size: 13px; z-index: 9999; pointer-events: none; opacity: 0;
+  }
+  /* Kolory tła dla opcji w liście rozwijanej */
+.opt-dodatnia { background-color: #d4edda !important; color: #155724; } /* Jasna zieleń */
+.opt-ujemna { background-color: #f8d7da !important; color: #721c24; }   /* Jasna czerwień */
+.opt-ogolna { background-color: #fff3cd !important; color: #856404; }   /* Jasna żółć */
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <img src="21 maj 2025, 16_13_32.png" alt="P-Librus logo">
+    <span>P-Librus</span>
+  </div>
+
+  <div class="menu-header">
+    <div class="menu-item"><a href="Lekcja.html">Lekcja</a></div>
+    <div class="menu-item"><a href="Oceny.html">Oceny</a></div>
+    <div class="menu-item"><a href="Zachowanie.html" style="background:#eef2f5; font-weight:bold;">Zachowanie</a></div>
+    <div class="menu-item"><a href="Zastepstwa.html">Zastępstwa</a></div>
+    <div class="menu-item"><a href="Organizacja.html">Organizacja</a></div>
+    <div class="menu-item"><a href="Wiadomosci.html">Wiadomości</a></div>
+    <div class="menu-item"><a href="Ogloszenia.html">Ogłoszenia</a></div>
+    <div class="menu-item"><a href="Terminarz.html">Terminarz</a></div>
+  </div>
+
+  <div class="user-info">
+    Jesteś zalogowany jako: <strong>Piotr Rejmentowski (nauczyciel)</strong>
+  </div>
+</div>
+
+<div class="container">
+  <h2>Zachowanie - Wybierz klasę</h2>
+  <table>
+    <thead><tr><th>Klasa</th><th>Suma pkt (śr. klasy)</th><th>Akcja</th></tr></thead>
+    <tbody id="listaKlasTabela"></tbody>
+  </table>
+</div>
+
+<div id="modalZachowanie" class="modal">
+  <div class="modal-content">
+    <div style="display:flex; justify-content: space-between; align-items:center;">
+        <h3>Klasa: <span id="nazwaKlasyNaglowek"></span></h3>
+        <button onclick="zamknijModal()">Zamknij Panel</button>
+    </div>
+    
+    <div class="form-section">
+        <h4>Dodawanie seryjne</h4>
+        <button onclick="toggleForm('formSeryjne')">➕ Dodaj oceny seryjnie</button>
+        
+        <div id="formSeryjne" style="display:none; margin-top:15px;">
+            <label>Kategoria:</label>
+            <select id="katSeryjna"></select>
+
+            <div style="display: flex; gap: 15px; align-items: flex-end;">
+                <div style="flex: 1;">
+                    <label>Punkty:</label>
+                    <input type="number" id="pktWszystkim" placeholder="+/-">
+                </div>
+                <div style="flex: 2;">
+                    <label>Komentarz:</label>
+                    <input type="text" id="komentWszystkim" placeholder="Wspólna uwaga...">
+                </div>
+                <button type="button" onclick="ustawWszystkim()" style="margin-bottom:12px;">Wstaw wszystkim poniżej</button>
+            </div>
+
+            <div id="listaUczniowSeryjna"></div>
+            <button onclick="zapiszSeryjnie()" class="btn-save">Zatwierdź i zapisz punkty</button>
+        </div>
+    </div>
+
+    <h4>Lista punktów i uwag</h4>
+    <div id="widokTabeliKlasy"></div>
+  </div>
+</div>
+
+<div id="modalIndywidualny" class="modal">
+    <div class="modal-content" style="max-width: 450px;">
+        <h3>Dodaj punkt: <span id="indivStudentName"></span></h3>
+        <label>Kategoria:</label>
+        <select id="katIndiv"></select>
+        <label>Liczba punktów (np. 10 lub -5):</label>
+        <input type="number" id="pktIndiv">
+        <label>Komentarz:</label>
+        <textarea id="komentIndiv" rows="3"></textarea>
+        
+        <button onclick="zapiszIndywidualnie()" class="btn-save">Zapisz wpis</button>
+        <button onclick="document.getElementById('modalIndywidualny').style.display='none'">Anuluj</button>
+    </div>
+</div>
+
+<div id="global-tooltip"></div>
+
+<script>
+const klasy = {
+  '6A-Język_Piotrowski': ['Jagoda', 'Lena', 'Szymon', 'Antek'],
+  '6B-Język_Piotrowski': ['Ewelina', 'Tomek', 'Agata', 'Tadeusz'],
+  '7DE-Język_Piotrowski': ['Wojtek', 'Krzysiek', 'Mirek', 'Ola', 'Maria', 'Marta'],
+  '7G-Język_Piotrowski': ['Ela', 'Ola', 'Marylka', 'Marta'],
+  '8H-Język_Piotrowski': ['Andrzej', 'Maciej', 'Patryk'],
+  '1C-Język_Piotrowski': ['Wiesia', 'Alina', 'Bożena', 'Halinka'],
+  '2L-Język_Piotrowski': ['Paweł', 'Ola', 'Natalia', 'Karol']
+};
+
+const kategorie = [
+  // ✅ Dodatnie
+  "A-Wzorowa frekwencja", "A-Aktywność na lekcji", "A-Wolontariat / działalność społeczna", "A-Reprezentowanie szkoły",
+  "A-Pomoc kolegom", "A-Kultura osobista", "A-Wysoka kultura języka", "A-Dbałość o mienie szkoły",
+  "A-Przyniesienie dodatkowych materiałów", "A-Inicjatywa własna", "A-Rozwiązywanie konfliktów", "A-Wykazanie empatii",
+  "A-Wzorowa postawa w sytuacji trudnej", "A-Pomoc nauczycielowi", "A-Wzorowe przestrzeganie zasad bezpieczeństwa",
+  "A-Wzorowa współpraca z grupą", "A-Wzorowa organizacja pracy", "A-Wykazanie odpowiedzialności",
+  "A-Zachowanie spokoju w sytuacjach konfliktowych", "A-Udzielanie wsparcia rówieśnikom",
+
+  // ❌ Ujemne
+  "B-Spóźnienie", "B-Nieusprawiedliwiona nieobecność", "B-Zakłócanie porządku zajęć", "B-Przeszkadzanie innym",
+  "B-Brak pracy domowej", "B-Nieprzygotowanie do lekcji", "B-Używanie telefonu na lekcji", "B-Niewłaściwe zachowanie na przerwie",
+  "B-Nieodpowiednie słownictwo", "B-Niszczenie mienia", "B-Aggresywne zachowanie", "B-Brak szacunku do nauczyciela",
+  "B-Brak szacunku do rówieśników", "B-Nieprzestrzeganie regulaminu szkoły", "B-Przemoc rówieśnicza (fizyczna)",
+  "B-Przemoc rówieśnicza (słowna)", "B-Przemoc psychiczna / zastraszanie", "B-Cyberprzemoc", "B-Konflikty z rówieśnikami",
+  "B-Grożenie innym", "B-Wyrządzanie szkody celowe", "B-Nadmierna agresja słowna", "B-Nieuprzejmość wobec pracowników szkoły",
+  "B-Odmowa wykonania polecenia nauczyciela", "B-Ucieczka z lekcji / opuszczenie zajęć", "B-Ryzykowne zachowania na przerwie",
+  "B-Niebezpieczne używanie przedmiotów", "B-Zachowanie zagrażające bezpieczeństwu innych", "B-Niszczenie własności kolegów",
+  "B-Prowokowanie konfliktów", "B-Przeklinanie / wulgarność", "B-Kłamstwo wobec nauczyciela", "B-Oszukiwanie / ściąganie",
+  "B-Przynoszenie przedmiotów niedozwolonych",
+
+  // 📌 Obowiązki ucznia
+  "C-Wywiązywanie się z obowiązków ucznia", "C-Zmiana obuwia", "C-Przynoszenie potrzebnych przyborów", "C-Przestrzeganie zasad BHP",
+  "C-Przestrzeganie zasad higieny", "C-Uczestnictwo w zajęciach dodatkowych", "C-Przestrzeganie zasad bezpieczeństwa",
+  "C-Noszenie stroju galowego", "C-Przestrzeganie zasad korzystania z szafki", "C-Zachowanie porządku w sali i na korytarzu",
+  "C-Zgłoszenie problemu nauczycielowi", "C-Udział w rozmowie wychowawczej", "C-Przestrzeganie zasad korzystania ze sprzętu szkolnego",
+  "C-Zgłoszenie niebezpiecznego zachowania", "C-Samodzielne rozwiązanie konfliktu", "C-Oddanie rzeczy znalezionej",
+  "C-Udział w zajęciach wyrównawczych", "C-Zgody i dokumenty dostarczone na czas", "C-Inne"
+];
+
+const STARTOWE_PUNKTY = 0;
+let aktualnaKlasa = "";
+let aktualnyUczenIndiv = "";
+
+function init() {
+  const tbody = document.getElementById('listaKlasTabela');
+  const cats = [document.getElementById('katSeryjna'), document.getElementById('katIndiv')];
+  
+  // Wypełnij selecty kategorii i dodaj kolory
+  cats.forEach(select => {
+    select.innerHTML = ""; // Czyścimy na wszelki wypadek
+    kategorie.forEach(k => {
+        let opt = document.createElement('option');
+        opt.value = k; 
+        opt.textContent = k;
+        
+        // Przypisanie koloru do opcji
+        if (k.startsWith('A-')) opt.className = 'opt-dodatnia';
+        else if (k.startsWith('B-')) opt.className = 'opt-ujemna';
+        else if (k.startsWith('C-')) opt.className = 'opt-ogolna';
+        
+        select.appendChild(opt);
+    });
+    // Podpięcie reakcji na zmianę koloru całego pola
+    select.setAttribute("onchange", "updateSelectColor(this)");
+    updateSelectColor(select);
+  });
+
+  Object.keys(klasy).forEach(k => {
+    const dane = JSON.parse(localStorage.getItem('zachowanie') || '{}');
+    const wpisy = dane[k] || [];
+    const suma = wpisy.length > 0 ? wpisy.reduce((a, b) => a + Number(b.punkty), 0) : 0;
+    
+    let tr = document.createElement('tr');
+    tr.innerHTML = `<td>${k}</td><td>${suma}</td><td><button onclick="otworzModal('${k}')">Wybierz</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function updateSelectColor(el) {
+    const val = el.value;
+    el.classList.remove('opt-dodatnia', 'opt-ujemna', 'opt-ogolna');
+    if (val.startsWith('A-')) el.classList.add('opt-dodatnia');
+    else if (val.startsWith('B-')) el.classList.add('opt-ujemna');
+    else if (val.startsWith('C-')) el.classList.add('opt-ogolna');
+}
+
+function otworzModal(klasa) {
+  aktualnaKlasa = klasa;
+  document.getElementById('nazwaKlasyNaglowek').textContent = klasa;
+  document.getElementById('modalZachowanie').style.display = 'flex';
+  renderujSeryjne();
+  renderujTabelePunktow();
+}
+
+function otworzDodawanieIndiv(uczen) {
+    aktualnyUczenIndiv = uczen;
+    document.getElementById('indivStudentName').textContent = uczen;
+    document.getElementById('pktIndiv').value = "";
+    document.getElementById('komentIndiv').value = "";
+    document.getElementById('modalIndywidualny').style.display = 'flex';
+    updateSelectColor(document.getElementById('katIndiv'));
+}
+
+function zapiszIndywidualnie() {
+    const p = document.getElementById('pktIndiv').value;
+    const k = document.getElementById('katIndiv').value;
+    const kom = document.getElementById('komentIndiv').value;
+
+    if(p === "") return alert("Wpisz liczbę punktów!");
+
+    const dane = JSON.parse(localStorage.getItem('zachowanie') || '{}');
+    if (!dane[aktualnaKlasa]) dane[aktualnaKlasa] = [];
+
+    dane[aktualnaKlasa].push({
+        id: crypto.randomUUID(),
+        uczen: aktualnyUczenIndiv,
+        punkty: Number(p),
+        kategoria: k,
+        komentarz: kom,
+        data: new Date().toLocaleDateString()
+    });
+
+    localStorage.setItem('zachowanie', JSON.stringify(dane));
+    document.getElementById('modalIndywidualny').style.display = 'none';
+    renderujTabelePunktow();
+}
+
+function renderujSeryjne() {
+  let html = `<table><thead><tr><th>Wybierz</th><th>Uczeń</th><th>Punkty</th><th>Komentarz</th></tr></thead><tbody>`;
+  klasy[aktualnaKlasa].forEach(u => {
+    html += `<tr>
+      <td><input type="checkbox" class="chk-u" data-uczen="${u}" checked></td>
+      <td>${u}</td>
+      <td><input type="number" class="pkt-u" data-uczen="${u}" style="width:70px"></td>
+      <td><input type="text" class="kom-u" data-uczen="${u}"></td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  document.getElementById('listaUczniowSeryjna').innerHTML = html;
+}
+
+function ustawWszystkim() {
+  const p = document.getElementById('pktWszystkim').value;
+  const k = document.getElementById('komentWszystkim').value;
+  document.querySelectorAll('.pkt-u').forEach(i => i.value = p);
+  document.querySelectorAll('.kom-u').forEach(i => i.value = k);
+}
+
+function zapiszSeryjnie() {
+  const dane = JSON.parse(localStorage.getItem('zachowanie') || '{}');
+  if (!dane[aktualnaKlasa]) dane[aktualnaKlasa] = [];
+  const kategoria = document.getElementById('katSeryjna').value;
+
+  document.querySelectorAll('.chk-u').forEach(chk => {
+    if (chk.checked) {
+      const u = chk.dataset.uczen;
+      const p = document.querySelector(`.pkt-u[data-uczen="${u}"]`).value;
+      const kom = document.querySelector(`.kom-u[data-uczen="${u}"]`).value;
+      
+      if (p !== "") {
+        dane[aktualnaKlasa].push({
+          id: crypto.randomUUID(),
+          uczen: u,
+          punkty: Number(p),
+          kategoria: kategoria,
+          komentarz: kom,
+          data: new Date().toLocaleDateString()
+        });
+      }
+    }
+  });
+
+  localStorage.setItem('zachowanie', JSON.stringify(dane));
+  renderujTabelePunktow();
+  toggleForm('formSeryjne');
+}
+
+function renderujTabelePunktow() {
+  const dane = JSON.parse(localStorage.getItem('zachowanie') || '{}');
+  const wpisy = dane[aktualnaKlasa] || [];
+  
+  let html = `<table><thead><tr><th>Uczeń</th><th>Punkty / Uwagi</th><th>Suma</th><th>Akcja</th></tr></thead><tbody>`;
+  
+  klasy[aktualnaKlasa].forEach(u => {
+    const uWpisy = wpisy.filter(w => w.uczen === u);
+    const suma = uWpisy.reduce((a, b) => a + b.punkty, STARTOWE_PUNKTY);
+    
+    const punktyHTML = uWpisy.map(w => {
+      const klasaKolor = w.punkty > 0 ? 'pts-dodatnie' : (w.punkty < 0 ? 'pts-ujemne' : 'pts-neutralne');
+      return `<span class="pts ${klasaKolor}" onclick="edytujPunkt('${w.id}')" 
+              onmouseover="showTooltip(event, '${w.kategoria}', '${w.komentarz}', '${w.data}')" onmouseout="hideTooltip()">
+              ${w.punkty > 0 ? '+' : ''}${w.punkty}</span>`;
+    }).join(' ');
+
+    html += `<tr>
+        <td style="text-align:left; padding-left:15px;"><strong>${u}</strong></td>
+        <td>${punktyHTML}</td>
+        <td><strong>${suma}</strong></td>
+        <td><button onclick="otworzDodawanieIndiv('${u}')">➕ Dodaj</button></td>
+    </tr>`;
+  });
+  
+  html += `</tbody></table>`;
+  document.getElementById('widokTabeliKlasy').innerHTML = html;
+}
+
+function edytujPunkt(id) {
+  const dane = JSON.parse(localStorage.getItem('zachowanie') || '{}');
+  const wpisy = dane[aktualnaKlasa];
+  const idx = wpisy.findIndex(w => w.id === id);
+  const wpis = wpisy[idx];
+
+  const akcja = prompt("Edycja punktu:\n1 - Zmień wartość\n2 - Usuń wpis\n(wpisz cyfrę)", "1");
+  if (akcja === "1") {
+    const p = prompt("Nowa liczba punktów:", wpis.punkty);
+    if (p !== null) wpis.punkty = Number(p);
+  } else if (akcja === "2") {
+    if (confirm("Na pewno usunąć ten wpis?")) wpisy.splice(idx, 1);
+  }
+
+  localStorage.setItem('zachowanie', JSON.stringify(dane));
+  renderujTabelePunktow();
+}
+
+function showTooltip(e, kat, kom, data) {
+  const tt = document.getElementById('global-tooltip');
+  tt.innerHTML = `<strong>Kategoria:</strong> ${kat}<br><strong>Data:</strong> ${data}<br><em>${kom || 'Brak komentarza'}</em>`;
+  tt.style.opacity = 1;
+  tt.style.left = e.pageX + 15 + "px";
+  tt.style.top = e.pageY + 15 + "px";
+}
+
+function hideTooltip() { document.getElementById('global-tooltip').style.opacity = 0; }
+function toggleForm(id) { 
+  const f = document.getElementById(id);
+  f.style.display = f.style.display === 'none' ? 'block' : 'none'; 
+}
+function zamknijModal() { document.getElementById('modalZachowanie').style.display = 'none'; location.reload(); }
+
+window.onload = init;
+</script>
+<footer style="text-align: center; padding: 20px; background-color: #f0f0f0;">
+  <div style="margin-bottom: 10px;">
+    <img src="teamppp.jpg" alt="Team P" style="width: 100px; margin: 0 20px;">
+    <img src="21 maj 2025, 16_13_32.png" alt="p-librus" style="width: 100px; margin: 0 20px;">
+    <img src="stpschool.jpg" alt="STP School" style="width: 100px; margin: 0 20px;">
+  </div>
+  <p style="font-size: 14px; color: #555;">P-Librus © 2026</p>
+</footer>
+</body>
+</html>
