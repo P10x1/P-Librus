@@ -181,6 +181,14 @@
   .typ-Półroczna        { background-color: #e0f7fa; color: black; }
   .typ-Egzamin-próbny   { background-color: #E6DAF0; color: black; }
   .typ-Egzamin-oficjalny { background-color: #E6DAF0; color: black; }
+  /* ===== KOLORY DLA NOWYCH KATEGORII ===== */
+  .typ-Pracadodatkowa          { background-color: #e8f5e9; color: black; } /* Jasnozielony */
+  .typ-Sprawdzeniezeszytu      { background-color: #fff9c4; color: black; } /* Pastelowy żółty */
+  .typ-Nieprzygotowaniedolekcji { background-color: #ffcdd2; color: black; } /* Blady czerwony */
+  .typ-Pracawgrupach           { background-color: #e1f5fe; color: black; } /* Błękitny */
+  .typ-Kartapracy              { background-color: #f3e5f5; color: black; } /* Lawendowy */
+  .typ-Prowadzeniezeszytu/ćwiczeń { background-color: #efebe9; color: black; } /* Beżowy */
+  .typ-Udziałwkonkursie        { background-color: #ffd54f; color: black; } /* Złoty/Żółty */
 
   /* ===== MODAL (BEZ PRZYCISKU ZAMKNIJ) ===== */
   /* ===== MODAL (Stała wielkość i przewijanie) ===== */
@@ -330,24 +338,34 @@ select#klasa:disabled {
 
       <label for="typ">Typ oceny:</label>
       <select id="typ">
-        <option>Sprawdzian</option>
-        <option>Praca klasowa</option>
-        <option>Kartkówka</option>
-        <option>Projekt</option>
-        <option>Prezentacja</option>
-        <option>Praca na lekcji</option>
-        <option>Odpowiedź ustna</option>
-        <option>Zadanie</option>
-        <option>Inne</option>
-        <option>Przewidywana</option>
-        <option>Roczna</option>
-        <option>Poprawa</option>
-        <option>Aktywność</option>
-        <option>Praca domowa</option>
-        <option>Egzamin-próbny</option>
-        <option>Egzamin-oficjalny</option>
-        <option>Półroczna</option>
-      </select>
+  <optgroup label="Oceny bieżące / normalne">
+    <option>Sprawdzian</option>
+    <option>Praca klasowa</option>
+    <option>Kartkówka</option>
+    <option>Projekt</option>
+    <option>Prezentacja</option>
+    <option>Praca na lekcji</option>
+    <option>Odpowiedź ustna</option>
+    <option>Zadanie</option>
+    <option>Aktywność</option>
+    <option>Praca domowa</option>
+    <option>Poprawa</option>
+    <!-- Nowe kategorie: -->
+    <option>Praca dodatkowa</option>
+    <option>Sprawdzenie zeszytu</option>
+    <option>Nieprzygotowanie do lekcji</option>
+    <option>Praca w grupach</option>
+    <option>Karta pracy</option>
+    <option>Prowadzenie zeszytu / ćwiczeń</option>
+    <option>Udział w konkursie</option>
+    <option>Inne</option>
+  </optgroup>
+  <optgroup label="Oceny podsumowujące / końcowe">
+    <option>Przewidywana</option>
+    <option>Półroczna</option>
+    <option>Roczna</option>
+  </optgroup>
+</select>
 
       <div style="display: flex; gap: 15px; align-items: flex-end; margin-bottom: 15px;">
           <div style="flex: 1;">
@@ -731,14 +749,19 @@ window.zamknijModalEdycji = function() {
 };
 
 // 3. ZAPISYWANIE ZMIAN
+// AKTUALIZACJA: Zapisywanie zmian w ocenie
 window.zapiszZmianyOceny = function() {
-    const klasa = document.getElementById('klasa').value; // Pobieramy aktualnie wybraną klasę
+    const klasa = document.getElementById('klasa').value; 
     const uczen = document.getElementById('edit-uczen').value;
     const index = parseInt(document.getElementById('edit-index').value);
+    const nowaWartosc = document.getElementById('edit-wartosc').value;
+    
+    if (!nowaWartosc) return alert('Wpisz wartość oceny!');
     
     const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
+    if (!zapisane[klasa]) return;
     
-    // Szukamy oceny w bazie
+    // Szukamy indeksu oceny w głównej tablicy dla danej klasy
     let licznik = 0;
     const ocenaWLocalStorage = zapisane[klasa].find(o => {
         if (o.uczen === uczen) {
@@ -749,16 +772,47 @@ window.zapiszZmianyOceny = function() {
     });
 
     if (ocenaWLocalStorage) {
-        // Podmieniamy dane na te z modalu
         ocenaWLocalStorage.typ = document.getElementById('edit-typ').value;
         ocenaWLocalStorage.komentarz = document.getElementById('edit-komentarz').value;
-        ocenaWLocalStorage.ocena = document.getElementById('edit-wartosc').value;
+        ocenaWLocalStorage.ocena = nowaWartosc;
         
         localStorage.setItem('oceny', JSON.stringify(zapisane));
         
-        // Odświeżamy tabelę, żeby od razu było widać nową ocenę
         if (typeof pokazTabele === 'function') pokazTabele(); 
+        window.zamknijModalEdycji();
+    }
+};
+
+// NOWOŚĆ: Usuwanie oceny z bazy danych
+window.usunOcene = function() {
+    if (!confirm("Na pewno chcesz trwale usunąć tę ocenę?")) return;
+
+    const klasa = document.getElementById('klasa').value; 
+    const uczen = document.getElementById('edit-uczen').value;
+    const index = parseInt(document.getElementById('edit-index').value);
+    
+    const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
+    if (!zapisane[klasa]) return;
+
+    // Szukamy pozycji (prawdziwego indeksu) oceny w lokalnej bazie
+    let licznik = 0;
+    const oryginalnyIndeks = zapisane[klasa].findIndex(o => {
+        if (o.uczen === uczen) {
+            if (licznik === index) return true;
+            licznik++;
+        }
+        return false;
+    });
+
+    if (oryginalnyIndeks !== -1) {
+        // Usuwamy ocenę z tablicy klasy
+        zapisane[klasa].splice(oryginalnyIndeks, 1);
         
+        // Zapisujemy zmiany w localStorage
+        localStorage.setItem('oceny', JSON.stringify(zapisane));
+        
+        // Odświeżamy widok tabeli i zamykamy modal
+        if (typeof pokazTabele === 'function') pokazTabele(); 
         window.zamknijModalEdycji();
     }
 };
@@ -826,24 +880,34 @@ window.zapiszZmianyOceny = function() {
 
     <label for="typ-jednego">Typ oceny:</label>
     <select id="typ-jednego">
-      <option>Sprawdzian</option>
-      <option>Praca klasowa</option>
-      <option>Kartkówka</option>
-      <option>Projekt</option>
-      <option>Prezentacja</option>
-      <option>Praca na lekcji</option>
-      <option>Odpowiedź ustna</option>
-      <option>Zadanie</option>
-      <option>Inne</option>
-      <option>Przewidywana</option>
-      <option>Roczna</option>
-      <option>Poprawa</option>
-      <option>Aktywność</option>
-      <option>Praca domowa</option>
-      <option>Egzamin-próbny</option>
-	  <option>Egzamin-oficjalny</option>
-      <option>Półroczna</option>
-    </select>
+  <optgroup label="Oceny bieżące / normalne">
+    <option>Sprawdzian</option>
+    <option>Praca klasowa</option>
+    <option>Kartkówka</option>
+    <option>Projekt</option>
+    <option>Prezentacja</option>
+    <option>Praca na lekcji</option>
+    <option>Odpowiedź ustna</option>
+    <option>Zadanie</option>
+    <option>Aktywność</option>
+    <option>Praca domowa</option>
+    <option>Poprawa</option>
+    <!-- Nowe kategorie: -->
+    <option>Praca dodatkowa</option>
+    <option>Sprawdzenie zeszytu</option>
+    <option>Nieprzygotowanie do lekcji</option>
+    <option>Praca w grupach</option>
+    <option>Karta pracy</option>
+    <option>Prowadzenie zeszytu / ćwiczeń</option>
+    <option>Udział w konkursie</option>
+    <option>Inne</option>
+  </optgroup>
+  <optgroup label="Oceny podsumowujące / końcowe">
+    <option>Przewidywana</option>
+    <option>Półroczna</option>
+    <option>Roczna</option>
+  </optgroup>
+</select>
 
     <label for="komentarz-jednego">Komentarz:</label>
     <textarea id="komentarz-jednego"></textarea>
@@ -851,8 +915,8 @@ window.zapiszZmianyOceny = function() {
     <label for="ocena-jednego">Ocena:</label>
     <select id="ocena-jednego">
   <option value="">-</option>
-  <option value="BZ">BZ</option>
-  <option value="NP">NP</option>
+  <option value="bz">bz</option>
+  <option value="np">np</option>
   <option value="-">-</option>
   <option value="+">+</option>
   <option value="1">1</option>
@@ -903,8 +967,7 @@ window.zapiszZmianyOceny = function() {
 </style>
 
 <div id="modalEdycjiOceny" class="modal">
-  <div class="modal-content">
-    <button onclick="zamknijModalEdycji()">Zamknij</button>
+  <div class="modal-content" style="max-width: 450px; height: auto;">
     <h3>Edycja oceny</h3>
     
     <input type="hidden" id="edit-index">
@@ -912,22 +975,34 @@ window.zapiszZmianyOceny = function() {
 
     <label>Typ oceny:</label>
     <select id="edit-typ">
-      <option>Sprawdzian</option>
-      <option>Praca klasowa</option>
-      <option>Kartkówka</option>
-      <option>Projekt</option>
-      <option>Prezentacja</option>
-      <option>Praca na lekcji</option>
-      <option>Odpowiedź ustna</option>
-      <option>Zadanie</option>
-      <option>Inne</option>
-      <option>Przewidywana</option>
-      <option>Roczna</option>
-      <option>Poprawa</option>
-      <option>Aktywność</option>
-      <option>Praca domowa</option>
-      <option>Półroczna</option>
-    </select>
+  <optgroup label="Oceny bieżące / normalne">
+    <option>Sprawdzian</option>
+    <option>Praca klasowa</option>
+    <option>Kartkówka</option>
+    <option>Projekt</option>
+    <option>Prezentacja</option>
+    <option>Praca na lekcji</option>
+    <option>Odpowiedź ustna</option>
+    <option>Zadanie</option>
+    <option>Aktywność</option>
+    <option>Praca domowa</option>
+    <option>Poprawa</option>
+    <!-- Nowe kategorie: -->
+    <option>Praca dodatkowa</option>
+    <option>Sprawdzenie zeszytu</option>
+    <option>Nieprzygotowanie do lekcji</option>
+    <option>Praca w grupach</option>
+    <option>Karta pracy</option>
+    <option>Prowadzenie zeszytu / ćwiczeń</option>
+    <option>Udział w konkursie</option>
+    <option>Inne</option>
+  </optgroup>
+  <optgroup label="Oceny podsumowujące / końcowe">
+    <option>Przewidywana</option>
+    <option>Półroczna</option>
+    <option>Roczna</option>
+  </optgroup>
+</select>
 
     <label>Komentarz:</label>
     <textarea id="edit-komentarz" style="width: 100%; height: 60px;"></textarea>
@@ -935,9 +1010,10 @@ window.zapiszZmianyOceny = function() {
     <label>Ocena:</label>
     <input type="text" id="edit-wartosc" style="width: 100%; padding: 8px;">
 
-    <div style="margin-top: 15px;">
-      <button onclick="zapiszZmianyOceny()" style="background: #4caf50; color: white;">Zapisz zmiany</button>
-      <button onclick="zamknijModalEdycji()">Anuluj</button>
+    <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <button onclick="zapiszZmianyOceny()" style="background: #4caf50; color: white; margin: 0;">Zapisz zmiany</button>
+      <button onclick="usunOcene()" style="background: #c62828; color: white; margin: 0;">Usuń ocenę</button>
+      <button onclick="zamknijModalEdycji()" style="background: #7c8fa6; color: white; margin: 0;">Anuluj</button>
     </div>
   </div>
 </div>
