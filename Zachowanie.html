@@ -229,7 +229,29 @@
         <button onclick="document.getElementById('modalIndywidualny').style.display='none'">Anuluj</button>
     </div>
 </div>
+<!-- NOWY MODAL EDYCYJNY DLA ZACHOWANIA -->
+<div id="modalEdycjiPunktu" class="modal">
+    <div class="modal-content" style="max-width: 450px;">
+        <h3>Edycja wpisu punktowego</h3>
+        
+        <input type="hidden" id="edit-id">
 
+        <label>Kategoria:</label>
+        <select id="edit-kat" onchange="updateSelectColor(this)"></select>
+
+        <label>Liczba punktów (np. 10 lub -5):</label>
+        <input type="number" id="edit-pkt">
+
+        <label>Komentarz:</label>
+        <textarea id="edit-koment" rows="3"></textarea>
+        
+        <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <button onclick="zapiszZmianyPunktu()" class="btn-save">Zapisz zmiany</button>
+            <button onclick="usunWpisPunktowy()" style="background: #c62828; color: white;">Usuń wpis</button>
+            <button onclick="document.getElementById('modalEdycjiPunktu').style.display='none'">Anuluj</button>
+        </div>
+    </div>
+</div>
 <div id="global-tooltip"></div>
 
 <script>
@@ -279,7 +301,7 @@ let aktualnyUczenIndiv = "";
 
 function init() {
   const tbody = document.getElementById('listaKlasTabela');
-  const cats = [document.getElementById('katSeryjna'), document.getElementById('katIndiv')];
+  const cats = [document.getElementById('katSeryjna'), document.getElementById('katIndiv'), document.getElementById('edit-kat')];
   
   // Wypełnij selecty kategorii i dodaj kolory
   cats.forEach(select => {
@@ -442,20 +464,61 @@ function renderujTabelePunktow() {
 
 function edytujPunkt(id) {
   const dane = JSON.parse(localStorage.getItem('zachowanie') || '{}');
-  const wpisy = dane[aktualnaKlasa];
-  const idx = wpisy.findIndex(w => w.id === id);
-  const wpis = wpisy[idx];
+  const wpisy = dane[aktualnaKlasa] || [];
+  const wpis = wpisy.find(w => w.id === id);
 
-  const akcja = prompt("Edycja punktu:\n1 - Zmień wartość\n2 - Usuń wpis\n(wpisz cyfrę)", "1");
-  if (akcja === "1") {
-    const p = prompt("Nowa liczba punktów:", wpis.punkty);
-    if (p !== null) wpis.punkty = Number(p);
-  } else if (akcja === "2") {
-    if (confirm("Na pewno usunąć ten wpis?")) wpisy.splice(idx, 1);
+  if (!wpis) return;
+
+  // Wypełnianie pól nowego modalu danymi wpisu
+  document.getElementById('edit-id').value = id;
+  document.getElementById('edit-kat').value = wpis.kategoria;
+  document.getElementById('edit-pkt').value = wpis.punkty;
+  document.getElementById('edit-koment').value = wpis.komentarz || '';
+
+  // Aktualizacja koloru tła selecta w zależności od kategorii (A-, B-, C-)
+  updateSelectColor(document.getElementById('edit-kat'));
+
+  // Pokazanie modalu
+  document.getElementById('modalEdycjiPunktu').style.display = 'flex';
+}
+
+function zapiszZmianyPunktu() {
+  const id = document.getElementById('edit-id').value;
+  const nowaKat = document.getElementById('edit-kat').value;
+  const nowePkt = document.getElementById('edit-pkt').value;
+  const nowyKoment = document.getElementById('edit-koment').value;
+
+  if (nowePkt === "") return alert("Wpisz liczbę punktów!");
+
+  const dane = JSON.parse(localStorage.getItem('zachowanie') || '{}');
+  const wpisy = dane[aktualnaKlasa] || [];
+  const wpis = wpisy.find(w => w.id === id);
+
+  if (wpis) {
+    wpis.kategoria = nowaKat;
+    wpis.punkty = Number(nowePkt);
+    wpis.komentarz = nowyKoment;
+
+    localStorage.setItem('zachowanie', JSON.stringify(dane));
+    renderujTabelePunktow();
+    document.getElementById('modalEdycjiPunktu').style.display = 'none';
   }
+}
 
-  localStorage.setItem('zachowanie', JSON.stringify(dane));
-  renderujTabelePunktow();
+function usunWpisPunktowy() {
+  if (!confirm("Na pewno usunąć ten wpis punktowy?")) return;
+
+  const id = document.getElementById('edit-id').value;
+  const dane = JSON.parse(localStorage.getItem('zachowanie') || '{}');
+  const wpisy = dane[aktualnaKlasa] || [];
+  const idx = wpisy.findIndex(w => w.id === id);
+
+  if (idx !== -1) {
+    wpisy.splice(idx, 1);
+    localStorage.setItem('zachowanie', JSON.stringify(dane));
+    renderujTabelePunktow();
+    document.getElementById('modalEdycjiPunktu').style.display = 'none';
+  }
 }
 
 function showTooltip(e, kat, kom, data) {
