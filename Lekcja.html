@@ -767,13 +767,13 @@ function normalizujKlase(klasa) {
 	  "7G-Język_Piotrowski": ["DZIAŁ 1 - ZDROWIE", "Części ciała i zdrowy styl życia", "Choroby, bóle i inne przypadki", "Past Simple - Lekcja gramatyczna", "Sprawdź czy potrafisz (1)", "DZIAŁ 2 - ŚWIAT I PRZYRODA", "Kontynenty oraz kraje", "Przyroda: Zwierzęta, Krajobrazy i rośliny", "Czas poprawny, Zapis czasu słownie", "Present Simple - Lekcja gramatyczna", "Sprawdź czy potrafisz (2)", "DZIAŁ 3 - ŻYCIE PRYWATNE", "Ludność: Rodzina i znajomi", "Czas wolny: Aktywności i dni wolne", "Present Cintus - Lekcja gramatyczna", "Sprawdź czy potrafisz (3)", "DZIAŁ 4 - CZŁOWIEK", "Opis człowieka: Cechy charakteru i wygląd zewnętrzny", "Przedmioty: Ubiór i przedmioty osobiste / użytkowe", "Etapy życia", "Zaimki osobowe - Lekcja gramatyczna", "Porównanie czasów teraźniejszych - Lekcja gramatyczna", "Sprawdź czy potrafisz (4)"],
 	  "7DE-Język_Piotrowski": ["DZIAŁ 1 - CZŁOWIEK", "Vocabulary (1)", "Gramar (1)", "Buking (1)", "Writing (1)", "DZIAŁ 2 - ZDROWIE", "Vocabulary (2)", "Gramar (2)", "Buking (2)", "Writing (2)", "DZIAŁ 3 - ŻYCIE PRYWATNE","Vocabulary (3)", "Gramar (3)", "Buking (3)", "Writing (3)", "DZIAŁ 4 - ŚWIAT I PRZYRODA", "Vocabulary (4)", "Gramar (4)", "Buking (4)", "Writing (4)"],
 	  "8H-Język_Piotrowski": ["DZIAŁ 1 - MIEJSCE ZAMIESZKANIA", "Vocabulary (1)", "Gramar (1)", "Buking i writing (1)", "DZIAŁ 2 - EDUKACJA", "Vocabulary (2)", "Gramar (2)", "Buking i writing (2)", "DZIAŁ 3 - PRACA","Vocabulary (3)", "Gramar (3)", "Buking i writing (3)"],
-      "1C-Język_Piotrowski": ["DZIAŁ 1 - SPORT","Vocabulary (1)", "Gramar (1)", "Buking (1))", "Writing (1)", "DZIAŁ 2 - KULTURA","Vocabulary (2)", "Gramar (2)", "Buking i writing (2)", "DZIAŁ 3 - TURYSTYKA", "Vocabulary (3)", "Gramar (3)", "Buking i writing (3)", "DZIAŁ 4 - TEMATY DODATKOWE", "Porównanie czasów teraźniejszych", "Stopniowanie przymiotników", "Słuchanie"],
+      "1C-Język_Piotrowski": ["DZIAŁ 1 - SPORT", "Vocabulary (1)", "Gramar (1)", "Buking (1)", "Writing (1)", "Revision (1)", "DZIAŁ 2 - KULTURA", "Vocabulary (2)", "Gramar (2)", "Buking (2)",  "Writing (2)", "Revision (2)", "DZIAŁ 3 - TURYSTYKA", "Vocabulary (3)", "Gramar (3)", "Buking (3)", "Writing (3)", "Revision (3)", "DZIAŁ 4 - TEMATY DODATKOWE", "+ Porównanie czasów teraźniejszych", "+ Stopniowanie przymiotników", "+ Słuchanie"],
 	  "<b>DZD</b>-Język_Piotrowski-Liceum" : ["Brak tematów dla wybranej klasy"],
 	  "<b>DZD</b>-Język_Piotrowski-Klasy_6" : ["Brak tematów dla wybranej klasy"],
 	  "<b>DZD</b>-Język_Piotrowski-Klasy_7" : ["Brak tematów dla wybranej klasy"],
 	  "<b>DZD</b>-Język_Piotrowski-Klasa_8" : ["Brak tematów dla wybranej klasy"],
 	  "<b>DZD</b>-Język_Piotrowski-Liceum" : ["Brak tematów dla wybranej klasy"],
-	  "2L-Język_Piotrowski": ["DZIAŁ 1 - ŚWIAT PRZYRODY","Vocabulary (1)", "Gramar (1)", "Buking i writing (1)", "DZIAŁ 2 - ZDROWIE","Vocabulary (2)", "Gramar (2)", "Buking i writing (2)"],
+	  "2L-Język_Piotrowski": ["DZIAŁ 1 - ŚWIAT PRZYRODY","Vocabulary (1)", "Gramar (1)", "Buking (1)", "Writing (1)", "Revision (1)", "DZIAŁ 2 - NAUKA I TECHNIKA", "Vocabulary (2)", "Gramar (2)", "Buking (2)", "Lang funkq (2)", "Writing (2)", "Revision (2)"],
 	  "Własna": ["Tematy dla edukacja dla bezpieczeństwa", "DZIAŁ 1 - BEZPIECZEŃSTWO PAŃSTWA", "Bezpieczny obywatel, bezpieczny naród, bezpieczne państwo", "Bezpieczeństwo Polski w stosunkach międzynarodowych", "DZIAŁ 2 - POSTĘPOWANIE W SYTUACJACH ZAGROŻEŃ", "Źródła zagrożeń", "Ostrzeganie o zagrożeniach i alarmowanie", "Ewakuacja","Zagrożenia pożarowe", "Zagrożenia powodziowe", "Ekstremalne warunki pogodowe", "Wypadki i katastrofy komunikacyjne", "Uwolnienie niebezpiecznych substancji chemicznych", "Zagrożenia terrorystyczne", "DZIAŁ 3 - PODSTAWY PIERWSZEJ POMOCY", "Podstawowe wiadomości z zakresu pierwszej pomocy", "Postępowanie w miejscu zdarzenia", "Pomoc osobie nieprzytomnej", "Resuscytacja krążeniowo-oddechowa", "Apteczka pierwszej pomocy", "Tamowanie krwawień i krwotoków", "Złamania i zwichnięcia", "Oparzenia i odmrożenia", "Inne groźne przypadki", "DZIAŁ 4 - PROFILAKTYKA ZDROWOTNA", "Zdrowie jako wartość. Zasady zdrowego stylu życia", "Choroby cywilizacyjne", "Komunikacja interpersonalna w trosce o zdrowie"]
  
 	};
@@ -811,9 +811,9 @@ if (pominieteTematy.includes(t)) {
 
       const tLower = t.toLowerCase();  
       if (
-        tLower.includes("powtórzenie wiadomości") ||
+        tLower.includes("revision") ||
         tLower.includes("sprawdzian") ||
-        tLower.includes("omówienie sprawdzianu") ||
+        tLower.includes("+") ||
         tLower.includes("powtórzenie do egzaminu 1") ||
         tLower.includes("powtórzenie do egzaminu 2") ||
         tLower.includes("egzamin szóstoklasisty") ||
