@@ -689,8 +689,8 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   document.addEventListener("mousemove", e => {
-    globalTooltip.style.left = e.pageX + 15 + "px";
-    globalTooltip.style.top = e.pageY + 15 + "px";
+    globalTooltip.style.left = e.clientX + 15 + "px";
+    globalTooltip.style.top = e.clientY + 15 + "px";
   });
 
   document.addEventListener("mouseout", e => {
