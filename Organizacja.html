@@ -90,7 +90,6 @@
         <tr><th>Klasa</th><th>Przedmiot</th><th>Uczniów</th><th>Akcja</th></tr>
       </thead>
       <tbody>
-        <tr><td><strong>6A</strong></td><td>Język piotrowski</td><td>4</td><td><button class="btn-action" onclick="openModal('6A')">Lista</button></td></tr>
         <tr>
           <td><strong>6B</strong></td>
           <td>Język piotrowski</td>
@@ -283,11 +282,9 @@
 <script>
   // Przykładowe dane uczniów
   const students = {
-    '1C-Język_Piotrowski': ['Kacper Chmurkowski', 'Krystyna Kolewska', 'Patrycja Kowalska', 'Aleksander Piotrowski', 'Martyna Pieprz', 'Oliwier Brzęczyszczykiewicz'],
-    '6A-Język_Piotrowski': ['Maja Alryszewska', 'Paweł Kosztuk', 'Filip Majewski', 'Zuzanna Okejska', 'Katarzyna Więczykowska', 'Antoni Wolski'],
-	'DZD-Język_Piotrowski-Klasy_6': ['Maja Alryszewska', 'Paweł Kosztuk', 'Filip Majewski', 'Zuzanna Okejska', 'Katarzyna Więczykowska', 'Antoni Wolski', 'Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska'],
-	'DZD-Język_Piotrowski-Liceum': ['Kacper Chmurkowski', 'Krystyna Kolewska', 'Patrycja Kowalska', 'Aleksander Piotrowski', 'Martyna Pieprz', 'Oliwier Brzęczyszczykiewicz'],
-	'6B-Język_Piotrowski': ['Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska']
+    '1C': ['Kacper Chmurkowski', 'Krystyna Kolewska', 'Patrycja Kowalska', 'Aleksander Piotrowski', 'Martyna Pieprz', 'Oliwier Brzęczyszczykiewicz'],
+    '6A': ['Maja Alryszewska', 'Paweł Kosztuk', 'Filip Majewski', 'Zuzanna Okejska', 'Katarzyna Więczykowska', 'Antoni Wolski'],
+	'6B': ['Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska']
   };
 
   function openModal(klasa) {
