@@ -94,39 +94,23 @@
         <tr>
           <td><strong>6B</strong></td>
           <td>Język piotrowski</td>
-          <td>4</td>
+          <td>6</td>
           <td><button class="btn-action" onclick="openModal('6B')">Lista</button></td>
         </tr>
         <tr>
-          <td><strong>7G</strong></td>
-          <td>Język piotrowski</td>
-          <td>4</td>
-          <td><button class="btn-action" onclick="openModal('7G')">Lista</button></td>
-        </tr>
-        <tr>
-          <td><strong>7DE</strong></td>
+          <td><strong>6A</strong></td>
           <td>Język piotrowski</td>
           <td>6</td>
-          <td><button class="btn-action" onclick="openModal('7DE')">Lista</button></td>
+          <td><button class="btn-action" onclick="openModal('6A')">Lista</button></td>
         </tr>
-		<tr>
-          <td><strong>8H</strong></td>
-          <td>Język piotrowski</td>
-          <td>3</td>
-          <td><button class="btn-action" onclick="openModal('8H')">Lista</button></td>
-        </tr>
+        
 		<tr>
           <td><strong>1C</strong></td>
           <td>Język piotrowski</td>
-          <td>4</td>
+          <td>6</td>
           <td><button class="btn-action" onclick="openModal('1C')">Lista</button></td>
         </tr>
-		<tr>
-          <td><strong>2L</strong></td>
-          <td>Język piotrowski</td>
-          <td>4</td>
-          <td><button class="btn-action" onclick="openModal('2L')">Lista</button></td>
-        </tr> </tbody>
+		 </tbody>
     </table>
   </div>
 
@@ -135,11 +119,7 @@
     <table class="modern-table">
       <thead><tr><th>Wydarzenie</th><th>Data</th></tr></thead>
       <tbody>
-        <tr><td>Rozpoczęcie roku szkolnego</td><td>01 czerwca 2026</td></tr>
-        <tr><td>Wystawienie ocen półrocznych</td><td>24 - 30 czerwca 2026</td></tr>
-        <tr><td>Wystawienie ocen przewidywanych</td><td>20 - 26 lipca 2026</td></tr>
-        <tr><td>Wystawienie ocen rocznych</td><td>27 - 31 lipca 2026</td></tr>
-        <tr><td>Zakończenie roku szkolnego</td><td>31 lipca 2026</td></tr>
+        <tr><td>Brak wpisanych ważnych wydarzeń.</td><td>...</td></tr>
       </tbody>
     </table>
   </div>
@@ -198,17 +178,17 @@
 	  </tr>
       <td>Patryk Prosiak</td>
       <td>Matematyka, Fizyka</td>
-	  <td>6B</td>
+	  <td>Brak</td>
     </tr>
     <tr>
       <td>Julia Bośniak</td>
       <td>Chemia</td>
-	  <td>7G</td>
+	  <td>Brak</td>
     </tr>
     <tr>
       <td>Martyna Wilska</td>
       <td>Edukacja dla bezpieczeństwa, Doradztwo zawodowe</td>
-	  <td>7DE</td>
+	  <td>Brak</td>
     </tr>
 	<tr>
       <td>Maja Oloj</td>
@@ -218,7 +198,7 @@
 	<tr>
       <td>Justyna Born</td>
       <td>Język angielski</td>
-	  <td>1C</td>
+	  <td>Brak</td>
     </tr>
 	<tr>
       <td>Patrycja Mińska</td>
@@ -233,22 +213,22 @@
 	<tr>
       <td>Maciej Bojnek</td>
       <td>Historia, Wiedza o społeczeństwie</td>
-	  <td>6A</td>
+	  <td>Brak</td>
     </tr>
 	<tr>
       <td>Anna Łezka</td>
       <td>Język polski, Matematyka</td>
-	  <td>8H</td>
+	  <td>Brak</td>
     </tr>
 	<tr>
       <td>Maria Oksejska</td>
       <td>Język niemiecki</td>
-	  <td>Brak</td>
+	  <td>1C</td>
     </tr>
 	<tr>
       <td>Zuzanna Filipińska</td>
       <td>Język Hiszpański</td>
-	  <td>2L</td>
+	  <td>Brak</td>
     </tr>
 	<tr>
       <td>Julia Komuniak</td>
@@ -258,12 +238,12 @@
 	<tr>
       <td>Krzysztof Sowa</td>
       <td>Wychowanie fizyczne</td>
-	  <td>Brak</td>
+	  <td>6B</td>
     </tr>
 	<tr>
       <td>Paweł Krak</td>
       <td>Wychowanie fizyczne</td>
-	  <td>Brak</td>
+	  <td>6A</td>
     </tr>
 	<tr>
       <td>Milena Bośniak</td>
@@ -303,13 +283,11 @@
 <script>
   // Przykładowe dane uczniów
   const students = {
-    '2L': ['Paweł', 'Ola', 'Natalia', 'Karol'],
-	'7DE': ['Wojtek', 'Krzysiek', 'Mirek', 'Ola', 'Maria', 'Marta'],
-	'7G': ['Ela', 'Ola', 'Marylka', 'Marta'],
-    '1C': ['Wiesia', 'Alina', 'Bożena', 'Halinka'],
-    '6A': ['Jagoda', 'Lena', 'Szymon', 'Antek'],
-	'8H': ['Andrzej', 'Maciej', 'Patryk'],
-	'6B': ['Ewelina', 'Tomek', 'Agata', 'Tadeusz']
+    '1C-Język_Piotrowski': ['Kacper Chmurkowski', 'Krystyna Kolewska', 'Patrycja Kowalska', 'Aleksander Piotrowski', 'Martyna Pieprz', 'Oliwier Brzęczyszczykiewicz'],
+    '6A-Język_Piotrowski': ['Maja Alryszewska', 'Paweł Kosztuk', 'Filip Majewski', 'Zuzanna Okejska', 'Katarzyna Więczykowska', 'Antoni Wolski'],
+	'DZD-Język_Piotrowski-Klasy_6': ['Maja Alryszewska', 'Paweł Kosztuk', 'Filip Majewski', 'Zuzanna Okejska', 'Katarzyna Więczykowska', 'Antoni Wolski', 'Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska'],
+	'DZD-Język_Piotrowski-Liceum': ['Kacper Chmurkowski', 'Krystyna Kolewska', 'Patrycja Kowalska', 'Aleksander Piotrowski', 'Martyna Pieprz', 'Oliwier Brzęczyszczykiewicz'],
+	'6B-Język_Piotrowski': ['Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska']
   };
 
   function openModal(klasa) {
