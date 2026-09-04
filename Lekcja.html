@@ -1334,8 +1334,8 @@ function pokazPlan(date) {
   document.getElementById("data-plan").value = dzienData;
 
   // ===== BLOKADA ZAKRESU DAT (1 Czerwca - 31 Lipca 2026) =====
-  const poczatekSemestru = new Date("2026-06-01");
-  const koniecSemestru = new Date("2026-07-31");
+  const poczatekSemestru = new Date("2026-09-01");
+  const koniecSemestru = new Date("2026-11-31");
   
   // Resetujemy godziny, żeby porównywać tylko same dni
   const sprawdzanaData = new Date(dzienData);
