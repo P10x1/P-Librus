@@ -434,12 +434,12 @@ footer p {
 
 <!-- Ukryty select, który nadal używany w kodzie -->
 <select id="klasa-select" style="display: none;">
-  <option value="6A-Język_Piotrowski">6A - Język Piotrowski</option>
-  <option value="6B-Język_Piotrowski">6B - Język Piotrowski</option>
-  <option value="1C-Język_Piotrowski">1C - Język Piotrowski</option>
-  <option value="DZD-Język_Piotrowski-Klasy_6"> Język piotrowski klasy 6</option>
-  <option value="DZD-Język_Piotrowski-Liceum"> Język piotrowski Liceum</option>
-  <option value="Własna">Własna</option>
+  <option value="6D-Język_Piotrowski">6D - Język Piotrowski</option>
+  <option value="6E-Język_Piotrowski">6E - Język Piotrowski</option>
+  <option value="7A-Język_Piotrowski">7A - Język Piotrowski</option>
+  <option value="7B-Język_Piotrowski">7B - Język Piotrowski</option>
+  <option value="1F-Język_Piotrowski">1F - Język Piotrowski</option>
+  <option value="2C-Język_Piotrowski">2C - Język Piotrowski</option>
 </select>
 
 <!-- NOWY WIDOK PLANU LEKCJI -->
@@ -716,41 +716,78 @@ function pominTemat() {
 // To blokuje wyskakiwanie okienka z prośbą o uprawnienia
 window.Notification = { requestPermission: () => Promise.resolve("denied"), permission: "denied" };
   const uczniowie = {
-    '1C-Język_Piotrowski': ['Kacper Chmurkowski', 'Krystyna Kolewska', 'Patrycja Kowalska', 'Aleksander Piotrowski', 'Martyna Pieprz', 'Oliwier Brzęczyszczykiewicz'],
-    '6A-Język_Piotrowski': ['Maja Alryszewska', 'Paweł Kosztuk', 'Filip Majewski', 'Zuzanna Okejska', 'Katarzyna Więczykowska', 'Antoni Wolski'],
-	'DZD-Język_Piotrowski-Klasy_6': ['Maja Alryszewska', 'Paweł Kosztuk', 'Filip Majewski', 'Zuzanna Okejska', 'Katarzyna Więczykowska', 'Antoni Wolski', 'Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska'],
-	'DZD-Język_Piotrowski-Liceum': ['Kacper Chmurkowski', 'Krystyna Kolewska', 'Patrycja Kowalska', 'Aleksander Piotrowski', 'Martyna Pieprz', 'Oliwier Brzęczyszczykiewicz'],
-	'6B-Język_Piotrowski': ['Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska']
+    '2C-Język_Piotrowski': ['Kacper Chmurkowski', 'Krystyna Kolewska', 'Patrycja Kowalska', 'Aleksander Piotrowski', 'Martyna Pieprz', 'Oliwier Brzęczyszczykiewicz'],
+    '7A-Język_Piotrowski': ['Maja Alryszewska', 'Paweł Kosztuk', 'Filip Majewski', 'Zuzanna Okejska', 'Katarzyna Więczykowska', 'Antoni Wolski'],
+	'6D-Język_Piotrowski': ['Jagoda Wiktorowicz', 'Szymon Wiktorowicz', 'Lena Pikura', 'Antoni Pikura'],
+	'6E-Język_Piotrowski': ['Amelia Wolińska', 'Juliusz Borowski', 'Paweł Kolski', 'Antonina Mok'],
+	'1F-Język_Piotrowski': ['Juliusz Lentacz', 'Karol Więczkowski', 'Mia Żaczkiewicz', 'Lena Żyźniewska'],
+	'7B-Język_Piotrowski': ['Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska']
   };
   // Alias skróconych nazw na pełne klasy
 const aliasyKlas = {
-  "6A": "6A-Język_Piotrowski",
-  "6B": "6B-Język_Piotrowski",
-  "1C": "1C-Język_Piotrowski"
+  "6E": "6E-Język_Piotrowski",
+  "6D": "6D-Język_Piotrowski",
+  "7A": "7A-Język_Piotrowski",
+  "7B": "7B-Język_Piotrowski",
+  "1F": "1F-Język_Piotrowski",
+  "2C": "2C-Język_Piotrowski"
 };
 
 const daneDodatkoweKlas = {
-  '1C-Język_Piotrowski': { wychowawca: 'Maria Oksejska', podrecznik: 'Piotrowskie zastosowanie 1 (Nowe wydanie)' },
-  '6B-Język_Piotrowski': { wychowawca: 'Krzysztof Sowa', podrecznik: 'Odkryj język piotrowski (Nowość)' },
-  '6A-Język_Piotrowski': { wychowawca: 'Paweł Krak', podrecznik: 'Odkryj język piotrowski (Nowość)' },
+  '2C-Język_Piotrowski': { wychowawca: 'Maria Oksejska', podrecznik: 'Piotrowskie zastosowanie 2 (NOWE WYDANIE 11-2026)' },
+  '7B-Język_Piotrowski': { wychowawca: 'Krzysztof Sowa', podrecznik: 'NOWY Język piotrowski na czasie' },
+  '7A-Język_Piotrowski': { wychowawca: 'Paweł Krak', podrecznik: 'NOWE Piotrowskie słowa' },
+  '6D-Język_Piotrowski': { wychowawca: 'Julia Bośniak', podrecznik: 'Odkryj język piotrowski' },
+  '6E-Język_Piotrowski': { wychowawca: 'Anna Łezka', podrecznik: 'Odkryj język piotrowski' },
   'Własna': { wychowawca: '—', podrecznik: '—' }
 };
 
 function normalizujKlase(klasa) {
   return aliasyKlas[klasa] || klasa;
 }
+const tematy = {
+
+  "6D-Język_Piotrowski": ["Lekcja organizacyjno wprowadzeniowa. Zapoznanie z podręcznikiem. O języku piotrowskim oraz jak korzystać z podręcznika", "DZIAŁ 1 - PODSTAWY JĘZYKA PIOTROWSKIEGO ORAZ PODSTAWOWE CZĘŚĆI MOWY", "Alfabet języka piotrowskiego oraz dziedziny alfabetyki", "Wprowadzenie do języka. Osoby, liczba pojedyncza oraz liczba mnoga.", "Podstawy części mowy. Rzeczowniki, czasowniki oraz przyimki.", "Przymiotniki i przysłówki. Końcówka przymiotnikowo osobowa i kolory.", "Liczebniki, czyli liczby oraz daty z nimi związane.", "DZIAŁ 2 - PODSTAWY GRAMATYKI JĘZYKA PIOTROWSKIEGO. PAST SIMPLE.", "Podstawy gramatyki piotrowskiej, czyli przeczenia, czasy i informacje.","Wprowadzenie do czasu gramatycznego Past Simple.", "Past Simple - zastosowanie ogólność i wyrażanie upodobań.", "Podstawy gramatyki piotrowskiej","Past Simple - zastosowanie regularność.","Past Simple - zastosowanie opis osobowy stały.","Podstawy zaimków osobowych."],
+	  
 
 
-  const tematy = {
-	  "6A-Język_Piotrowski": ["Lekcja organizacyjno wprowadzeniowa. Zapoznanie z podręcznikiem. O języku piotrowskim oraz jak korzystać z podręcznika", "DZIAŁ 1 - PODSTAWY JĘZYKA PIOTROWSKIEGO ORAZ PODSTAWOWE CZĘŚĆI MOWY", "Alfabet języka piotrowskiego oraz dziedziny alfabetyki", "Wprowadzenie do języka. Osoby, liczba pojedyncza oraz liczba mnoga.", "Podstawy części mowy. Rzeczowniki, czasowniki oraz przyimki.", "Przymiotniki i przysłówki. Końcówka przymiotnikowo osobowa i kolory.", "Liczebniki, czyli liczby oraz daty z nimi związane.", "DZIAŁ 2 - PODSTAWY GRAMATYKI JĘZYKA PIOTROWSKIEGO. PAST SIMPLE.", "Podstawy gramatyki piotrowskiej, czyli przeczenia, czasy i informacje.","Wprowadzenie do czasu gramatycznego Past Simple.", "Past Simple - zastosowanie ogólność i wyrażanie upodobań.", "Podstawy gramatyki piotrowskiej","Past Simple - zastosowanie regularność.","Past Simple - zastosowanie opis osobowy stały.","Podstawy zaimków osobowych."],
-	  "6B-Język_Piotrowski": ["Lekcja organizacyjno wprowadzeniowa. Zapoznanie z podręcznikiem. O języku piotrowskim oraz jak korzystać z podręcznika", "DZIAŁ 1 - PODSTAWY JĘZYKA PIOTROWSKIEGO ORAZ PODSTAWOWE CZĘŚĆI MOWY", "Alfabet języka piotrowskiego oraz dziedziny alfabetyki", "Wprowadzenie do języka. Osoby, liczba pojedyncza oraz liczba mnoga.", "Podstawy części mowy. Rzeczowniki, czasowniki oraz przyimki.", "Przymiotniki i przysłówki. Końcówka przymiotnikowo osobowa i kolory.", "Liczebniki, czyli liczby oraz daty z nimi związane.", "DZIAŁ 2 - PODSTAWY GRAMATYKI JĘZYKA PIOTROWSKIEGO. PAST SIMPLE.", "Podstawy gramatyki piotrowskiej, czyli przeczenia, czasy i informacje.","Wprowadzenie do czasu gramatycznego Past Simple.", "Past Simple - zastosowanie ogólność i wyrażanie upodobań.", "Podstawy gramatyki piotrowskiej","Past Simple - zastosowanie regularność.","Past Simple - zastosowanie opis osobowy stały.","Podstawy zaimków osobowych."],
-	  "1C-Język_Piotrowski": ["DZIAŁ 1 - SPORT", "Vocabulary (1)", "Gramar (1)", "Buking (1)", "Writing (1)", "Revision (1)", "DZIAŁ 2 - KULTURA", "Vocabulary (2)", "Gramar (2)", "Buking (2)",  "Writing (2)", "Revision (2)", "DZIAŁ 3 - TURYSTYKA", "Vocabulary (3)", "Gramar (3)", "Buking (3)", "Writing (3)", "Revision (3)", "DZIAŁ 4 - TEMATY DODATKOWE", "+ Porównanie czasów teraźniejszych", "+ Stopniowanie przymiotników", "+ Słuchanie"],
-	  "DZD-Język_Piotrowski-Liceum" : ["Brak tematów dla wybranej klasy"],
-	  "DZD-Język_Piotrowski-Klasy_6" : ["Brak tematów dla wybranej klasy"],
-	  "Własna": ["Tematy dla edukacja dla bezpieczeństwa", "DZIAŁ 1 - BEZPIECZEŃSTWO PAŃSTWA", "Bezpieczny obywatel, bezpieczny naród, bezpieczne państwo", "Bezpieczeństwo Polski w stosunkach międzynarodowych", "DZIAŁ 2 - POSTĘPOWANIE W SYTUACJACH ZAGROŻEŃ", "Źródła zagrożeń", "Ostrzeganie o zagrożeniach i alarmowanie", "Ewakuacja","Zagrożenia pożarowe", "Zagrożenia powodziowe", "Ekstremalne warunki pogodowe", "Wypadki i katastrofy komunikacyjne", "Uwolnienie niebezpiecznych substancji chemicznych", "Zagrożenia terrorystyczne", "DZIAŁ 3 - PODSTAWY PIERWSZEJ POMOCY", "Podstawowe wiadomości z zakresu pierwszej pomocy", "Postępowanie w miejscu zdarzenia", "Pomoc osobie nieprzytomnej", "Resuscytacja krążeniowo-oddechowa", "Apteczka pierwszej pomocy", "Tamowanie krwawień i krwotoków", "Złamania i zwichnięcia", "Oparzenia i odmrożenia", "Inne groźne przypadki", "DZIAŁ 4 - PROFILAKTYKA ZDROWOTNA", "Zdrowie jako wartość. Zasady zdrowego stylu życia", "Choroby cywilizacyjne", "Komunikacja interpersonalna w trosce o zdrowie"]
- 
-	};
+"6E-Język_Piotrowski": ["Lekcja organizacyjno wprowadzeniowa. Zapoznanie z podręcznikiem. O języku piotrowskim oraz jak korzystać z podręcznika", "DZIAŁ 1 - PODSTAWY JĘZYKA PIOTROWSKIEGO ORAZ PODSTAWOWE CZĘŚĆI MOWY", "Alfabet języka piotrowskiego oraz dziedziny alfabetyki", "Wprowadzenie do języka. Osoby, liczba pojedyncza oraz liczba mnoga.", "Podstawy części mowy. Rzeczowniki, czasowniki oraz przyimki.", "Przymiotniki i przysłówki. Końcówka przymiotnikowo osobowa i kolory.", "Liczebniki, czyli liczby oraz daty z nimi związane.", "DZIAŁ 2 - PODSTAWY GRAMATYKI JĘZYKA PIOTROWSKIEGO. PAST SIMPLE.", "Podstawy gramatyki piotrowskiej, czyli przeczenia, czasy i informacje.","Wprowadzenie do czasu gramatycznego Past Simple.", "Past Simple - zastosowanie ogólność i wyrażanie upodobań.", "Podstawy gramatyki piotrowskiej","Past Simple - zastosowanie regularność.","Past Simple - zastosowanie opis osobowy stały.","Podstawy zaimków osobowych."],
+	  
 
+"7A-Język_Piotrowski": ["DZIAŁ 1 - CZŁOWIEK", "Człowiek - Vocabulary", "Człowiek - Gramar", "Człowiek - Buking", "Człowiek - Writing", "Człowiek - Revision", "DZIAŁ 2 - ZDROWIE", "Zdrowie - Vocabulary", "Zdrowie - Gramar", "Zdrowie - Buking", "Zdrowie - Writing", "Zdrowie - Revision", "DZIAŁ 3 - ŻYCIE PRYWATNE", "Życie prywatne - Vocabulary", "Życie prywatne - Gramar", "Życie prywatne - Buking", "Życie prywatne - Writing", "Życie prywatne - Revision", "DZIAŁ 4 - ŚWIAT I PRZYRODA", "Świat i przyroda - Vocabulary", "Świat i przyroda - Gramar", "Świat i przyroda - Buking", "Świat i przyroda - Writing", "Świat i przyroda - Revision"],
+
+"7B-Język_Piotrowski": [
+    "DZIAŁ 1 - ZDROWIE",
+    "Części ciała i zdrowy styl życia",
+    "Choroby, bóle i nieprzypadki",
+    "Past Simple - Lekcja gramatyczna",
+
+    "DZIAŁ 2 - ŚWIAT I PRZYRODA",
+    "Kontynenty oraz kraje",
+    "Przyroda: Zwierzęta, Krajobrazy, rośliny",
+    "Czas. Zapis czasu słownie",
+    "Present Simple - Lekcja gramatyczna",
+
+    "DZIAŁ 3 - ŻYCIE PRYWATNE",
+    "Ludność: Rodzina i znajomi",
+    "Czas wolny: Aktywności i dni wolne",
+    "Present Cintus - Lekcja gramatyczna",
+
+    "DZIAŁ 4 - CZŁOWIEK",
+    "Opis człowieka: Cechy charakteru i wygląd zewnętrzny",
+    "Przedmioty: Ubiór i przedmioty osobiste / użytkowe",
+    "Etapy życia",
+    "Zaimki osobowe - Lekcja gramatyczna",
+    "Porównanie czasów teraźniejszych - Lekcja gramatyczna"
+],
+
+
+"1F-Język_Piotrowski": ["DZIAŁ 1 - SPORT", "Vocabulary (1)", "Gramar (1)", "Buking (1)", "Writing (1)", "Revision (1)", "DZIAŁ 2 - KULTURA", "Vocabulary (2)", "Gramar (2)", "Buking (2)",  "Writing (2)", "Revision (2)", "DZIAŁ 3 - TURYSTYKA", "Vocabulary (3)", "Gramar (3)", "Buking (3)", "Writing (3)", "Revision (3)", "DZIAŁ 4 - TEMATY DODATKOWE", "+ Porównanie czasów teraźniejszych", "+ Stopniowanie przymiotników", "+ Słuchanie"],
+
+
+"2C-Język_Piotrowski": ["DZIAŁ 1 - ŚWIAT PRZYRODY", "Vocabulary (1)", "Gramar (1)", "Buking (1)", "Writing (1)", "Revision (1)", "DZIAŁ 2 - NAUKA I TECHNIKA", "Vocabulary (2)", "Gramar (2)", "Buking i lang funkq",  "Writing (2)", "Wrting - Lekcja 2", "Revision (2)", "DZIAŁ 3 - TEMATY DODATKOWE", "+ Porównanie czasów przeszłościowych", "+ Słuchanie"],
+
+};
   const klasaSelect = document.getElementById("klasa-select");
   const tematSelect = document.getElementById("temat-select");
 
@@ -1262,55 +1299,63 @@ function przywrocKlaseInterfejs(klasa) {
 <script>
 const planLekcji = {
   "poniedziałek": [
-    { nr: 1, klasa: "6A-Język_Piotrowski" },
-    { nr: 2, klasa: "6B-Język_Piotrowski" },
-    { nr: 3, klasa: "1C-Język_Piotrowski" },
-    { nr: 4, klasa: "Własna" },
-	{ nr: 5, klasa: "DZD-Język_Piotrowski-Klasy_6" },
-	{ nr: 6, klasa: "DZD-Język_Piotrowski-Liceum" }
+    { nr: 1, klasa: "6D-Język_Piotrowski" },
+    { nr: 2, klasa: "6E-Język_Piotrowski" },
+	{ nr: 3, klasa: "7A-Język_Piotrowski" },
+    { nr: 4, klasa: "7B-Język_Piotrowski" },
+	{ nr: 5, klasa: "1F-Język_Piotrowski" },
+    { nr: 6, klasa: "2C-Język_Piotrowski" }
 	
 	
   ],
   "wtorek": [
-    { nr: 1, klasa: "6A-Język_Piotrowski" },
-    { nr: 2, klasa: "6B-Język_Piotrowski" },
-    { nr: 3, klasa: "1C-Język_Piotrowski" },
-    { nr: 4, klasa: "Własna" },
-	{ nr: 5, klasa: "DZD-Język_Piotrowski-Klasy_6" },
-	{ nr: 6, klasa: "DZD-Język_Piotrowski-Liceum" }
+    { nr: 1, klasa: "6D-Język_Piotrowski" },
+    { nr: 2, klasa: "6E-Język_Piotrowski" },
+	{ nr: 3, klasa: "7A-Język_Piotrowski" },
+    { nr: 4, klasa: "7B-Język_Piotrowski" },
+	{ nr: 5, klasa: "1F-Język_Piotrowski" },
+    { nr: 6, klasa: "2C-Język_Piotrowski" }
   ],
   "środa": [
-    { nr: 1, klasa: "6A-Język_Piotrowski" },
-    { nr: 2, klasa: "6B-Język_Piotrowski" },
-    { nr: 3, klasa: "1C-Język_Piotrowski" },
-    { nr: 4, klasa: "Własna" },
-	{ nr: 5, klasa: "DZD-Język_Piotrowski-Klasy_6" },
-	{ nr: 6, klasa: "DZD-Język_Piotrowski-Liceum" }
+    { nr: 1, klasa: "6D-Język_Piotrowski" },
+    { nr: 2, klasa: "6E-Język_Piotrowski" },
+	{ nr: 3, klasa: "7A-Język_Piotrowski" },
+    { nr: 4, klasa: "7B-Język_Piotrowski" },
+	{ nr: 5, klasa: "1F-Język_Piotrowski" },
+    { nr: 6, klasa: "2C-Język_Piotrowski" }
   ],
   "czwartek": [
-    { nr: 1, klasa: "6A-Język_Piotrowski" },
-    { nr: 2, klasa: "6B-Język_Piotrowski" },
-    { nr: 3, klasa: "1C-Język_Piotrowski" },
-    { nr: 4, klasa: "Własna" },
-	{ nr: 5, klasa: "DZD-Język_Piotrowski-Klasy_6" },
-	{ nr: 6, klasa: "DZD-Język_Piotrowski-Liceum" }
+    { nr: 1, klasa: "6D-Język_Piotrowski" },
+    { nr: 2, klasa: "6E-Język_Piotrowski" },
+	{ nr: 3, klasa: "7A-Język_Piotrowski" },
+    { nr: 4, klasa: "7B-Język_Piotrowski" },
+	{ nr: 5, klasa: "1F-Język_Piotrowski" },
+    { nr: 6, klasa: "2C-Język_Piotrowski" }
 
   ],
   "piątek": [
-    { nr: 1, klasa: "6A-Język_Piotrowski" },
-    { nr: 2, klasa: "6B-Język_Piotrowski" },
-    { nr: 3, klasa: "1C-Język_Piotrowski" },
-    { nr: 4, klasa: "Własna" },
-	{ nr: 5, klasa: "DZD-Język_Piotrowski-Klasy_6" },
-	{ nr: 6, klasa: "DZD-Język_Piotrowski-Liceum" }
+    { nr: 1, klasa: "6D-Język_Piotrowski" },
+    { nr: 2, klasa: "6E-Język_Piotrowski" },
+	{ nr: 3, klasa: "7A-Język_Piotrowski" },
+    { nr: 4, klasa: "7B-Język_Piotrowski" },
+	{ nr: 5, klasa: "1F-Język_Piotrowski" },
+    { nr: 6, klasa: "2C-Język_Piotrowski" }
   ],
     "sobota": [
-    { nr: 1, klasa: "6A-Język_Piotrowski" },
-    { nr: 2, klasa: "6B-Język_Piotrowski" },
-    { nr: 3, klasa: "1C-Język_Piotrowski" },
-    { nr: 4, klasa: "Własna" },
-	{ nr: 5, klasa: "DZD-Język_Piotrowski-Klasy_6" },
-	{ nr: 6, klasa: "DZD-Język_Piotrowski-Liceum" }
+    { nr: 1, klasa: "6D-Język_Piotrowski" },
+    { nr: 2, klasa: "6E-Język_Piotrowski" },
+	{ nr: 3, klasa: "7A-Język_Piotrowski" },
+    { nr: 4, klasa: "7B-Język_Piotrowski" },
+	{ nr: 5, klasa: "1F-Język_Piotrowski" },
+    { nr: 6, klasa: "2C-Język_Piotrowski" }
+  ],
+  "niedziela": [
+    { nr: 1, klasa: "6D-Język_Piotrowski" },
+    { nr: 2, klasa: "6E-Język_Piotrowski" },
+	{ nr: 3, klasa: "7A-Język_Piotrowski" },
+    { nr: 4, klasa: "7B-Język_Piotrowski" },
+	{ nr: 5, klasa: "1F-Język_Piotrowski" },
+    { nr: 6, klasa: "2C-Język_Piotrowski" }
   ]
 };
 // 🔸 Pobieranie zakończonych klas z pamięci przeglądarki (localStorage)
@@ -1334,8 +1379,8 @@ function pokazPlan(date) {
   document.getElementById("data-plan").value = dzienData;
 
   // ===== BLOKADA ZAKRESU DAT (1 Czerwca - 31 Lipca 2026) =====
-  const poczatekSemestru = new Date("2026-09-01");
-  const koniecSemestru = new Date("2026-11-31");
+  const poczatekSemestru = new Date("2026-11-01");
+  const koniecSemestru = new Date("2026-12-31");
   
   // Resetujemy godziny, żeby porównywać tylko same dni
   const sprawdzanaData = new Date(dzienData);
