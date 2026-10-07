@@ -439,6 +439,7 @@ footer p {
   <option value="7A-Język_Piotrowski">7A - Język Piotrowski</option>
   <option value="7B-Język_Piotrowski">7B - Język Piotrowski</option>
   <option value="1F-Język_Piotrowski">1F - Język Piotrowski</option>
+  <option value="1F-Edukacja_dla_bezpieczeństwa">1F - Edukacja dla bezpieczeństwa</option>
   <option value="2C-Język_Piotrowski">2C - Język Piotrowski</option>
 </select>
 
@@ -721,6 +722,7 @@ window.Notification = { requestPermission: () => Promise.resolve("denied"), perm
 	'6D-Język_Piotrowski': ['Jagoda Wiktorowicz', 'Szymon Wiktorowicz', 'Lena Pikura', 'Antoni Pikura'],
 	'6E-Język_Piotrowski': ['Amelia Wolińska', 'Juliusz Borowski', 'Paweł Kolski', 'Antonina Mok'],
 	'1F-Język_Piotrowski': ['Juliusz Lentacz', 'Karol Więczkowski', 'Mia Żaczkiewicz', 'Lena Żyźniewska'],
+	'1F-Edukacja_dla_bezpieczeństwa': ['Juliusz Lentacz', 'Karol Więczkowski', 'Mia Żaczkiewicz', 'Lena Żyźniewska'],
 	'7B-Język_Piotrowski': ['Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska']
   };
   // Alias skróconych nazw na pełne klasy
@@ -730,6 +732,7 @@ const aliasyKlas = {
   "7A": "7A-Język_Piotrowski",
   "7B": "7B-Język_Piotrowski",
   "1F": "1F-Język_Piotrowski",
+  "1F": "1F-Edukacja_dla_bezpieczeństwa",
   "2C": "2C-Język_Piotrowski"
 };
 
@@ -739,6 +742,8 @@ const daneDodatkoweKlas = {
   '7A-Język_Piotrowski': { wychowawca: 'Paweł Krak', podrecznik: 'NOWE Piotrowskie słowa' },
   '6D-Język_Piotrowski': { wychowawca: 'Julia Bośniak', podrecznik: 'Odkryj język piotrowski' },
   '6E-Język_Piotrowski': { wychowawca: 'Anna Łezka', podrecznik: 'Odkryj język piotrowski' },
+  '1F-Język_Piotrowski': { wychowawca: 'Patryk Prosiak', podrecznik: 'Piotrowskie zastosowanie 1' },
+  '1F-Edukacja_dla_bezpieczeństwa': { wychowawca: 'Patryk Prosiak', podrecznik: 'Żyję i działam bezpiecznie. Podręcznik do edukacji dla bezpieczeństwa dla liceum ogólnokształcącego i technikum' },
   'Własna': { wychowawca: '—', podrecznik: '—' }
 };
 
@@ -782,6 +787,45 @@ const tematy = {
 ],
 
 
+
+
+"1F-Edukacja_dla_bezpieczeństwa": [
+  "1. Alarmowanie i ewakuacja",
+  "Rozdział 1. Podstawy pierwszej pomocy",
+  "1. Podstawowe wiadomości z zakresu pierwszej pomocy",
+  "2. Postępowanie na miejscu zdarzenia",
+  "3. Pomoc osobie nieprzytomnej",
+  "4. Resuscytacja krążeniowo-oddechowa",
+  "5. Ciało obce w organizmie",
+  "6. Rany i krwotoki",
+  "7. Urazy kości i stawów",
+  "8. Oparzenia i odmrożenia",
+  "9. Inne groźne przypadki",
+  "Sprawdź, czy potrafisz!",
+  "Rozdział 2. Zagrożenia i działania ratownicze",
+  "1. Rodzaje zagrożeń i ochrona przed nimi",
+  "2. Pożary",
+  "3. Powodzie i inne zagrożenia naturalne",
+  "4. Zagrożenia terrorystyczne i zagrożenia cyberbezpieczeństwa",
+  "5. Zagrożenia promieniotwórcze i skażenia",
+  "6. Wypadki i inne zagrożenia spowodowane działalnością człowieka",
+  "Sprawdź, czy potrafisz!",
+  "Rozdział 3. Bezpieczeństwo i system obronny państwa",
+  "1. Bezpieczeństwo państwa",
+  "2. Siły Zbrojne Rzeczypospolitej Polskiej",
+  "3. Ochrona ludności i dóbr kultury oraz obrona cywilna",
+  "Sprawdź, czy potrafisz!",
+  "Rozdział 4. Edukacja obronna",
+  "1. Sztuka przetrwania w sytuacji zagrożenia",
+  "2. Szkolenie strzeleckie",
+  "Sprawdź, czy potrafisz!",
+  "Temat dodatkowy. Edukacja zdrowotna – wybrane zagadnienia"
+],
+
+
+
+
+
 "1F-Język_Piotrowski": ["DZIAŁ 1 - SPORT", "Vocabulary (1)", "Gramar (1)", "Buking (1)", "Writing (1)", "Revision (1)", "DZIAŁ 2 - KULTURA", "Vocabulary (2)", "Gramar (2)", "Buking (2)",  "Writing (2)", "Revision (2)", "DZIAŁ 3 - TURYSTYKA", "Vocabulary (3)", "Gramar (3)", "Buking (3)", "Writing (3)", "Revision (3)", "DZIAŁ 4 - TEMATY DODATKOWE", "+ Porównanie czasów teraźniejszych", "+ Stopniowanie przymiotników", "+ Słuchanie"],
 
 
@@ -818,13 +862,20 @@ if (pominieteTematy.includes(t)) {
       if (t.startsWith("DZIAŁ")) {
         option.classList.add("dzial-option");
       }
+	  
+	  if (t.startsWith("Rozdział")) {
+        option.classList.add("dzial-option");
+      }
+	  
+	  
+	  
 
       const tLower = t.toLowerCase();  
       if (
         tLower.includes("revision") ||
         tLower.includes("sprawdzian") ||
         tLower.includes("+") ||
-        tLower.includes("powtórzenie do egzaminu 1") ||
+        tLower.includes("Temat dodatkowy.") ||
         tLower.includes("powtórzenie do egzaminu 2") ||
         tLower.includes("egzamin szóstoklasisty") ||
         tLower.includes("jak na egzaminie") ||
@@ -1304,7 +1355,8 @@ const planLekcji = {
 	{ nr: 3, klasa: "7A-Język_Piotrowski" },
     { nr: 4, klasa: "7B-Język_Piotrowski" },
 	{ nr: 5, klasa: "1F-Język_Piotrowski" },
-    { nr: 6, klasa: "2C-Język_Piotrowski" }
+	{ nr: 6, klasa: "1F-Edukacja_dla_bezpieczeństwa" },
+    { nr: 7, klasa: "2C-Język_Piotrowski" }
 	
 	
   ],
@@ -1314,7 +1366,8 @@ const planLekcji = {
 	{ nr: 3, klasa: "7A-Język_Piotrowski" },
     { nr: 4, klasa: "7B-Język_Piotrowski" },
 	{ nr: 5, klasa: "1F-Język_Piotrowski" },
-    { nr: 6, klasa: "2C-Język_Piotrowski" }
+	{ nr: 6, klasa: "1F-Edukacja_dla_bezpieczeństwa" },
+    { nr: 7, klasa: "2C-Język_Piotrowski" }
   ],
   "środa": [
     { nr: 1, klasa: "6D-Język_Piotrowski" },
@@ -1322,7 +1375,8 @@ const planLekcji = {
 	{ nr: 3, klasa: "7A-Język_Piotrowski" },
     { nr: 4, klasa: "7B-Język_Piotrowski" },
 	{ nr: 5, klasa: "1F-Język_Piotrowski" },
-    { nr: 6, klasa: "2C-Język_Piotrowski" }
+	{ nr: 6, klasa: "1F-Edukacja_dla_bezpieczeństwa" },
+    { nr: 7, klasa: "2C-Język_Piotrowski" }
   ],
   "czwartek": [
     { nr: 1, klasa: "6D-Język_Piotrowski" },
@@ -1330,7 +1384,8 @@ const planLekcji = {
 	{ nr: 3, klasa: "7A-Język_Piotrowski" },
     { nr: 4, klasa: "7B-Język_Piotrowski" },
 	{ nr: 5, klasa: "1F-Język_Piotrowski" },
-    { nr: 6, klasa: "2C-Język_Piotrowski" }
+	{ nr: 6, klasa: "1F-Edukacja_dla_bezpieczeństwa" },
+    { nr: 7, klasa: "2C-Język_Piotrowski" }
 
   ],
   "piątek": [
@@ -1339,7 +1394,8 @@ const planLekcji = {
 	{ nr: 3, klasa: "7A-Język_Piotrowski" },
     { nr: 4, klasa: "7B-Język_Piotrowski" },
 	{ nr: 5, klasa: "1F-Język_Piotrowski" },
-    { nr: 6, klasa: "2C-Język_Piotrowski" }
+	{ nr: 6, klasa: "1F-Edukacja_dla_bezpieczeństwa" },
+    { nr: 7, klasa: "2C-Język_Piotrowski" }
   ],
     "sobota": [
     { nr: 1, klasa: "6D-Język_Piotrowski" },
@@ -1347,7 +1403,8 @@ const planLekcji = {
 	{ nr: 3, klasa: "7A-Język_Piotrowski" },
     { nr: 4, klasa: "7B-Język_Piotrowski" },
 	{ nr: 5, klasa: "1F-Język_Piotrowski" },
-    { nr: 6, klasa: "2C-Język_Piotrowski" }
+	{ nr: 6, klasa: "1F-Edukacja_dla_bezpieczeństwa" },
+    { nr: 7, klasa: "2C-Język_Piotrowski" }
   ],
   "niedziela": [
     { nr: 1, klasa: "6D-Język_Piotrowski" },
@@ -1355,7 +1412,8 @@ const planLekcji = {
 	{ nr: 3, klasa: "7A-Język_Piotrowski" },
     { nr: 4, klasa: "7B-Język_Piotrowski" },
 	{ nr: 5, klasa: "1F-Język_Piotrowski" },
-    { nr: 6, klasa: "2C-Język_Piotrowski" }
+	{ nr: 6, klasa: "1F-Edukacja_dla_bezpieczeństwa" },
+    { nr: 7, klasa: "2C-Język_Piotrowski" }
   ]
 };
 // 🔸 Pobieranie zakończonych klas z pamięci przeglądarki (localStorage)
