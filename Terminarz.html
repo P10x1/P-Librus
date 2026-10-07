@@ -18,7 +18,7 @@
     h2 { margin-top: 0; margin-bottom: 18px; font-size: 18px; color: #444; }
 
     .controls { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; }
-    select, input, textarea { padding: 8px; border: 1px solid #cfd5db; border-radius: 4px; font-size: 13px; }
+    select, input, textarea { padding: 8px; border: 1px solid #cfd5db; border-radius: 4px; font-size: 13px; box-sizing: border-box; }
     
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: #d8dde3; border: 1px solid #d8dde3; }
     .weekday { background: #f8f9fa; padding: 10px; text-align: center; font-weight: bold; font-size: 12px; color: #666; }
@@ -27,7 +27,7 @@
     .day-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
     .day-number { font-weight: bold; font-size: 14px; }
 
-    /* PRZYCISKI PLUS Z TŁEM */
+    /* PRZYCISKI PLUS */
     .btn-plus { 
       background: #e2e8f0; color: #123e61; border: 1px solid #cbd5e1; 
       border-radius: 4px; width: 24px; height: 24px; font-size: 18px; 
@@ -36,75 +36,75 @@
     }
     .btn-plus:hover { background: #123e61; color: white; }
 
-    /* WYDARZENIA */
-    .event-item { font-size: 10px; padding: 4px 6px; margin-bottom: 3px; border-radius: 3px; cursor: pointer; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .event-sprawdzian { background: #d9534f; }
-    .event-kartkowka { background: #f0ad4e; }
-    .event-odpowiedz { background: #5bc0de; }
-    .event-zaliczone { background: #5cb85c !important; text-decoration: line-through; opacity: 0.8; }
+    /* WYDARZENIA - ULEPSZONE LEPSZE KOLORY I KONTRAST */
+    .event-item { font-size: 11px; padding: 5px 7px; margin-bottom: 4px; border-radius: 4px; cursor: pointer; color: white; font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+
+    .event-praca-klasowa { background: #900C3F !important; color: #ffffff !important; } /* Ciemny bordo */
+	.event-zaliczenie { background: #900C3F !important; color: #ffffff !important; } /* Ciemny bordo */
+    .event-sprawdzian { background: #C70039 !important; color: #ffffff !important; }   /* Wyrazista czerwień */
+    .event-kartkowka { background: #D97706 !important; color: #ffffff !important; }    /* Ciepły, czytelny pomarańcz */
+    .event-odpowiedz { background: #0284C7 !important; color: #ffffff !important; }     /* Jasnoniebieski akcent */
+    .event-projekt { background: #7C3AED !important; color: #ffffff !important; }       /* Głęboki fiolet */
+    .event-dzien-wolny { background: #059669 !important; color: #ffffff !important; }    /* Wyrazista zieleń */
+    .event-inne { background: #4B5563 !important; color: #ffffff !important; }          /* Grafitowy */
+    .event-wydarzenie { background: #2563EB !important; color: #ffffff !important; }     /* Niebieski */
+    .event-egzamin-probny { background: #4C1D95 !important; color: #ffffff !important; } /* Ciemny fiolet */
+    .event-egzamin-glowny { background: #581C87 !important; color: #ffffff !important; } /* Śliwkowy */
+
+    /* NIEOBECNOŚĆ I ZASTĘPSTWO */
+    .event-nieobecnosc { background: #FEE2E2 !important; color: #991B1B !important; border: 1px solid #FCA5A5; }
+    .event-zastepstwo { background: #D1FAE5 !important; color: #065F46 !important; border: 1px solid #6EE7B7; }
+
+    .event-zaliczone { opacity: 0.55; text-decoration: line-through; filter: grayscale(40%); }
     
-    /* NIEBECNOŚĆ - JASNO CZERWONE TŁO */
-    .event-nieobecnosc { background: #f8d7da; color: #721c24; border: 1px solid #f5c2c7; font-weight: 500; }
+    .event-comment-text {
+      display: block;
+      font-size: 10px;
+      margin-top: 3px;
+      padding-top: 3px;
+      border-top: 1px solid rgba(255,255,255,0.3);
+      white-space: normal;
+      word-wrap: break-word;
+      line-height: 1.2;
+      font-weight: normal;
+    }
+
+    .comment-label {
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 8px;
+      display: block;
+      margin-bottom: 1px;
+    }
+
+    .event-nieobecnosc .event-comment-text, 
+    .event-zastepstwo .event-comment-text {
+      border-top: 1px solid rgba(0,0,0,0.15);
+      color: #333;
+    }
 
     .btn-action { background: #123e61; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
 
     /* MODALE */
     .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
-    .modal-content { background: white; width: 400px; margin: 8% auto; padding: 25px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+    .modal-content { background: white; width: 420px; max-width: 90%; margin: 5% auto; padding: 25px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); max-height: 85vh; overflow-y: auto; }
     .modal-content label { display: block; margin-top: 12px; font-weight: bold; font-size: 12px; }
     .modal-footer { margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end; }
-  /* WYDARZENIA - KOLORYSTYKA */
-.event-item { font-size: 10px; padding: 4px 6px; margin-bottom: 3px; border-radius: 3px; cursor: pointer; color: white; font-weight: 500; }
 
-.event-praca-klasowa { background: #b00020 !important; } /* Ciemna czerwień */
-.event-sprawdzian { background: #ff69b4 !important; }   /* Różowy */
-.event-kartkowka { background: #f0ad4e !important; }    /* Pomarańczowy */
-.event-odpowiedz { background: #5bc0de !important; }     /* Niebieski */
-.event-projekt { background: #FFA500 !important; }
-.event-dzien-wolny { background: #85A67A !important; }
-.event-inne { background: #D3D3D3 !important; }
-.event-wydarzenie { background: #D3D3D3 !important; }
-.event-egzamin-probny { background: #500000 !important; }
-.event-egzamin-glowny { background: #500000 !important; }
+    .user-info {
+      font-size: 12px;
+      color: #555;
+      text-align: right;
+      flex-shrink: 0;
+      min-width: 150px;
+    }
 
-/* NIEBECNOŚĆ I ZASTĘPSTWO */
-.event-nieobecnosc { background: #f8d7da !important; color: #721c24 !important; border: 1px solid #f5c2c7; }
-.event-zastepstwo { background: #d4edda !important; color: #155724 !important; border: 1px solid #c3e6cb; } /* Zielone tło */
-
-.event-zaliczone { background: #5cb85c !important; text-decoration: line-through; opacity: 0.6; }
-  
-  .event-comment-text {
-  display: block;
-  font-size: 11px; /* Większa, czytelna czcionka */
-  margin-top: 4px;
-  padding-top: 3px;
-  border-top: 1px solid rgba(255,255,255,0.4);
-  white-space: normal;
-  word-wrap: break-word;
-  line-height: 1.3;
-}
-
-/* Styl dla etykiety wewnątrz komentarza */
-.comment-label {
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 9px;
-  display: block;
-  margin-bottom: 1px;
-}
-
-.event-nieobecnosc .event-comment-text, 
-.event-zastepstwo .event-comment-text {
-  border-top: 1px solid rgba(0,0,0,0.1);
-  color: #333;
-}
-.user-info {
-  font-size: 12px;
-  color: #555;
-  text-align: right;
-  flex-shrink: 0;
-  min-width: 150px;
-}
+    .time-range-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
@@ -124,7 +124,7 @@
     <div class="menu-item"><a href="Ogloszenia.html">Ogłoszenia</a></div>
     <div class="menu-item"><a href="Terminarz.html" style="background:#eef2f5; font-weight:bold;">Terminarz</a></div>
   </div>
-<div class="user-info">
+  <div class="user-info">
     Jesteś zalogowany jako: <strong>Piotr Rejmentowski (nauczyciel)</strong>
   </div>
 </div>
@@ -135,7 +135,7 @@
     <select id="year-select"></select>
   </div>
   
-   <h2>📅 Terminarz – Piotr Rejmentowski</h2>
+  <h2>📅 Terminarz – Piotr Rejmentowski</h2>
   
   <div class="calendar-grid" id="calendar-grid"></div>
 </div>
@@ -156,27 +156,44 @@
 
   <div id="fields-wydarzenie">
     <label>Klasa:</label>
+	
     <select id="ev-class" style="width:100%">
-      <option>Szkoła</option><option>6A</option><option>6B</option><option>1C</option>
+      
+      <option value="6D">6D</option>
+      <option value="6E">6E</option>
+      <option value="7A">7A</option>
+      <option value="7B">7B</option>
+      <option value="1F">1F</option>
+      <option value="2C">2C</option>
+	  <option value="Szkoła">Szkoła</option>
+	  <option value="Szkoła-podstawowa">Szkoła podstawowa</option>
+	  <option value="Liceum-ogólnokształcące">Liceum ogólnokształcące</option>
+	  <option value="Klasy z językiem piotrowskim">Klasy z językiem piotrowskim</option>
+	  <option value="6D-6E">6D oraz 6E</option>
     </select>
 
     <label>Przedmiot:</label>
     <select id="ev-subject" style="width:100%">
-      <option>Język piotrowski</option><option>-</option>
+      <option value="Język piotrowski">Język piotrowski</option>
+	  <option value="Edukacja dla bepzieczeństwa">Edukacja dla bezpieczeństwa</option>
+      <option value="-">Brak</option>
     </select>
     
     <label>Rodzaj:</label>
     <select id="ev-type" style="width:100%">
       <option value="sprawdzian">Sprawdzian</option>
-        <option value="kartkowka">Kartkówka</option>
-        <option value="odpowiedz">Odpowiedź ustna</option>
-		<option value="praca-klasowa">Praca klasowa</option>
-		<option value="projekt">Projekt</option>
-		<option value="dzien-wolny">Dzień wolny szkoły</option>
-		<option value="wydarzenie">Wydarzenie szkolne</option>
-		<option value="egzamin-probny">Egzamin próbny</option>
-		<option value="egzamin-glowny">Egzamin główny</option>
-		<option value="inne">Inne</option>
+      <option value="kartkowka">Kartkówka</option>
+      <option value="odpowiedz">Odpowiedź ustna</option>
+      <option value="praca-klasowa">Praca klasowa</option>
+      <option value="projekt">Projekt</option>
+      <option value="dzien-wolny">Dzień wolny szkoły</option>
+      <option value="wydarzenie">Wydarzenie szkolne</option>
+      <option value="egzamin-probny">Egzamin próbny</option>
+      <option value="egzamin-glowny">Egzamin główny</option>
+	  
+	  <option value="zaliczenie">Zaliczenie</option>
+	  
+      <option value="inne">Inne</option>
     </select>
   </div>
 
@@ -185,30 +202,51 @@
     <select id="abs-sub-type" style="width:100%">
       <option value="nieobecnosc">Nieobecność nauczyciela</option>
     </select>
+    
     <label>Nazwisko nieobecnego nauczyciela:</label>
     <select id="ev-teacher" style="width:100%">
-    <option value="">— wybierz nauczyciela —</option>
-<option value="Patryk Prosiak">Patryk Prosiak (Matematyka, Fizyka)</option>
-<option value="Julia Bośniak">Julia Bośniak (Chemia)</option>
-<option value="Martyna Wilska">Martyna Wilska (Edukacja dla bezpieczeństwa, Doradztwo zawodowe)</option>
-<option value="Maja Oloj">Maja Oloj (Informatyka, Język angielski)</option>
-<option value="Justyna Born">Justyna Born (Język angielski)</option>
-<option value="Patrycja Mińska">Patrycja Mińska (Muzyka, Świetlica)</option>
-<option value="Agata Majewska">Agata Majewska (Katachetka religii)</option>
-<option value="Maciej Bojnek">Maciej Bojnek (Historia, Wiedza o społeczeństwie)</option>
-<option value="Anna Łezka">Anna Łezka (Język polski, Matematyka)</option>
-<option value="Maria Oksejska">Maria Oksejska (Język niemiecki)</option>
-<option value="Zuzanna Filipińska">Zuzanna Filipińska (Język hiszpański)</option>
-<option value="Julia Komuniak">Julia Komuniak (Język francuski)</option>
-<option value="Krzysztof Sowa">Krzysztof Sowa (Wychowanie fizyczne)</option>
-<option value="Paweł Krak">Paweł Krak (Wychowanie fizyczne)</option>
-<option value="Milena Bośniak">Milena Bośniak (Plastyka, Technika)</option>
-<option value="Martyna Polecsa">Martyna Polecsa (Geografia)</option>
-<option value="Pomela Muk">Pomela Muk (Biologia, Przyroda)</option>
-<option value="Piotr Rejmentowski">Piotr Rejmentowski (Język piotrowski)</option>
-  </select>
-    <label>Informacja dodatkowa:</label>
-    <input type="text" id="ev-info" placeholder="Zalecane wpisywanie tego w Komentarz." style="width:100%">
+      <option value="">— wybierz nauczyciela —</option>
+      <option value="Patryk Prosiak">Patryk Prosiak (Matematyka, Fizyka)</option>
+      <option value="Julia Bośniak">Julia Bośniak (Chemia)</option>
+      <option value="Martyna Wilska">Martyna Wilska (Edukacja dla bezpieczeństwa, Doradztwo zawodowe)</option>
+      <option value="Maja Oloj">Maja Oloj (Informatyka, Język angielski)</option>
+      <option value="Justyna Born">Justyna Born (Język angielski)</option>
+      <option value="Patrycja Mińska">Patrycja Mińska (Muzyka, Świetlica)</option>
+      <option value="Agata Majewska">Agata Majewska (Katachetka religii)</option>
+      <option value="Maciej Bojnek">Maciej Bojnek (Historia, Wiedza o społeczeństwie)</option>
+      <option value="Anna Łezka">Anna Łezka (Język polski, Matematyka)</option>
+      <option value="Maria Oksejska">Maria Oksejska (Język niemiecki)</option>
+      <option value="Zuzanna Filipińska">Zuzanna Filipińska (Język hiszpański)</option>
+      <option value="Julia Komuniak">Julia Komuniak (Język francuski)</option>
+      <option value="Krzysztof Sowa">Krzysztof Sowa (Wychowanie fizyczne)</option>
+      <option value="Paweł Krak">Paweł Krak (Wychowanie fizyczne)</option>
+      <option value="Milena Bośniak">Milena Bośniak (Plastyka, Technika)</option>
+      <option value="Martyna Polecsa">Martyna Polecsa (Geografia)</option>
+      <option value="Pomela Muk">Pomela Muk (Biologia, Przyroda)</option>
+      <option value="Piotr Rejmentowski">Piotr Rejmentowski (Język piotrowski)</option>
+    </select>
+
+    <label>Kiedy (Czas trwania):</label>
+    <select id="abs-time-mode" style="width:100%" onchange="toggleTimeInputs()">
+      <option value="all-day">Cały dzień</option>
+      <option value="custom-hours">Godziny / Lekcje (określone)</option>
+    </select>
+
+    <div id="abs-custom-hours-group" class="time-range-group" style="display:none;">
+      <span style="font-size: 12px;">Od:</span>
+      <input type="text" id="abs-time-from" placeholder="np. 8:00 lub 2. lekcja" style="flex:1;">
+      <span style="font-size: 12px;">Do:</span>
+      <input type="text" id="abs-time-to" placeholder="np. 12:30 lub 5. lekcja" style="flex:1;">
+    </div>
+
+    <div id="abs-range-container" style="margin-top: 12px; background: #f8fafc; padding: 10px; border-radius: 5px; border: 1px solid #e2e8f0;">
+      <label style="margin-top:0;">Okres nieobecności (opcjonalnie):</label>
+      <div style="display: flex; gap: 10px; align-items: center; margin-top: 5px;">
+        <label style="font-weight:normal; margin:0; font-size:12px;">Do dnia:</label>
+        <input type="date" id="abs-end-date" style="flex:1;">
+      </div>
+      <span style="font-size: 10px; color: #64748b; display: block; margin-top: 4px;">Pozostaw puste, jeśli nieobecność dotyczy tylko jednego dnia.</span>
+    </div>
   </div>
 
   <label>Komentarz:</label>
@@ -242,13 +280,24 @@
     const mSel = document.getElementById('month-select');
     const ySel = document.getElementById('year-select');
     const months = ["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"];
+    
+    mSel.innerHTML = '';
+    ySel.innerHTML = '';
+
     months.forEach((m, i) => mSel.innerHTML += `<option value="${i}">${m}</option>`);
-    for(let y=2024; y<=2026; y++) ySel.innerHTML += `<option value="${y}">${y}</option>`;
+    
+    /* Zmiana zakresu lat od 2026 do 2028 */
+    for(let y=2026; y<=2028; y++) ySel.innerHTML += `<option value="${y}">${y}</option>`;
     
     const now = new Date();
     mSel.value = now.getMonth();
-    ySel.value = now.getFullYear();
-    mSel.onchange = render; ySel.onchange = render;
+    
+    /* Domyślne ustawienie roku w zakresie 2026-2028 */
+    const currentYear = now.getFullYear();
+    ySel.value = (currentYear >= 2026 && currentYear <= 2028) ? currentYear : 2026;
+
+    mSel.onchange = render; 
+    ySel.onchange = render;
     render();
   }
 
@@ -279,47 +328,46 @@
       `;
 
       dataStorage.filter(e => e.date === dateStr).forEach(ev => {
-  const evDiv = document.createElement('div');
-  let mainContent = "";
+        const evDiv = document.createElement('div');
+        let mainContent = "";
 
-  // Mapa nazw systemowych na pełne nazwy polskie
-  const nazwyWydarzen = {
-    "praca-klasowa": "Praca klasowa",
-    "sprawdzian": "Sprawdzian",
-    "kartkowka": "Kartkówka",
-    "odpowiedz": "Odpowiedź ustna",
-	"dzien-wolny": "Dzień wolny szkoły",
-	"egzamin-probny": "Egzamin próbny",
-	"egzamin-glowny": "Egzamin główny",
-	"wydarzenie": "Wydarzenie szkolne",
-	"inne": "Inne",
-	"projekt": "Projekt"
-  };
+        const nazwyWydarzen = {
+          "praca-klasowa": "Praca klasowa",
+          "sprawdzian": "Sprawdzian",
+          "kartkowka": "Kartkówka",
+          "odpowiedz": "Odpowiedź ustna",
+          "dzien-wolny": "Dzień wolny szkoły",
+          "egzamin-probny": "Egzamin próbny",
+          "egzamin-glowny": "Egzamin główny",
+          "wydarzenie": "Wydarzenie szkolne",
+          "inne": "Inne",
+          "projekt": "Projekt"
+        };
 
-  if (ev.mainType === 'nieobecnosc') {
-    evDiv.className = 'event-item event-nieobecnosc';
-    mainContent = `Nieobecność: ${ev.teacher}`;
-  } else if (ev.mainType === 'zastepstwo') {
-    evDiv.className = 'event-item event-zastepstwo';
-    mainContent = `Zastępstwo: ${ev.teacher}`;
-  } else {
-    evDiv.className = `event-item event-${ev.type} ${ev.zaliczone ? 'event-zaliczone' : ''}`;
-    
-    // Pobieramy ładną nazwę z mapy, jeśli nie ma - używamy surowej nazwy
-    const pelnaNazwa = nazwyWydarzen[ev.type] || ev.type;
-    
-    mainContent = `[${ev.klasa}] ${ev.subject} <br> <span style="font-size: 10px; text-transform: uppercase;">(${pelnaNazwa})</span>`;
-  }
+        if (ev.mainType === 'nieobecnosc') {
+          evDiv.className = 'event-item event-nieobecnosc';
+          const timeInfo = (ev.timeMode === 'custom-hours' && (ev.timeFrom || ev.timeTo)) 
+            ? `<br><span style="font-size:10px; font-weight:normal;">⏰ ${ev.timeFrom || ''} - ${ev.timeTo || ''}</span>`
+            : '<br><span style="font-size:10px; font-weight:normal;">⏰ Cały dzień</span>';
+          mainContent = `Nieobecność: <strong>${ev.teacher}</strong>${timeInfo}`;
+        } else if (ev.mainType === 'zastepstwo') {
+          evDiv.className = 'event-item event-zastepstwo';
+          mainContent = `Zastępstwo: <strong>${ev.teacher}</strong>`;
+        } else {
+          evDiv.className = `event-item event-${ev.type} ${ev.zaliczone ? 'event-zaliczone' : ''}`;
+          const pelnaNazwa = nazwyWydarzen[ev.type] || ev.type;
+          mainContent = `[${ev.klasa || 'Szkoła'}] ${ev.subject} <br> <span style="font-size: 10px; text-transform: uppercase; opacity: 0.9;">(${pelnaNazwa})</span>`;
+        }
 
-  const commentHtml = ev.comment 
-    ? `<span class="event-comment-text"><span class="comment-label">Komentarz:</span>${ev.comment}</span>` 
-    : "";
-  
-  evDiv.innerHTML = `<div style="font-weight:bold; line-height: 1.2;">${mainContent}</div>${commentHtml}`;
-  
-  evDiv.onclick = (e) => { e.stopPropagation(); openOptions(ev.id); };
-  dayDiv.appendChild(evDiv);
-});
+        const commentHtml = ev.comment 
+          ? `<span class="event-comment-text"><span class="comment-label">Komentarz:</span>${ev.comment}</span>` 
+          : "";
+        
+        evDiv.innerHTML = `<div style="line-height: 1.2;">${mainContent}</div>${commentHtml}`;
+        
+        evDiv.onclick = (e) => { e.stopPropagation(); openOptions(ev.id); };
+        dayDiv.appendChild(evDiv);
+      });
       grid.appendChild(dayDiv);
     }
   }
@@ -330,11 +378,17 @@
     document.getElementById('fields-nieobecnosc').style.display = type === 'nieobecnosc' ? 'block' : 'none';
   }
 
+  function toggleTimeInputs() {
+    const mode = document.getElementById('abs-time-mode').value;
+    document.getElementById('abs-custom-hours-group').style.display = (mode === 'custom-hours') ? 'flex' : 'none';
+  }
+
   function openAddModal(date) {
     currentId = null;
     document.getElementById('ev-id').value = "";
     document.getElementById('ev-date').value = date;
     document.getElementById('modal-title').textContent = "Dodaj wpis: " + date;
+    document.getElementById('abs-range-container').style.display = 'block';
     resetForm();
     document.getElementById('eventModal').style.display = 'block';
   }
@@ -343,62 +397,122 @@
     currentId = id;
     const ev = dataStorage.find(e => e.id === id);
     document.getElementById('opt-title').textContent = ev.mainType === 'nieobecnosc' ? "Nieobecność" : ev.subject;
-    document.getElementById('opt-comment').textContent = ev.comment || (ev.mainType === 'nieobecnosc' ? ev.info : "Brak dodatkowego komentarza.");
+    
+    let extraText = "";
+    if (ev.mainType === 'nieobecnosc') {
+      const czasText = (ev.timeMode === 'custom-hours') ? `Godziny: ${ev.timeFrom || '?'} - ${ev.timeTo || '?'}` : "Cały dzień";
+      extraText = `Nauczyciel: ${ev.teacher}\nCzas: ${czasText}\n`;
+    }
+
+    document.getElementById('opt-comment').textContent = extraText + (ev.comment ? "Komentarz: " + ev.comment : "Brak komentarza.");
     document.getElementById('btn-zalicz').style.display = ev.mainType === 'nieobecnosc' ? 'none' : 'block';
     document.getElementById('optionsModal').style.display = 'block';
   }
 
   function saveEntry() {
-  const id = document.getElementById('ev-id').value;
-  const mainChoice = document.getElementById('ev-main-type').value;
-  const subAbsType = document.getElementById('abs-sub-type').value;
-  
-  const newEntry = {
-    id: id ? parseInt(id) : Date.now(),
-    date: document.getElementById('ev-date').value,
-    // Jeśli wybrano nieobecność, zapisujemy czy to 'nieobecnosc' czy 'zastepstwo'
-    mainType: (mainChoice === 'nieobecnosc') ? subAbsType : 'wydarzenie',
-    comment: document.getElementById('ev-comment').value,
-    zaliczone: false
-  };
+    const id = document.getElementById('ev-id').value;
+    const mainChoice = document.getElementById('ev-main-type').value;
+    const subAbsType = document.getElementById('abs-sub-type').value;
+    const startDateStr = document.getElementById('ev-date').value;
 
-  if (mainChoice === 'nieobecnosc') {
-    newEntry.teacher = document.getElementById('ev-teacher').value;
-    newEntry.info = document.getElementById('ev-info').value;
-  } else {
-    newEntry.subject = document.getElementById('ev-subject').value;
-    newEntry.type = document.getElementById('ev-type').value;
-    newEntry.klasa = document.getElementById('ev-class').value; // ZAPIS KLASY
+    if (mainChoice === 'nieobecnosc') {
+      const endDateStr = document.getElementById('abs-end-date').value;
+      const teacher = document.getElementById('ev-teacher').value;
+
+      if (!teacher) {
+        alert("Proszę wybrać nauczyciela!");
+        return;
+      }
+
+      // Przy edycji edytujemy tylko jeden konkretny wpis
+      if (id) {
+        const idx = dataStorage.findIndex(e => e.id == id);
+        if (idx !== -1) {
+          dataStorage[idx].teacher = teacher;
+          dataStorage[idx].timeMode = document.getElementById('abs-time-mode').value;
+          dataStorage[idx].timeFrom = document.getElementById('abs-time-from').value;
+          dataStorage[idx].timeTo = document.getElementById('abs-time-to').value;
+          dataStorage[idx].comment = document.getElementById('ev-comment').value;
+        }
+      } else {
+        // Dodawanie pojedyncze lub na zakres dat
+        let datesToAdd = [startDateStr];
+
+        if (endDateStr && endDateStr >= startDateStr) {
+          datesToAdd = [];
+          let cur = new Date(startDateStr);
+          const end = new Date(endDateStr);
+          while (cur <= end) {
+            datesToAdd.push(cur.toISOString().slice(0, 10));
+            cur.setDate(cur.getDate() + 1);
+          }
+        }
+
+        datesToAdd.forEach(d => {
+          dataStorage.push({
+            id: Date.now() + Math.floor(Math.random() * 10000),
+            date: d,
+            mainType: subAbsType,
+            teacher: teacher,
+            timeMode: document.getElementById('abs-time-mode').value,
+            timeFrom: document.getElementById('abs-time-from').value,
+            timeTo: document.getElementById('abs-time-to').value,
+            comment: document.getElementById('ev-comment').value,
+            zaliczone: false
+          });
+        });
+      }
+
+    } else {
+      // Zapis dla wydarzenia szkolnego / lekcyjnego
+      const newEntry = {
+        id: id ? parseInt(id) : Date.now(),
+        date: startDateStr,
+        mainType: 'wydarzenie',
+        subject: document.getElementById('ev-subject').value,
+        type: document.getElementById('ev-type').value,
+        klasa: document.getElementById('ev-class').value,
+        comment: document.getElementById('ev-comment').value,
+        zaliczone: false
+      };
+
+      if (id) {
+        const idx = dataStorage.findIndex(e => e.id == id);
+        newEntry.zaliczone = dataStorage[idx].zaliczone;
+        dataStorage[idx] = newEntry;
+      } else {
+        dataStorage.push(newEntry);
+      }
+    }
+
+    localStorage.setItem('lib_calendar_v3', JSON.stringify(dataStorage));
+    closeModal('eventModal');
+    render();
   }
-
-  if (id) {
-    const idx = dataStorage.findIndex(e => e.id == id);
-    newEntry.zaliczone = dataStorage[idx].zaliczone;
-    dataStorage[idx] = newEntry;
-  } else {
-    dataStorage.push(newEntry);
-  }
-
-  localStorage.setItem('lib_calendar_v3', JSON.stringify(dataStorage));
-  closeModal('eventModal');
-  render();
-}
 
   function actionEdytuj() {
     const ev = dataStorage.find(e => e.id === currentId);
     document.getElementById('ev-id').value = ev.id;
     document.getElementById('ev-date').value = ev.date;
-    document.getElementById('ev-main-type').value = ev.mainType;
-    document.getElementById('ev-comment').value = ev.comment;
+    document.getElementById('ev-main-type').value = ev.mainType === 'nieobecnosc' ? 'nieobecnosc' : 'wydarzenie';
+    document.getElementById('ev-comment').value = ev.comment || "";
     
-    toggleFields();
+    // Ukrywamy zakres przy edycji pojedynczego wpisu
+    document.getElementById('abs-range-container').style.display = 'none';
+
     if(ev.mainType === 'nieobecnosc') {
-      document.getElementById('ev-teacher').value = ev.teacher;
-      document.getElementById('ev-info').value = ev.info;
+      document.getElementById('ev-teacher').value = ev.teacher || "";
+      document.getElementById('abs-time-mode').value = ev.timeMode || "all-day";
+      document.getElementById('abs-time-from').value = ev.timeFrom || "";
+      document.getElementById('abs-time-to').value = ev.timeTo || "";
+      toggleTimeInputs();
     } else {
-      document.getElementById('ev-subject').value = ev.subject;
-      document.getElementById('ev-type').value = ev.type;
+      document.getElementById('ev-subject').value = ev.subject || "Język piotrowski";
+      document.getElementById('ev-type').value = ev.type || "sprawdzian";
+      document.getElementById('ev-class').value = ev.klasa || "6D";
     }
+
+    setEntryType(ev.mainType === 'nieobecnosc' ? 'nieobecnosc' : 'wydarzenie');
 
     closeModal('optionsModal');
     document.getElementById('modal-title').textContent = "Edytuj wpis";
@@ -407,14 +521,16 @@
 
   function actionZalicz() {
     const idx = dataStorage.findIndex(e => e.id === currentId);
-    dataStorage[idx].zaliczone = !dataStorage[idx].zaliczone;
-    localStorage.setItem('lib_calendar_v3', JSON.stringify(dataStorage));
+    if (idx !== -1) {
+      dataStorage[idx].zaliczone = !dataStorage[idx].zaliczone;
+      localStorage.setItem('lib_calendar_v3', JSON.stringify(dataStorage));
+    }
     closeModal('optionsModal');
     render();
   }
 
   function actionUsun() {
-    if(confirm("Czy na pewno usunąć?")) {
+    if(confirm("Czy na pewno usunąć ten wpis?")) {
       dataStorage = dataStorage.filter(e => e.id !== currentId);
       localStorage.setItem('lib_calendar_v3', JSON.stringify(dataStorage));
       closeModal('optionsModal');
@@ -425,24 +541,25 @@
   function resetForm() {
     document.getElementById('ev-main-type').value = 'wydarzenie';
     document.getElementById('ev-teacher').value = "";
-    document.getElementById('ev-info').value = "";
     document.getElementById('ev-comment').value = "";
-    toggleFields();
+    document.getElementById('abs-time-mode').value = "all-day";
+    document.getElementById('abs-time-from').value = "";
+    document.getElementById('abs-time-to').value = "";
+    document.getElementById('abs-end-date').value = "";
+    setEntryType('wydarzenie');
+    toggleTimeInputs();
   }
 
   function closeModal(mId) { document.getElementById(mId).style.display = 'none'; }
 
-  init();
-  
   function setEntryType(type) {
-  document.getElementById('ev-main-type').value = type;
-  
-  // Zmiana kolorów przycisków, żeby było widać co wybrane
-  document.getElementById('btn-type-ev').style.background = (type === 'wydarzenie') ? '#123e61' : '#6c757d';
-  document.getElementById('btn-type-abs').style.background = (type === 'nieobecnosc') ? '#123e61' : '#6c757d';
-  
-  toggleFields(); // Ukrywa/pokazuje odpowiednie pola (już to masz w kodzie)
-}
+    document.getElementById('ev-main-type').value = type;
+    document.getElementById('btn-type-ev').style.background = (type === 'wydarzenie') ? '#123e61' : '#6c757d';
+    document.getElementById('btn-type-abs').style.background = (type === 'nieobecnosc') ? '#123e61' : '#6c757d';
+    toggleFields();
+  }
+
+  init();
 </script>
 
 <footer style="text-align: center; padding: 20px; background-color: #f0f0f0;">
@@ -453,25 +570,6 @@
   </div>
   <p style="font-size: 14px; color: #555;">P-Librus © 2026</p>
 </footer>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </body>
 </html>
