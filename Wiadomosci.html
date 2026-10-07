@@ -7,13 +7,12 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#333}
-/* Znajdź i podmień ten fragment */
 
 .layout{display:flex;height:calc(100vh - 56px)}
 .sidebar{width:260px;background:#fff;border-right:1px solid #ddd;padding:15px}
 .compose-btn {
   width: 100%;
-  background: #123e61; /* Nowy kolor granatowy */
+  background: #123e61;
   color: #fff;
   border: 0;
   border-radius: 4px;
@@ -23,29 +22,40 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#3
   margin-bottom: 15px;
 }
 .header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: #f1eadf; border-bottom: 1px solid #d8dde3; gap: 20px; }
-    .logo { display: flex; align-items: center; margin-right: auto; }
-    .logo img { height: 65px; margin-right: 10px; }
-    .logo span { font-size: 22px; color: #123e61; font-weight: bold; }
-    .menu-header { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; flex-grow: 1; }
-    .menu-header .menu-item a { display: block; padding: 10px 18px; background: #ffffff; border: 1px solid #cfd5db; border-radius: 4px; text-decoration: none; color: #333; font-size: 13px; white-space: nowrap; }
-    .menu-header .menu-item a:hover { background: #e9edf2; }
+.logo { display: flex; align-items: center; margin-right: auto; }
+.logo img { height: 65px; margin-right: 10px; }
+.logo span { font-size: 22px; color: #123e61; font-weight: bold; }
+.menu-header { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; flex-grow: 1; }
+.menu-header .menu-item a { display: block; padding: 10px 18px; background: #ffffff; border: 1px solid #cfd5db; border-radius: 4px; text-decoration: none; color: #333; font-size: 13px; white-space: nowrap; }
+.menu-header .menu-item a:hover { background: #e9edf2; }
+
 .main{flex:1;background:#fff;display:flex;flex-direction:column}
+.search-bar { padding: 10px 15px; background: #f9fafb; border-bottom: 1px solid #eee; }
+.search-bar input { width: 100%; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
+
 .list{flex:1;overflow:auto}
-.row{display:grid;grid-template-columns:220px 1fr 90px;gap:10px;padding:12px 15px;border-bottom:1px solid #eee;cursor:pointer}
+.row{display:grid;grid-template-columns:30px 200px 1fr 110px 40px;gap:10px;padding:12px 15px;border-bottom:1px solid #eee;cursor:pointer;align-items:center}
 .row.unread .sender,.row.unread .subject{font-weight:bold}
 .row:hover{background:#f9fafb}
+.star { cursor: pointer; font-size: 16px; color: #ccc; text-align: center; }
+.star.active { color: #f39c12; }
 .sender{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.subject{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.subject{word-break:break-word;line-height:1.4}
 .date{text-align:right;font-size:13px;color:#666}
+.delete-btn { color: #d9534f; cursor: pointer; text-align: center; font-weight: bold; opacity: 0.6; }
+.delete-btn:hover { opacity: 1; }
+
 .view{padding:20px;display:none}
 .view h2{margin-top:0}
+.view-actions { margin-top: 20px; display: flex; gap: 10px; }
+
 .compose{padding:20px;display:none;max-width:900px}
 .field{margin-bottom:15px}
 .field label{font-weight:bold;display:block;margin-bottom:6px}
 .field input,.field textarea,.field select{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px}
 .field textarea{height:160px}
 .send-btn {
-  background: #123e61; /* Nowy kolor granatowy */
+  background: #123e61;
   color: #fff;
   border: 0;
   padding: 10px 20px;
@@ -53,37 +63,15 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#3
   font-weight: bold;
   cursor: pointer;
 }
-.back{margin-bottom:15px;cursor:pointer;color:#2f80ed}
+.back{margin-bottom:15px;cursor:pointer;color:#2f80ed;font-weight:bold}
+
 /* modal */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index: 100;}
 .modal-box{background:#fff;width:420px;max-height:80vh;overflow:auto;border-radius:6px;padding:20px}
 .tree .group{margin:6px 0}
 .tree .group-header{display:flex;align-items:center;gap:6px;cursor:pointer}
 .tree ul{list-style:none;padding-left:26px;display:none}
 
-.top-left{
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
-.top-btn{
-  color:#333;
-  text-decoration:none;
-  background:#ffffff;
-  padding:6px 12px;
-  border-radius:4px;
-  font-size:14px;
-}
-
-.top-btn:hover{
-  background:#7c8fa6;
-}
-
-.top-right{
-  font-size:14px;
-  opacity:0.95;
-}
 .user-info {
   font-size: 12px;
   color: #555;
@@ -97,36 +85,33 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#3
   margin: 0; 
   display: flex; 
   flex-direction: column; 
-  gap: 10px; /* Odstęp między przyciskami */
+  gap: 10px;
 }
 
-/* Zamiana elementów listy w granatowe przyciski */
 .menu li { 
-  background: #123e61; /* Twój granatowy kolor */
+  background: #123e61;
   color: white; 
   padding: 12px 15px; 
   border-radius: 6px; 
   cursor: pointer; 
-  text-align: center; 
+  text-align: left; 
   font-weight: bold; 
   transition: background 0.3s;
   border: 1px solid #0d2d46;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Efekt po najechaniu myszką */
-.menu li:hover { 
-  background: #1a5685; 
-}
+.menu li:hover { background: #1a5685; }
+.menu li.active { background: #f1eadf; color: #123e61; border: 2px solid #123e61; }
 
-/* Styl dla aktywnego przycisku (wybranego) */
-.menu li.active { 
-  background: #f1eadf; /* Kolor piaskowy dla wyróżnienia, co jest wybrane */
-  color: #123e61; 
-  border: 2px solid #123e61;
-}
+.badge { background: #d9534f; color: white; border-radius: 10px; padding: 2px 7px; font-size: 11px; }
+.attachment-box { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 8px 12px; border-radius: 4px; display: inline-block; margin-top: 10px; font-size: 13px; }
 </style>
 </head>
 <body>
+
 <div class="header">
   <div class="logo">
     <img src="21 maj 2025, 16_13_32.png" alt="P-Librus logo">
@@ -142,7 +127,7 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#3
     <div class="menu-item"><a href="Ogloszenia.html">Ogłoszenia</a></div>
     <div class="menu-item"><a href="Terminarz.html">Terminarz</a></div>
   </div>
-<div class="user-info">
+  <div class="user-info">
     Jesteś zalogowany jako: <strong>Piotr Rejmentowski (nauczyciel)</strong>
   </div>
 </div>
@@ -151,21 +136,30 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#3
 <aside class="sidebar">
 <button class="compose-btn" onclick="openCompose()">✉ UTWÓRZ WIADOMOŚĆ</button>
 <ul class="menu">
-<li class="active" onclick="showInbox(this)">📥 Odebrane</li>
-<li onclick="showSent(this)">📤 Wysłane</li>
+  <li class="active" id="btn-inbox" onclick="switchFolder('inbox', this)">📥 Odebrane <span id="unread-count" class="badge" style="display:none;">0</span></li>
+  <li id="btn-starred" onclick="switchFolder('starred', this)">⭐ Ważne</li>
+  <li id="btn-sent" onclick="switchFolder('sent', this)">📤 Wysłane</li>
+  <li id="btn-trash" onclick="switchFolder('trash', this)">🗑️ Kosz</li>
 </ul>
 </aside>
+
 <main class="main">
+<div class="search-bar" id="search-bar">
+  <input type="text" id="search-input" placeholder="🔍 Szukaj po nadawcy, odbiorcy, temacie lub treści..." oninput="renderCurrentFolder()">
+</div>
+
 <div class="list" id="list"></div>
 <div class="view" id="view"></div>
+
 <div class="compose" id="compose">
 <div class="field">
 <label>Tryb</label>
 <select id="mode">
-<option value="toParents">Wyślij</option>
-<option value="toMe">Stwórz do mnie</option>
+<option value="toParents">Wyślij do kogoś</option>
+<option value="toMe">Stwórz do mnie (Symulacja odebranej)</option>
 </select>
 </div>
+
 <div class="field" id="senderField" style="display:none">
   <label>Rola nadawcy</label>
   <select id="senderRole" onchange="loadSenders()">
@@ -175,13 +169,12 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#3
     <option value="Wychowawca">Wychowawca</option>
     <option value="Pedagog">Pedagog/Psycholog</option>
     <option value="Dyrektor">Dyrektor</option>
-	<option value="Klasa_6A">Klasa 6A</option>
-	<option value="Klasa_6B">Klasa 6B</option>
-	<option value="Klasa_7DE">Klasa 7DE</option>
-	<option value="Klasa_7G">Klasa 7G</option>
-	<option value="Klasa_8H">Klasa 8H</option>
-	<option value="Klasa_1C">Klasa 1C</option>
-	<option value="Klasa_2L">Klasa 2L</option>
+    <option value="Klasa_6D">Klasa 6D</option>
+    <option value="Klasa_6E">Klasa 6E</option>
+    <option value="Klasa_7A">Klasa 7A</option>
+    <option value="Klasa_7B">Klasa 7B</option>
+    <option value="Klasa_1F">Klasa 1F</option>
+    <option value="Klasa_2C">Klasa 2C</option>
   </select>
 
   <label style="margin-top:10px">Osoba</label>
@@ -190,36 +183,45 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#3
   </select>
 </div>
 
-<div class="field">
-<label>Odbiorcy</label>
-<button onclick="openModal()">Wybierz odbiorców</button>
-<div id="chosen"></div>
+<div class="field" id="recipientField">
+  <label>Odbiorcy</label>
+  <button onclick="openModal()">Wybierz odbiorców</button>
+  <div id="chosen" style="margin-top:5px; font-weight:bold;"></div>
 </div>
+
 <div class="field"><label>Temat</label><input id="subject"></div>
+
+<div class="field">
+  <label>Załącznik (opcjonalnie)</label>
+  <input type="file" id="attachment">
+</div>
+
 <div class="field"><label>Treść</label><textarea id="body"></textarea></div>
 <button class="send-btn" onclick="sendMsg()">WYŚLIJ</button>
 </div>
 </main>
 </div>
-<!-- MODAL -->
+
+<!-- MODAL ODBIORCÓW -->
 <div class="modal" id="modal">
 <div class="modal-box">
 <h3>Odbiorcy wiadomości</h3>
 <div class="tree">
+
 <div class="group">
 <div class="group-header" onclick="toggleGroup(this)">
 <input type="checkbox" onchange="toggleAll(this)"> Wychowawcy
 </div>
 <ul>
-<li><label><input type="checkbox" value="Maciej Bojnek"> Maciej Bojnek (6A)</label></li>
-<li><label><input type="checkbox" value="Patryk Prosiak"> Patryk Prosiak (6B)</label></li>
-<li><label><input type="checkbox" value="Julia Bośniak"> Julia Bośniak (7G)</label></li>
-<li><label><input type="checkbox" value="Martyna Wilska"> Martyna Wilska (7DE)</label></li>
-<li><label><input type="checkbox" value="Anna Łezka"> Anna Łezka (8H)</label></li>
-<li><label><input type="checkbox" value="Justyna Born"> Justyna Born (1C)</label></li>
-<li><label><input type="checkbox" value="Zuzanna Filipińska"> Zuzanna Filipińska (2L)</label></li>
+<li><label><input type="checkbox" value="Julia Bośniak (6D)"> Julia Bośniak (6D)</label></li>
+<li><label><input type="checkbox" value="Anna Łezka (6E)"> Anna Łezka (6E)</label></li>
+<li><label><input type="checkbox" value="Paweł Krak (7A)"> Paweł Krak (7A)</label></li>
+<li><label><input type="checkbox" value="Krzysztof Sowa (7B)"> Krzysztof Sowa (7B)</label></li>
+<li><label><input type="checkbox" value="Patryk Prosiak (1F)"> Patryk Prosiak (1F)</label></li>
+<li><label><input type="checkbox" value="Maria Oksejska (2C)"> Maria Oksejska (2C)</label></li>
 </ul>
 </div>
+
 <div class="group">
 <div class="group-header" onclick="toggleGroup(this)">
 <input type="checkbox" onchange="toggleAll(this)"> Nauczyciele
@@ -243,12 +245,21 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#3
 <li><label><input type="checkbox" value="Martyna Polecsa">Martyna Polecsa (Geografia)</label></li>
 <li><label><input type="checkbox" value="Pomela Muk">Pomela Muk (Biologia, Przyroda)</label></li>
 <li><label><input type="checkbox" value="Piotr Rejmentowski">Piotr Rejmentowski (Język piotrowski)</label></li>
-
 </ul>
 </div>
-<div class="group"><label><input type="checkbox"> Rada rodziców</label></div>
-<div class="group"><label><input type="checkbox"> Pedagog/Psycholog</label></div>
-<div class="group"><label><input type="checkbox"> Administrator szkoły</label></div>
+
+<div class="group"><label><input type="checkbox" value="Rada rodziców"> Rada rodziców</label></div>
+
+<div class="group">
+<div class="group-header" onclick="toggleGroup(this)">
+<input type="checkbox" onchange="toggleAll(this)"> Pedagog / Psycholog
+</div>
+<ul>
+<li><label><input type="checkbox" value="Pedagog szkolny"> Pedagog szkolny</label></li>
+<li><label><input type="checkbox" value="Psycholog szkolny"> Psycholog szkolny</label></li>
+</ul>
+</div>
+
 <div class="group">
 <div class="group-header" onclick="toggleGroup(this)">
 <input type="checkbox" onchange="toggleAll(this)"> Sekretariat
@@ -259,136 +270,136 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#3
 <li><label><input type="checkbox" value="Patrycja Nowak"> Patrycja Nowak</label></li>
 </ul>
 </div>
-<div class="group"><label><input type="checkbox"> Firma P-Librus Pomoc Techniczna</label></div>
-<div class="group"><label><input type="checkbox"> Grupy odbiorców</label></div>
-
-
-
-
 
 <div class="group">
-  <div class="group-header" onclick="toggleGroup(this)">
-    <input type="checkbox" onchange="toggleAll(this)"> 6A
-  </div>
-  <ul>
-    <li><label><input type="checkbox" value="Jagoda"> Jagoda</label></li>
-    <li><label><input type="checkbox" value="Lena"> Lena</label></li>
-    <li><label><input type="checkbox" value="Szymon"> Szymon</label></li>
-	  <li><label><input type="checkbox" value="Antek"> Antek</label></li>
-    <li><label><input type="checkbox" value="Rodzic Jagody"> Rodzic Jagody</label></li>
-    <li><label><input type="checkbox" value="Rodzic Leny"> Rodzic Leny</label></li>
-    <li><label><input type="checkbox" value="Rodzic Szymona"> Rodzic Szymona</label></li>
-	  <li><label><input type="checkbox" value="Rodzic Antka"> Rodzic Antka</label></li>
-  </ul>
+<div class="group-header" onclick="toggleGroup(this)">
+<input type="checkbox" onchange="toggleAll(this)"> Dyrektor / Dyrektorzy
 </div>
-
-
-<div class="group">
-  <div class="group-header" onclick="toggleGroup(this)">
-    <input type="checkbox" onchange="toggleAll(this)"> 6B
-  </div>
-  <ul>
-    <li><label><input type="checkbox" value="Ewelina"> Ewelina</label></li>
-    <li><label><input type="checkbox" value="Tomek"> Tomek</label></li>
-    <li><label><input type="checkbox" value="Agata"> Agata</label></li>
-	  <li><label><input type="checkbox" value="Tadeusz"> Tadeusz</label></li>
-    <li><label><input type="checkbox" value="Rodzic Eweliny"> Rodzic Eweliny</label></li>
-    <li><label><input type="checkbox" value="Rodzic Tomka"> Rodzic Tomka</label></li>
-    <li><label><input type="checkbox" value="Rodzic Agaty"> Rodzic Agaty</label></li>
-	  <li><label><input type="checkbox" value="Rodzic Tadeusza"> Rodzic Tadeusza</label></li>
-  </ul>
-</div>
-
-
-<div class="group">
-  <div class="group-header" onclick="toggleGroup(this)">
-    <input type="checkbox" onchange="toggleAll(this)"> 7DE
-  </div>
-  <ul>
-    <li><label><input type="checkbox" value="Ola"> Ola</label></li>
-    <li><label><input type="checkbox" value="Maria"> Maria</label></li>
-    <li><label><input type="checkbox" value="Marta"> Marta</label></li>
-	<li><label><input type="checkbox" value="Wojtek"> Wojtek</label></li>
-    <li><label><input type="checkbox" value="Krzysiek"> Krzysiek</label></li>
-    <li><label><input type="checkbox" value="Mirek"> Mirek</label></li>
-    <li><label><input type="checkbox" value="Rodzic Oli"> Rodzic Oli</label></li>
-    <li><label><input type="checkbox" value="Rodzic Marii"> Rodzic Marii</label></li>
-    <li><label><input type="checkbox" value="Rodzic Marty"> Rodzic Marty</label></li>
-	<li><label><input type="checkbox" value="Rodzic Wojtka"> Rodzic Wojtka</label></li>
-    <li><label><input type="checkbox" value="Rodzic Krzyśka"> Rodzic Krzyśka</label></li>
-    <li><label><input type="checkbox" value="Rodzic Mirka"> Rodzic Mirka</label></li>
-  </ul>
-</div>
-
-
-<div class="group">
-  <div class="group-header" onclick="toggleGroup(this)">
-    <input type="checkbox" onchange="toggleAll(this)"> 7G
-  </div>
-  <ul>
-    <li><label><input type="checkbox" value="Ela"> Ela</label></li>
-    <li><label><input type="checkbox" value="Ola"> Ola</label></li>
-    <li><label><input type="checkbox" value="Marylka"> Marylka</label></li>
-	  <li><label><input type="checkbox" value="Marta"> Marta</label></li>
-    <li><label><input type="checkbox" value="Rodzic Eli"> Rodzic Eli</label></li>
-    <li><label><input type="checkbox" value="Rodzic Oli"> Rodzic Oli</label></li>
-    <li><label><input type="checkbox" value="Rodzic Marylki"> Rodzic Marylki</label></li>
-	  <li><label><input type="checkbox" value="Rodzic Marty"> Rodzic Marty</label></li>
-  </ul>
-</div>
-  
-
-
-
-<div class="group">
-  <div class="group-header" onclick="toggleGroup(this)">
-    <input type="checkbox" onchange="toggleAll(this)"> 8H
-  </div>
-  <ul>
-    <li><label><input type="checkbox" value="Andrzej"> Andrzej</label></li>
-    <li><label><input type="checkbox" value="Maciej"> Maciej</label></li>
-    <li><label><input type="checkbox" value="Patryk"> Patryk</label></li>
-    <li><label><input type="checkbox" value="Rodzic Andrzeja"> Rodzic Andrzeja</label></li>
-    <li><label><input type="checkbox" value="Rodzic Macieja"> Rodzic Macieja</label></li>
-    <li><label><input type="checkbox" value="Rodzic Patryka"> Rodzic Patryka</label></li>
-  </ul>
+<ul>
+<li><label><input type="checkbox" value="Kuba Rejmentowski"> Kuba Rejmentowski (Dyrektor SP i LO)</label></li>
+<li><label><input type="checkbox" value="Maja Oloj"> Maja Oloj (Wicedyrektor SP i LO)</label></li>
+<li><label><input type="checkbox" value="Piotr Rejmentowski"> Piotr Rejmentowski (Główny administrator)</label></li>
+</ul>
 </div>
 
 
 
-
 <div class="group">
-  <div class="group-header" onclick="toggleGroup(this)">
-    <input type="checkbox" onchange="toggleAll(this)"> 1C
-  </div>
-  <ul>
-    <li><label><input type="checkbox" value="Wiesia"> Wiesia</label></li>
-    <li><label><input type="checkbox" value="Alina"> Alina</label></li>
-    <li><label><input type="checkbox" value="Halina"> Halina</label></li>
-    <li><label><input type="checkbox" value="Bożena"> Bożena</label></li>
-    <li><label><input type="checkbox" value="Rodzic Wiesi"> Rodzic Wiesi</label></li>
-    <li><label><input type="checkbox" value="Rodzic Aliny"> Rodzic Aliny</label></li>
-    <li><label><input type="checkbox" value="Rodzic Haliny"> Rodzic Haliny</label></li>
-    <li><label><input type="checkbox" value="Rodzic Bożeny"> Rodzic Bożeny</label></li>
-  </ul>
+<div class="group-header" onclick="toggleGroup(this)">
+<input type="checkbox" onchange="toggleAll(this)"> Firma P-Librus Pomoc Techniczna
+</div>
+<ul>
+<li><label><input type="checkbox" value="Firma P-Librus Pomoc Techniczna"> Firma P-Librus Pomoc Techniczna</label></li>
+</ul>
 </div>
 
 
 
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 6D
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Jagoda Wiktorowicz"> Jagoda Wiktorowicz</label></li>
+    <li><label><input type="checkbox" value="Lena Pikura"> Lena Pikura</label></li>
+    <li><label><input type="checkbox" value="Szymon Wiktorowicz"> Szymon Wiktorowicz</label></li>
+    <li><label><input type="checkbox" value="Antoni Pikura"> Antoni Pikura</label></li>
+    <li><label><input type="checkbox" value="Rodzic Jagody Wiktorowicz"> Rodzic Jagody Wiktorowicz</label></li>
+    <li><label><input type="checkbox" value="Rodzic Leny Pikura"> Rodzic Leny Pikura</label></li>
+    <li><label><input type="checkbox" value="Rodzic Szymona Wiktorowicz"> Rodzic Szymona Wiktorowicz</label></li>
+    <li><label><input type="checkbox" value="Rodzic Antoniego Pikura"> Rodzic Antoniego Pikura</label></li>
+  </ul>
+</div>
 
 <div class="group">
   <div class="group-header" onclick="toggleGroup(this)">
-    <input type="checkbox" onchange="toggleAll(this)"> 2L
+    <input type="checkbox" onchange="toggleAll(this)"> 6E
   </div>
   <ul>
-    <li><label><input type="checkbox" value="Paweł"> Paweł</label></li>
-    <li><label><input type="checkbox" value="Ola"> Ola</label></li>
-    <li><label><input type="checkbox" value="Natalia"> Natalia</label></li>
-    <li><label><input type="checkbox" value="Karol"> Karol</label></li>
-    <li><label><input type="checkbox" value="Rodzic Pawła"> Rodzic Pawła</label></li>
-    <li><label><input type="checkbox" value="Rodzic Oli"> Rodzic Oli</label></li>
-    <li><label><input type="checkbox" value="Rodzic Natalii"> Rodzic Natalii</label></li>
-    <li><label><input type="checkbox" value="Rodzic Karola"> Rodzic Karola</label></li>
+    <li><label><input type="checkbox" value="Amelia Wolińska"> Amelia Wolińska</label></li>
+    <li><label><input type="checkbox" value="Juliusz Borowski"> Juliusz Borowski</label></li>
+    <li><label><input type="checkbox" value="Paweł Kolski"> Paweł Kolski</label></li>
+    <li><label><input type="checkbox" value="Antonina Mok"> Antonina Mok</label></li>
+    <li><label><input type="checkbox" value="Rodzic Amelii Wolińskiej"> Rodzic Amelii Wolińskiej</label></li>
+    <li><label><input type="checkbox" value="Rodzic Juliusza Borowskiego"> Rodzic Juliusza Borowskiego</label></li>
+    <li><label><input type="checkbox" value="Rodzic Pawła Kolskiego"> Rodzic Pawła Kolskiego</label></li>
+    <li><label><input type="checkbox" value="Rodzic Antoniny Mok"> Rodzic Antoniny Mok</label></li>
+  </ul>
+</div>
+
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 7A
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Maja Alryszewska"> Maja Alryszewska</label></li>
+    <li><label><input type="checkbox" value="Paweł Kosztuk"> Paweł Kosztuk</label></li>
+    <li><label><input type="checkbox" value="Filip Majewski"> Filip Majewski</label></li>
+    <li><label><input type="checkbox" value="Zuzanna Oksejska"> Zuzanna Oksejska</label></li>
+    <li><label><input type="checkbox" value="Antoni Wolski"> Antoni Wolski</label></li>
+    <li><label><input type="checkbox" value="Katarzyna Więczykowska"> Katarzyna Więczykowska</label></li>
+    <li><label><input type="checkbox" value="Rodzic Maji Alryszewskiej"> Rodzic Maji Alryszewskiej</label></li>
+    <li><label><input type="checkbox" value="Rodzic Pawła Kosztuka"> Rodzic Pawła Kosztuka</label></li>
+    <li><label><input type="checkbox" value="Rodzic Filipa Majewskiego"> Rodzic Filipa Majewskiego</label></li>
+    <li><label><input type="checkbox" value="Rodzic Zuzanny Oksejskiej"> Rodzic Zuzanny Oksejskiej</label></li>
+    <li><label><input type="checkbox" value="Rodzic Antoniego Wolskiego"> Rodzic Antoniego Wolskiego</label></li>
+    <li><label><input type="checkbox" value="Rodzic Katarzyny Więczykowskiej"> Rodzic Katarzyny Więczykowskiej</label></li>
+  </ul>
+</div>
+
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 7B
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Amelia Krzyk"> Amelia Krzyk</label></li>
+    <li><label><input type="checkbox" value="Aleksandra Kruk"> Aleksandra Kruk</label></li>
+    <li><label><input type="checkbox" value="Maciej Limonka"> Maciej Limonka</label></li>
+    <li><label><input type="checkbox" value="Natan Toleński"> Natan Toleński</label></li>
+    <li><label><input type="checkbox" value="Patryk Drążek"> Patryk Drążek</label></li>
+    <li><label><input type="checkbox" value="Julia Beskidska"> Julia Beskidska</label></li>
+    <li><label><input type="checkbox" value="Rodzic Amelii Krzyk"> Rodzic Amelii Krzyk</label></li>
+    <li><label><input type="checkbox" value="Rodzic Aleksandry Kruk"> Rodzic Aleksandry Kruk</label></li>
+    <li><label><input type="checkbox" value="Rodzic Macieja Limonki"> Rodzic Macieja Limonki</label></li>
+    <li><label><input type="checkbox" value="Rodzic Natana Toleńskiego"> Rodzic Natana Toleńskiego</label></li>
+    <li><label><input type="checkbox" value="Rodzic Patryka Drążek"> Rodzic Patryka Drążek</label></li>
+    <li><label><input type="checkbox" value="Rodzic Julii Beskidskiej"> Rodzic Julii Beskidskiej</label></li>
+  </ul>
+</div>
+
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 1F
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Juliusz Lentacz"> Juliusz Lentacz</label></li>
+    <li><label><input type="checkbox" value="Karol Więczkowski"> Karol Więczkowski</label></li>
+    <li><label><input type="checkbox" value="Mia Żaczkiewicz"> Mia Żaczkiewicz</label></li>
+    <li><label><input type="checkbox" value="Lena Żyźniewska"> Lena Żyźniewska</label></li>
+    <li><label><input type="checkbox" value="Rodzic Juliusza Lentacza"> Rodzic Juliusza Lentacza</label></li>
+    <li><label><input type="checkbox" value="Rodzic Karola Więczkowskiego"> Rodzic Karola Więczkowskiego</label></li>
+    <li><label><input type="checkbox" value="Rodzic Mii Żaczkiewicz"> Rodzic Mii Żaczkiewicz</label></li>
+    <li><label><input type="checkbox" value="Rodzic Leny Żyźniewskiej"> Rodzic Leny Żyźniewskiej</label></li>
+  </ul>
+</div>
+
+<div class="group">
+  <div class="group-header" onclick="toggleGroup(this)">
+    <input type="checkbox" onchange="toggleAll(this)"> 2C
+  </div>
+  <ul>
+    <li><label><input type="checkbox" value="Kacper Chmurkowski"> Kacper Chmurkowski</label></li>
+    <li><label><input type="checkbox" value="Krystyna Kolewska"> Krystyna Kolewska</label></li>
+    <li><label><input type="checkbox" value="Patrycja Kowalska"> Patrycja Kowalska</label></li>
+    <li><label><input type="checkbox" value="Aleksander Borowski"> Aleksander Borowski</label></li>
+    <li><label><input type="checkbox" value="Martyna Pieprz"> Martyna Pieprz</label></li>
+    <li><label><input type="checkbox" value="Oliwier Brzęczyszczykiewicz"> Oliwier Brzęczyszczykiewicz</label></li>
+    <li><label><input type="checkbox" value="Rodzic Kacpra Chmurkowskiego"> Rodzic Kacpra Chmurkowskiego</label></li>
+    <li><label><input type="checkbox" value="Rodzic Krystyny Kolewskiej"> Rodzic Krystyny Kolewskiej</label></li>
+    <li><label><input type="checkbox" value="Rodzic Patrycji Kowalskiej"> Rodzic Patrycji Kowalskiej</label></li>
+    <li><label><input type="checkbox" value="Rodzic Aleksandra Borowskiego"> Rodzic Aleksandra Borowskiego</label></li>
+    <li><label><input type="checkbox" value="Rodzic Martyny Pieprz"> Rodzic Martyny Pieprz</label></li>
+    <li><label><input type="checkbox" value="Rodzic Oliwiera Brzęczyszczykiewicz"> Rodzic Oliwiera Brzęczyszczykiewicz</label></li>
   </ul>
 </div>
 
@@ -397,31 +408,270 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#3
 <button onclick="closeModal()">ZAMKNIJ</button>
 </div>
 </div>
+
 <script>
-let inbox=JSON.parse(localStorage.getItem('inbox')||'[]');
-let sent=JSON.parse(localStorage.getItem('sent')||'[]');
-let selected=[];
-const list=document.getElementById('list');
-const view=document.getElementById('view');
-mode.onchange=()=>senderField.style.display=mode.value==='toMe'?'block':'none';
-function renderInbox(){list.innerHTML='';inbox.forEach((m,i)=>{list.innerHTML+=`<div class="row ${m.read?'':'unread'}" onclick="openMsg(${i})"><div class="sender">${m.from}</div><div class="subject">${m.subject}</div><div class="date">${m.date}</div></div>`})}
-function renderSent(){list.innerHTML='';sent.forEach(m=>{list.innerHTML+=`<div class="row"><div class="sender">${m.to}</div><div class="subject">${m.subject}</div><div class="date">${m.date}</div></div>`})}
-function openMsg(i){const m=inbox[i];m.read=true;localStorage.setItem('inbox',JSON.stringify(inbox));list.style.display='none';view.style.display='block';view.innerHTML=`<div class="back" onclick="backToList()">← Powrót</div><h2>${m.subject}</h2><p><b>Od:</b> ${m.from}</p><p>${m.body||'(brak treści)'}</p>`}
-function backToList(){view.style.display='none';list.style.display='block';renderInbox()}
-function showInbox(el){setActive(el);compose.style.display='none';view.style.display='none';list.style.display='block';renderInbox()}
-function showSent(el){setActive(el);compose.style.display='none';view.style.display='none';list.style.display='block';renderSent()}
-function setActive(el){document.querySelectorAll('.menu li').forEach(li=>li.classList.remove('active'));el.classList.add('active')}
-function openCompose(){compose.style.display='block';list.style.display='none';view.style.display='none'}
-function openModal(){modal.style.display='flex'}
-function closeModal(){modal.style.display='none';selected=[...modal.querySelectorAll('input[value]:checked')].map(i=>i.value);chosen.innerText=selected.join(', ')}
-function toggleGroup(h){const ul=h.nextElementSibling;ul.style.display=ul.style.display==='block'?'none':'block'}
-function toggleAll(cb){const ul=cb.parentElement.nextElementSibling;ul.querySelectorAll('input').forEach(i=>i.checked=cb.checked)}
-function sendMsg(){const d=new Date().toLocaleDateString('pl-PL');if(mode.value==='toMe'){inbox.unshift({from: senderPerson.value
-,subject:subject.value,body:body.value,date:d,read:false})}else{sent.unshift({to:selected.join(', ')||'Rodzice',subject:subject.value,date:d})}
-localStorage.setItem('inbox',JSON.stringify(inbox));localStorage.setItem('sent',JSON.stringify(sent));alert('Wiadomość wysłana (symulacja)');subject.value=body.value='';showInbox(document.querySelector('.menu li'))}
-renderInbox();
+let inbox = JSON.parse(localStorage.getItem('inbox') || '[]');
+let sent = JSON.parse(localStorage.getItem('sent') || '[]');
+let trash = JSON.parse(localStorage.getItem('trash') || '[]');
+
+let selected = [];
+let currentFolder = 'inbox';
+
+const list = document.getElementById('list');
+const view = document.getElementById('view');
+const compose = document.getElementById('compose');
+const mode = document.getElementById('mode');
+const senderField = document.getElementById('senderField');
+const recipientField = document.getElementById('recipientField');
+
+mode.onchange = () => {
+  senderField.style.display = mode.value === 'toMe' ? 'block' : 'none';
+  recipientField.style.display = mode.value === 'toMe' ? 'none' : 'block';
+};
+
+function switchFolder(folder, el) {
+  currentFolder = folder;
+  document.querySelectorAll('.menu li').forEach(li => li.classList.remove('active'));
+  el.classList.add('active');
+  compose.style.display = 'none';
+  view.style.display = 'none';
+  list.style.display = 'block';
+  document.getElementById('search-bar').style.display = 'block';
+  renderCurrentFolder();
+}
+
+function renderCurrentFolder() {
+  const query = document.getElementById('search-input').value.toLowerCase();
+  list.innerHTML = '';
+  
+  let dataset = [];
+  if (currentFolder === 'inbox') dataset = inbox;
+  else if (currentFolder === 'sent') dataset = sent;
+  else if (currentFolder === 'trash') dataset = trash;
+  else if (currentFolder === 'starred') {
+    dataset = [...inbox, ...sent].filter(m => m.starred);
+  }
+
+  // Filtrowanie szukania
+  const filtered = dataset.filter(m => 
+    (m.from && m.from.toLowerCase().includes(query)) ||
+    (m.to && m.to.toLowerCase().includes(query)) ||
+    (m.subject && m.subject.toLowerCase().includes(query)) ||
+    (m.body && m.body.toLowerCase().includes(query))
+  );
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div style="padding:20px; color:#777; text-align:center;">Brak wiadomości w tym folderze.</div>';
+    updateBadges();
+    return;
+  }
+
+  filtered.forEach((m) => {
+    const realIndex = dataset.indexOf(m);
+    const starClass = m.starred ? 'star active' : 'star';
+    const isUnread = (currentFolder === 'inbox' && !m.read) ? 'unread' : '';
+    const nameText = currentFolder === 'sent' ? `<b>Do:</b> ${m.to}` : (m.from || `<b>Do:</b> ${m.to}`);
+
+    list.innerHTML += `
+      <div class="row ${isUnread}">
+        <div class="${starClass}" onclick="toggleStar(event, '${currentFolder}', ${realIndex})">★</div>
+        <div class="sender" onclick="openMsgDetails('${currentFolder}', ${realIndex})">${nameText}</div>
+        <div class="subject" onclick="openMsgDetails('${currentFolder}', ${realIndex})">${m.subject || '(Bez tematu)'} ${m.fileName ? '📎' : ''}</div>
+        <div class="date" onclick="openMsgDetails('${currentFolder}', ${realIndex})">${m.date || ''}</div>
+        <div class="delete-btn" title="Usuń" onclick="deleteMsg(event, '${currentFolder}', ${realIndex})">🗑️</div>
+      </div>
+    `;
+  });
+
+  updateBadges();
+}
+
+function updateBadges() {
+  const unread = inbox.filter(m => !m.read).length;
+  const badge = document.getElementById('unread-count');
+  if (unread > 0) {
+    badge.textContent = unread;
+    badge.style.display = 'inline-block';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function toggleStar(e, folder, index) {
+  e.stopPropagation();
+  let dataset = folder === 'inbox' ? inbox : (folder === 'sent' ? sent : trash);
+  if (dataset[index]) {
+    dataset[index].starred = !dataset[index].starred;
+    saveAll();
+    renderCurrentFolder();
+  }
+}
+
+function deleteMsg(e, folder, index) {
+  e.stopPropagation();
+  if (folder === 'trash') {
+    if (confirm("Czy na pewno chcesz trwale usunąć tę wiadomość?")) {
+      trash.splice(index, 1);
+    }
+  } else {
+    let dataset = folder === 'inbox' ? inbox : sent;
+    const item = dataset.splice(index, 1)[0];
+    item.originalFolder = folder;
+    trash.unshift(item);
+  }
+  saveAll();
+  renderCurrentFolder();
+}
+
+function openMsgDetails(folder, index) {
+  let dataset = folder === 'inbox' ? inbox : (folder === 'sent' ? sent : (folder === 'trash' ? trash : [...inbox, ...sent].filter(m => m.starred)));
+  const m = dataset[index];
+
+  if (folder === 'inbox') {
+    m.read = true;
+    saveAll();
+  }
+
+  list.style.display = 'none';
+  document.getElementById('search-bar').style.display = 'none';
+  view.style.display = 'block';
+
+  const attachHtml = m.fileName ? `<div class="attachment-box">📎 Załącznik: <strong>${m.fileName}</strong></div>` : '';
+  const isTrash = folder === 'trash';
+
+  view.innerHTML = `
+    <div class="back" onclick="backToList()">← Powrót do listy</div>
+    <h2>${m.subject || '(Bez tematu)'}</h2>
+    <p><b>Od:</b> ${m.from || 'Ty'}</p>
+    <p><b>Odbiorcy:</b> ${m.to || 'Ja'}</p>
+    <p><b>Data:</b> ${m.date}</p>
+    ${attachHtml}
+    <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+    <p style="white-space: pre-wrap; line-height: 1.5;">${m.body || '(brak treści)'}</p>
+    
+    <div class="view-actions">
+      ${!isTrash ? `<button class="send-btn" onclick="replyMsg('${m.from || m.to}', '${m.subject}', '${m.body}')">↩ Odpowiedz</button>` : ''}
+      ${!isTrash ? `<button class="send-btn" style="background:#4a5568;" onclick="forwardMsg('${m.subject}', '${m.body}')">↪ Przekaż</button>` : ''}
+      ${isTrash ? `<button class="send-btn" style="background:#28a745;" onclick="restoreMsg(${index})">♻️ Przywróć</button>` : ''}
+    </div>
+  `;
+}
+
+function restoreMsg(trashIndex) {
+  const item = trash.splice(trashIndex, 1)[0];
+  if (item.originalFolder === 'sent') sent.unshift(item);
+  else inbox.unshift(item);
+  saveAll();
+  backToList();
+}
+
+function replyMsg(to, subject, body) {
+  openCompose();
+  document.getElementById('mode').value = 'toParents';
+  senderField.style.display = 'none';
+  recipientField.style.display = 'block';
+  selected = [to];
+  document.getElementById('chosen').innerText = to;
+  document.getElementById('subject').value = subject.startsWith('Re:') ? subject : 'Re: ' + subject;
+  document.getElementById('body').value = `\n\n--- Cytowana wiadomość (${to}) ---\n` + body;
+}
+
+function forwardMsg(subject, body) {
+  openCompose();
+  document.getElementById('mode').value = 'toParents';
+  senderField.style.display = 'none';
+  recipientField.style.display = 'block';
+  document.getElementById('subject').value = subject.startsWith('Fwd:') ? subject : 'Fwd: ' + subject;
+  document.getElementById('body').value = `\n\n--- Przekazana wiadomość ---\n` + body;
+}
+
+function backToList() {
+  view.style.display = 'none';
+  list.style.display = 'block';
+  document.getElementById('search-bar').style.display = 'block';
+  renderCurrentFolder();
+}
+
+function openCompose() {
+  compose.style.display = 'block';
+  list.style.display = 'none';
+  view.style.display = 'none';
+  document.getElementById('search-bar').style.display = 'none';
+}
+
+function openModal() { modal.style.display = 'flex'; }
+function closeModal() {
+  modal.style.display = 'none';
+  selected = [...modal.querySelectorAll('input[value]:checked')].map(i => i.value);
+  document.getElementById('chosen').innerText = selected.join(', ');
+}
+
+function toggleGroup(h) {
+  const ul = h.nextElementSibling;
+  ul.style.display = ul.style.display === 'block' ? 'none' : 'block';
+}
+
+function toggleAll(cb) {
+  const ul = cb.parentElement.nextElementSibling;
+  ul.querySelectorAll('input').forEach(i => i.checked = cb.checked);
+}
+
+function sendMsg() {
+  const d = new Date().toLocaleDateString('pl-PL') + ' ' + new Date().toLocaleTimeString('pl-PL', {hour:'2-digit', minute:'2-digit'});
+  const subj = document.getElementById('subject').value;
+  const content = document.getElementById('body').value;
+  const fileInput = document.getElementById('attachment');
+  const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : null;
+
+  if (mode.value === 'toMe') {
+    const sender = document.getElementById('senderPerson').value || 'Nieznany nadawca';
+    inbox.unshift({
+      from: sender,
+      to: 'Piotr Rejmentowski (Ja)',
+      subject: subj,
+      body: content,
+      date: d,
+      read: false,
+      starred: false,
+      fileName: fileName
+    });
+  } else {
+    const recipients = selected.length > 0 ? selected.join(', ') : 'Wszyscy odbiorcy';
+    sent.unshift({
+      from: 'Piotr Rejmentowski (Ja)',
+      to: recipients,
+      subject: subj,
+      body: content,
+      date: d,
+      starred: false,
+      fileName: fileName
+    });
+  }
+
+  saveAll();
+  alert('Wiadomość została wysłana!');
+  
+  // Czyszczenie formularza
+  document.getElementById('subject').value = '';
+  document.getElementById('body').value = '';
+  document.getElementById('attachment').value = '';
+
+  if (mode.value === 'toMe') {
+    switchFolder('inbox', document.getElementById('btn-inbox'));
+  } else {
+    switchFolder('sent', document.getElementById('btn-sent'));
+  }
+}
+
+function saveAll() {
+  localStorage.setItem('inbox', JSON.stringify(inbox));
+  localStorage.setItem('sent', JSON.stringify(sent));
+  localStorage.setItem('trash', JSON.stringify(trash));
+}
+
 function loadSenders() {
-  const role = senderRole.value;
+  const role = document.getElementById('senderRole').value;
+  const senderPerson = document.getElementById('senderPerson');
   senderPerson.innerHTML = "";
 
   if (!role) {
@@ -450,104 +700,98 @@ const peopleByRole = {
     "Patryk Prosiak (Matematyka i Fizyka)", "Julia Bośniak (Chemia)", "Martyna Wilska (Edukacja dla bezpieczeństwa i doradztwo zawodowe)", "Maja Oloj (Informatyka i język angielski)", "Justyna Born (Język angielski)", "Patrycja Mińska (Muzyka)", "Agata Majewska (Religia)", "Maciej Bojnek (Historia, Wiedza o społeczeństwie)", "Anna Łezka (Język polski i matematyka)", "Maria Oksejska (Język niemiecki)", "Zuzanna Filipińska (Język hiszpański)", "Julia Komuniak (Język francuski)", "Krzysztof Sowa (Wychowanie fizyczne)", "Paweł Krak (Wychowanie fizyczne)", "Milena Bośniak (Plastyka i technika)", "Martyna Polecsa (Geografia)", "Pomela Muk (Biologia i przyroda)"
   ],
   Wychowawca: [
-    "Maciej Bojnek (6A)",
-"Patryk Prosiak (6B)",
-"Martyna Wilska (7DE)",
-"Julia Bośniak (7G)",
-"Anna Łezka (8H)",
-"Justyna Born (1C)",
-"Zuzanna Filipińska (2L)"
+    "Julia Bośniak (6D)",
+    "Anna Łezka (6E)",
+    "Paweł Krak (7A)",
+    "Krzysztof Sowa (7B)",
+    "Patryk Prosiak (1F)",
+    "Maria Oksejska (2C)"
   ],
   Pedagog: [
     "Pedagog szkolny",
     "Psycholog szkolny"
   ],
   Dyrektor: [
-    "Kuba Rejmentowski (Dyrektor)", "Maja Oloj (Wicedyrektor)"
+    "Kuba Rejmentowski (Dyrektor)",
+    "Maja Oloj (Wicedyrektor)"
   ],
-  Klasa_6A: [
-  "Jagoda",
-  "Lena",
-  "Szymon",
-  "Antek",
-  "Rodzic Jagody",
-  "Rodzic Leny",
-  "Rodzic Szymona",
-  "Rodzic Antka"
-],
-
-Klasa_6B: [
-  "Ewelina",
-  "Tomek",
-  "Agata",
-  "Tadeusz",
-  "Rodzic Eweliny",
-  "Rodzic Tomka",
-  "Rodzic Agaty",
-  "Rodzic Tadeusza"
-],
-
-Klasa_7DE: [
-  "Ola",
-  "Maria",
-  "Marta",
-  "Wojtek",
-  "Krzysiek",
-  "Mirek",
-  "Rodzic Oli",
-  "Rodzic Marii",
-  "Rodzic Marty",
-  "Rodzic Wojtka",
-  "Rodzic Krzyśka",
-  "Rodzic Mirka"
-],
-
-Klasa_7G: [
-  "Ela",
-  "Ola",
-  "Marylka",
-  "Marta",
-  "Rodzic Eli",
-  "Rodzic Oli",
-  "Rodzic Marylki",
-  "Rodzic Marty"
-],
-
-Klasa_8H: [
-  "Andrzej",
-  "Maciej",
-  "Patryk",
-  "Rodzic Andrzeja",
-  "Rodzic Macieja",
-  "Rodzic Patryka"
-],
-
-Klasa_1C: [
-  "Wiesia",
-  "Alina",
-  "Halina",
-  "Bożena",
-  "Rodzic Wiesi",
-  "Rodzic Aliny",
-  "Rodzic Haliny",
-  "Rodzic Bożeny"
-],
-
-Klasa_2L: [
-  "Paweł",
-  "Ola",
-  "Natalia",
-  "Karol",
-  "Rodzic Pawła",
-  "Rodzic Oli",
-  "Rodzic Natalii",
-  "Rodzic Karola"
-],
-
-
+  Klasa_6D: [
+    "Jagoda Wiktorowicz",
+    "Lena Pikura",
+    "Szymon Wiktorowicz",
+    "Antoni Pikura",
+    "Rodzic Jagody Wiktorowicz",
+    "Rodzic Leny Pikura",
+    "Rodzic Szymona Wiktorowicz",
+    "Rodzic Antoniego Pikura"
+  ],
+  Klasa_6E: [
+    "Amelia Wolińska",
+    "Juliusz Borowski",
+    "Paweł Kolski",
+    "Antonina Mok",
+    "Rodzic Amelii Wolińskiej",
+    "Rodzic Juliusza Borowskiego",
+    "Rodzic Pawła Kolskiego",
+    "Rodzic Antoniny Mok"
+  ],
+  Klasa_7A: [
+    "Maja Alryszewska",
+    "Paweł Kosztuk",
+    "Filip Majewski",
+    "Zuzanna Oksejska",
+    "Antoni Wolski",
+    "Katarzyna Więczykowska",
+    "Rodzic Maji Alryszewskiej",
+    "Rodzic Pawła Kosztuka",
+    "Rodzic Filipa Majewskiego",
+    "Rodzic Zuzanny Oksejskiej",
+    "Rodzic Antoniego Wolskiego",
+    "Rodzic Katarzyny Więczykowskiej"
+  ],
+  Klasa_7B: [
+    "Amelia Krzyk",
+    "Aleksandra Kruk",
+    "Maciej Limonka",
+    "Natan Toleński",
+    "Patryk Drążek",
+    "Julia Beskidska",
+    "Rodzic Amelii Krzyk",
+    "Rodzic Aleksandry Kruk",
+    "Rodzic Macieja Limonki",
+    "Rodzic Natana Toleńskiego",
+    "Rodzic Patryka Drążek",
+    "Rodzic Julii Beskidskiej"
+  ],
+  Klasa_1F: [
+    "Juliusz Lentacz",
+    "Karol Więczkowski",
+    "Mia Żaczkiewicz",
+    "Lena Żyźniewska",
+    "Rodzic Juliusza Lentacza",
+    "Rodzic Karola Więczkowskiego",
+    "Rodzic Mii Żaczkiewicz",
+    "Rodzic Leny Żyźniewskiej"
+  ],
+  Klasa_2C: [
+    "Kacper Chmurkowski",
+    "Krystyna Kolewska",
+    "Patrycja Kowalska",
+    "Aleksander Borowski",
+    "Martyna Pieprz",
+    "Oliwier Brzęczyszczykiewicz",
+    "Rodzic Kacpra Chmurkowskiego",
+    "Rodzic Krystyny Kolewskiej",
+    "Rodzic Patrycji Kowalskiej",
+    "Rodzic Aleksandra Borowskiego",
+    "Rodzic Martyny Pieprz",
+    "Rodzic Oliwiera Brzęczyszczykiewicz"
+  ],
 };
 
+renderCurrentFolder();
 </script>
+
 <footer style="text-align: center; padding: 20px; background-color: #f0f0f0;">
   <div style="margin-bottom: 10px;">
     <img src="teamppp.png" alt="Team P" style="width: 100px; margin: 0 20px;">
@@ -557,31 +801,5 @@ Klasa_2L: [
   <p style="font-size: 14px; color: #555;">P-Librus © 2026</p>
 </footer>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </body>
 </html>
-
-
