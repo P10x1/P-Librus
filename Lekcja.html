@@ -192,7 +192,12 @@ button:hover,
 }
 
 .status-normalna {
-  color: #555;
+  color: #888;
+}
+
+.status-wpisana {
+  color: #176b35;
+  font-weight: 700;
 }
 
 .status-odwolana {
@@ -508,7 +513,7 @@ function pokazPostep(klasa) {
   const klucz = `lekcje_${klasa}`;
   const lekcje = JSON.parse(localStorage.getItem(klucz)) || [];
 
-  const zrealizowaneTematy = new Set(lekcje.map(l => l.temat));
+  const zrealizowaneTematy = new Set(lekcje.map(l => l.tematZListy || l.temat));
 
   const liczbaZrealizowanych = wszystkieTematy.filter(t => zrealizowaneTematy.has(t)).length;
   const liczbaWszystkich = wszystkieTematy.length;
@@ -541,7 +546,7 @@ function pokazPostep(klasa) {
   const klucz = `lekcje_${klasa}`;
   const lekcje = JSON.parse(localStorage.getItem(klucz)) || [];
 
-  const zrealizowaneTematy = new Set(lekcje.map(l => l.temat));
+  const zrealizowaneTematy = new Set(lekcje.map(l => l.tematZListy || l.temat));
   const liczbaZrealizowanych = wszystkieTematy.filter(t => zrealizowaneTematy.has(t)).length;
   const liczbaWszystkich = wszystkieTematy.length;
   const procent = liczbaWszystkich ? Math.round((liczbaZrealizowanych / liczbaWszystkich) * 100) : 0;
@@ -604,6 +609,8 @@ function pokazPostep(klasa) {
   <label for="temat-select">Temat lekcji:</label>
   <select id="temat-select"></select>
   <button type="button" onclick="pominTemat()">Pomiń ten temat</button>
+  <label for="temat-wpisany">Temat lekcji (możesz go edytować):</label>
+  <input type="text" id="temat-wpisany" placeholder="Temat, który zostanie zapisany w dzienniku..." />
 <label for="nowy-temat">Dodaj własny temat lekcji:</label>
 <input type="text" id="nowy-temat" placeholder="Wpisz nowy temat..." />
 <button type="button" onclick="dodajWlasnyTemat()">Dodaj temat</button>
@@ -844,7 +851,7 @@ const kluczPominiete = `pominiete_${klasa}`;
 const pominieteTematy = JSON.parse(localStorage.getItem(kluczPominiete)) || [];
   const klucz = `lekcje_${klasa}`;
   const lekcje = JSON.parse(localStorage.getItem(klucz)) || [];
-  const zrealizowaneTematy = new Set(lekcje.map(l => l.temat));
+  const zrealizowaneTematy = new Set(lekcje.map(l => l.tematZListy || l.temat));
 
   if (tematy[klasa]) {
     tematy[klasa].forEach(t => {
@@ -899,8 +906,10 @@ if (pominieteTematy.includes(t)) {
     });
   }
 
-  // automatycznie zaznacz następny temat
+  // automatycznie zaznacz następny temat i wstaw go do edytowalnego pola
   wybierzNastepnyTemat(klasa, zrealizowaneTematy);
+  const poleTematu = document.getElementById("temat-wpisany");
+  if (poleTematu) poleTematu.value = tematSelect.value || "";
 }
 
 function wybierzNastepnyTemat(klasa, zrealizowaneTematy) {
@@ -920,6 +929,11 @@ function wybierzNastepnyTemat(klasa, zrealizowaneTematy) {
     }
   }
 }
+
+  tematSelect.addEventListener("change", () => {
+    const poleTematu = document.getElementById("temat-wpisany");
+    if (poleTematu) poleTematu.value = tematSelect.value || "";
+  });
 
   function pokazFrekwencje(klasa) {
   const tbody = document.getElementById("tabela-obecnosci-body");
@@ -963,7 +977,8 @@ tr.innerHTML = `
 function zapiszLekcje() {
   const data = document.getElementById("data").value;
   const klasa = document.getElementById("klasa-select").value;
-  const temat = document.getElementById("temat-select").value;
+  const tematZListy = document.getElementById("temat-select").value;
+  const temat = document.getElementById("temat-wpisany").value.trim();
   const opis = document.getElementById("opis").value;
   const status = document.getElementById("status-lekcji").value;
   const zastepca = document.getElementById("zastepca").value;
@@ -981,12 +996,18 @@ function zapiszLekcje() {
   });
   // -----------------------------------------------
 
+  if (!temat) {
+    alert("Wpisz temat lekcji.");
+    return;
+  }
+
   const info = daneDodatkoweKlas[klasa] || { wychowawca: "—", podrecznik: "—" };
 
   const nowaLekcja = {
     data: data,
     klasa: klasa,
     temat: temat,
+    tematZListy: tematZListy,
     opis: opis,
     status: status,
     zastepca: zastepca,
@@ -1027,7 +1048,8 @@ function edytujLekcje(index, klasa) {
   document.getElementById("opis").value = lekcja.opis || "";
   klasaSelect.value = lekcja.klasa;
   updateTematy();
-  tematSelect.value = lekcja.temat;
+  tematSelect.value = lekcja.tematZListy || lekcja.temat;
+  document.getElementById("temat-wpisany").value = lekcja.temat || "";
 
   pokazFrekwencje(klasa);
 
@@ -1529,11 +1551,18 @@ function pokazPlan(date) {
       `;
     }
 
+    const maZapisanaFrekwencje = !!(wpisana && Array.isArray(wpisana.frekwencja) && wpisana.frekwencja.length);
+    const statusWidoczny = czyOdwolana ? "odwołana" :
+      (status === "zastepstwo" ? "Zastępstwo" :
+      (wpisana && status === "normalna" && maZapisanaFrekwencje ? "wpisana" : "normalna"));
+    const klasaStatusu = statusWidoczny === "wpisana" ? "status-wpisana" :
+      (czyOdwolana ? "status-odwolana" : (status === "zastepstwo" ? "status-zastepstwo" : "status-normalna"));
+
     tr.innerHTML = `
       <td>${poz.nr}</td>
       <td>${klasa}</td>
       <td>${temat}</td>
-      <td><span class="status-label status-${status}">${status}</span></td>
+      <td><span class="status-label ${klasaStatusu}">${statusWidoczny}</span></td>
       <td>${selectHtml}</td>
     `;
     tabela.appendChild(tr);
@@ -1548,7 +1577,7 @@ function pokazPlan(date) {
         <td>${numer++}</td>
         <td>${l.klasa}</td>
         <td>${l.temat}</td>
-        <td><span class="status-label status-${l.status}">${l.status}</span></td>
+        <td><span class="status-label ${l.status === "zastepstwo" ? "status-zastepstwo" : (l.status === "odwołana" || l.status === "odwolana" ? "status-odwolana" : (l.status === "normalna" && Array.isArray(l.frekwencja) && l.frekwencja.length ? "status-wpisana" : "status-normalna"))}">${l.status === "zastepstwo" ? "Zastępstwo" : (l.status === "odwołana" || l.status === "odwolana" ? "odwołana" : (l.status === "normalna" && Array.isArray(l.frekwencja) && l.frekwencja.length ? "wpisana" : "normalna"))}</span></td>
         <td>
           <select class="akcja-select" onchange="wykonajAkcje(this.value, '${l.klasa}', '${dzienData}')">
             <option value="">— wybierz —</option>
