@@ -271,6 +271,77 @@ select#klasa:disabled {
   opacity: 0.8;
   backdrop-filter: blur(4px); /* Efekt delikatnego rozmycia */
 }
+/* Panel ocen podsumowujących */
+.podsumowanie-ocen {
+  max-width: 1200px;
+}
+
+.podsumowanie-ocen .kolumna-ocena {
+  background: #edf4fa;
+  min-width: 160px;
+}
+
+.podsumowanie-ocen .kolumna-komentarz {
+  background: #f5f1e9;
+  min-width: 260px;
+}
+
+.podsumowanie-ocen .kolumna-ocena input,
+.podsumowanie-ocen .kolumna-komentarz input {
+  margin: 0;
+  background: #fff;
+}
+
+.podsumowanie-ocen .kolumna-ocena th,
+.podsumowanie-ocen .kolumna-komentarz th {
+  background: #e4eaf0;
+}
+
+.podsumowanie-ocen .kolumna-komentarz th {
+  background: #ece5d9;
+}
+
+.podsumowanie-ocen .tabela-podsumowania {
+  min-width: 700px;
+}
+
+.podsumowanie-ocen .tabela-podsumowania td {
+  vertical-align: middle;
+}
+
+.podsumowanie-ocen .tabela-podsumowania input {
+  box-sizing: border-box;
+  width: 100%;
+}
+/* Mniejsze pole na ocenę */
+.kolumna-ocena {
+    width: 75px !important;
+    min-width: 75px !important;
+    max-width: 75px !important;
+}
+
+.kolumna-ocena input {
+    width: 75px !important;
+    min-width: 0 !important;
+    max-width: 75px !important;
+    padding: 5px !important;
+    box-sizing: border-box;
+}
+
+/* Mniejsze pole na komentarz */
+.kolumna-komentarz {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+}
+
+/* Dopasowanie samych pól do kolumn */
+.kolumna-ocena input,
+.kolumna-komentarz input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
 </style>
 
 </head>
@@ -330,7 +401,11 @@ select#klasa:disabled {
 
 <div class="form-section">
   <h4>Dodawanie seryjne</h4>
-  <button onclick="toggleFormOceny()">➕ Dodaj oceny seryjnie</button>
+  <button onclick="toggleFormOceny()">➕ Dodaj standardowe oceny seryjnie</button>
+  
+  <button type="button" onclick="otworzOcenyPodsumowujace()">
+  📋 Dodaj oceny semestralne
+</button>
   
   <div id="formOceny" style="display:none; margin-top:15px;">
       <label for="klasa">Klasa:</label>
@@ -402,16 +477,63 @@ select#klasa:disabled {
   </div> <!-- koniec modal-content -->
 </div> <!-- koniec modal -->
 
+
+<!-- OSOBNY PANEL OCEN PODSUMOWUJĄCYCH -->
+<div id="modalOcenyPodsumowujace" class="modal">
+  <div class="modal-content podsumowanie-ocen">
+    <button type="button" onclick="zamknijOcenyPodsumowujace()">
+      Zamknij
+    </button>
+
+    <h2>Dodawanie ocen semestralnych</h2>
+    <p>
+      Oceny półroczne / przewidywane / roczne
+    </p>
+
+    <label for="typ-podsumowania">Rodzaj oceny:</label>
+    <select id="typ-podsumowania" onchange="pokazTabelePodsumowania()">
+      <option value="Przewidywana">Ocena przewidywana</option>
+      <option value="Półroczna">Ocena półroczna</option>
+      <option value="Roczna">Ocena roczna</option>
+    </select>
+
+    <div style="overflow-x:auto;">
+      <table class="tabela-podsumowania">
+        <thead>
+  <tr>
+    <th>Uczeń</th>
+    <th class="kolumna-ocena">Ocena</th>
+    <th class="kolumna-komentarz">Komentarz</th>
+    <th>Oceny ucznia</th>
+    <th>Średnia</th>
+    <th>(I)</th>
+    <th>(II)</th>
+    <th>(R)</th>
+  </tr>
+</thead>
+        <tbody id="uczniowiePodsumowania"></tbody>
+      </table>
+    </div>
+
+    <button type="button" onclick="zapiszOcenyPodsumowujace()">
+      Zapisz oceny (semestralne)
+    </button>
+  </div>
+</div>
+
+
   <!-- [Twój kod aż do <script>] -->
 
 <script>
     const klasy = {
-	'1C-Język_Piotrowski': ['Kacper Chmurkowski', 'Krystyna Kolewska', 'Patrycja Kowalska', 'Aleksander Piotrowski', 'Martyna Pieprz', 'Oliwier Brzęczyszczykiewicz'],
-    '6A-Język_Piotrowski': ['Maja Alryszewska', 'Paweł Kosztuk', 'Filip Majewski', 'Zuzanna Okejska', 'Katarzyna Więczykowska', 'Antoni Wolski'],
-	'DZD-Język_Piotrowski-Klasy_6': ['Maja Alryszewska', 'Paweł Kosztuk', 'Filip Majewski', 'Zuzanna Okejska', 'Katarzyna Więczykowska', 'Antoni Wolski', 'Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska'],
-	'DZD-Język_Piotrowski-Liceum': ['Kacper Chmurkowski', 'Krystyna Kolewska', 'Patrycja Kowalska', 'Aleksander Piotrowski', 'Martyna Pieprz', 'Oliwier Brzęczyszczykiewicz'],
-	'6B-Język_Piotrowski': ['Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska']
-  };
+	'6D-Język_Piotrowski': ['Jagoda Wiktorowicz', 'Szymon Wiktorowicz', 'Lena Pikura', 'Antoni Pikura'],
+	'6E-Język_Piotrowski': ['Amelia Wolińska', 'Juliusz Borowski', 'Paweł Kolski', 'Antonina Mok'],
+	'7A-Język_Piotrowski': ['Maja Alryszewska', 'Paweł Kosztuk', 'Filip Majewski', 'Zuzanna Okejska', 'Katarzyna Więczykowska', 'Antoni Wolski'],
+	'7B-Język_Piotrowski': ['Amelia Krzyk', 'Aleksandra Kruk', 'Maciej Limonka', 'Natan Toleński', 'Patryk Drążek', 'Julia Beskidska'],
+	'1F-Język_Piotrowski': ['Juliusz Lentacz', 'Karol Więczkowski', 'Mia Żaczkiewicz', 'Lena Żyźniewska'],
+	'1F-Edukacja_dla_bezpieczeństwa': ['Juliusz Lentacz', 'Karol Więczkowski', 'Mia Żaczkiewicz', 'Lena Żyźniewska'],
+	'2C-Język_Piotrowski': ['Kacper Chmurkowski', 'Krystyna Kolewska', 'Patrycja Kowalska', 'Aleksander Piotrowski', 'Martyna Pieprz', 'Oliwier Brzęczyszczykiewicz']
+};
   window.addEventListener('DOMContentLoaded', () => {
 
 
@@ -521,7 +643,32 @@ document.querySelectorAll('.chk-u').forEach(chk => {
 
   alert('Oceny zapisane!');
 }
+function stworzOceneKoncowa(klasa, uczen, typ, wartosc) {
+  if (!wartosc) return '';
 
+  const zapisane = JSON.parse(
+    localStorage.getItem('oceny') || '{}'
+  );
+
+  const rekord = (zapisane[klasa] || []).find(
+    o => o.uczen === uczen && o.typ === typ
+  );
+
+  if (!rekord) return '';
+
+  const klasaTypu = `typ-${typ.replace(/\s/g, '')}`;
+
+  return `
+    <span class="grade ${klasaTypu}"
+          data-typ="${typ}"
+          data-komentarz="${rekord.komentarz || 'Brak komentarza'}"
+          data-data="${rekord.data}"
+          style="cursor:pointer;"
+          title="Kliknij, aby edytować ocenę"
+          onclick="edytujOcene('${klasa}', '${uczen}', ${((zapisane[klasa] || []).filter(o => o.uczen === uczen)).indexOf(rekord)})">
+      ${wartosc}
+    </span>`;
+}
     
     function pokazTabele() {
   const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
@@ -578,18 +725,24 @@ if (srednia) {
   else proponowana = '1';
 }
 
-    const ocenyHTML = ocenyUcznia.map((o, idx) => {
-      const klasaTypu = `typ-${o.typ.replace(/\s/g, '')}`;
-      return `
-<span class="grade ${klasaTypu}"
-      data-typ="${o.typ}"
-      data-komentarz="${o.komentarz || 'Brak komentarza'}"
-      data-data="${o.data}"
-      style="cursor:pointer;"
-      onclick="edytujOcene('${wybranaKlasa}', '${uczen}', ${idx})">
+    const ocenyBiezace = ocenyUcznia.filter(o =>
+  !['Przewidywana', 'Półroczna', 'Roczna'].includes(o.typ)
+);
+
+const ocenyHTML = ocenyBiezace.map(o => {
+  const idx = ocenyUcznia.indexOf(o);
+  const klasaTypu = `typ-${o.typ.replace(/\s/g, '')}`;
+
+  return `
+    <span class="grade ${klasaTypu}"
+          data-typ="${o.typ}"
+          data-komentarz="${o.komentarz || 'Brak komentarza'}"
+          data-data="${o.data}"
+          style="cursor:pointer;"
+          onclick="edytujOcene('${wybranaKlasa}', '${uczen}', ${idx})">
       ${o.ocena}${o.typ.toLowerCase() === 'poprawa' ? '*' : ''}
-</span>`;
-    }).join(' ');
+    </span>`;
+}).join(' ');
 
    html += `<tr>
   <td>
@@ -599,9 +752,17 @@ if (srednia) {
   <td>${ocenyHTML}</td>
   <td>${srednia}</td>
   <td>${proponowana}</td>
-  <td>${polroczna}</td>
-  <td>${przewidywana}</td>
-  <td>${roczna}</td>
+  <td>${stworzOceneKoncowa(
+  wybranaKlasa, uczen, 'Półroczna', polroczna
+)}</td>
+
+<td>${stworzOceneKoncowa(
+  wybranaKlasa, uczen, 'Przewidywana', przewidywana
+)}</td>
+
+<td>${stworzOceneKoncowa(
+  wybranaKlasa, uczen, 'Roczna', roczna
+)}</td>
 </tr>`;
 
 
@@ -1016,6 +1177,198 @@ window.usunOcene = function() {
   </div>
 </div>
 
+
+
+<script>
+function otworzOcenyPodsumowujace() {
+  const klasa = document.getElementById('klasa').value;
+
+  if (!klasa || !klasy[klasa]) {
+    alert('Najpierw wybierz klasę.');
+    return;
+  }
+
+  document.getElementById('modalOcenyPodsumowujace').style.display = 'flex';
+  pokazTabelePodsumowania();
+}
+
+function zamknijOcenyPodsumowujace() {
+  document.getElementById('modalOcenyPodsumowujace').style.display = 'none';
+}
+
+
+function pokazTabelePodsumowania() {
+  const klasa = document.getElementById('klasa').value;
+  const typ = document.getElementById('typ-podsumowania').value;
+  const tbody = document.getElementById('uczniowiePodsumowania');
+
+  if (!klasa || !klasy[klasa]) {
+    tbody.innerHTML = '';
+    return;
+  }
+
+  const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
+  const ocenyKlasy = zapisane[klasa] || [];
+
+  tbody.innerHTML = klasy[klasa].map((uczen, index) => {
+    const ocenyUcznia = ocenyKlasy.filter(o => o.uczen === uczen);
+
+    const biezace = ocenyUcznia.filter(o =>
+      !['Przewidywana', 'Półroczna', 'Roczna'].includes(o.typ)
+    );
+
+    const polroczna = ocenyUcznia.find(o => o.typ === 'Półroczna');
+    const przewidywana = ocenyUcznia.find(o => o.typ === 'Przewidywana');
+    const roczna = ocenyUcznia.find(o => o.typ === 'Roczna');
+
+    const liczby = biezace
+      .filter(o => !isNaN(parseInt(o.ocena)))
+      .map(o => parseInt(o.ocena));
+
+    const srednia = liczby.length
+      ? (liczby.reduce((a, b) => a + b, 0) / liczby.length).toFixed(2)
+      : '';
+
+    const ocenyHTML = biezace.map(o => {
+      const idx = ocenyUcznia.indexOf(o);
+      const klasaTypu = `typ-${o.typ.replace(/\s/g, '')}`;
+
+      return `
+        <span class="grade ${klasaTypu}"
+          data-typ="${o.typ}"
+          data-komentarz="${o.komentarz || 'Brak komentarza'}"
+          data-data="${o.data || ''}"
+          style="cursor:pointer;"
+          onclick="edytujOcene('${klasa}', '${uczen}', ${idx})">
+          ${o.ocena}${o.typ.toLowerCase() === 'poprawa' ? '*' : ''}
+        </span>`;
+    }).join(' ');
+
+    const podsumowanieHTML = (rekord) => rekord
+      ? `<span class="grade typ-${rekord.typ.replace(/\s/g, '')}"
+           data-typ="${rekord.typ}"
+           data-komentarz="${rekord.komentarz || 'Brak komentarza'}"
+           data-data="${rekord.data || ''}"
+           title="${rekord.komentarz || ''}">
+           ${rekord.ocena}
+         </span>`
+      : '';
+
+    const ocenaDoWpisania = ocenyUcznia.find(o => o.typ === typ);
+
+    return `
+      <tr>
+        <td><strong>${uczen}</strong></td>
+
+        <td class="kolumna-ocena">
+          <input
+            type="text"
+            id="podsumowanie-${index}-ocena"
+            class="ocena-podsumowujaca"
+            value="${ocenaDoWpisania ? ocenaDoWpisania.ocena : ''}"
+            placeholder="Ocena..."
+          >
+        </td>
+
+        <td class="kolumna-komentarz">
+          <input
+            type="text"
+            id="podsumowanie-${index}-komentarz"
+            class="komentarz-podsumowujacy"
+            value="${ocenaDoWpisania ? (ocenaDoWpisania.komentarz || '') : ''}"
+            placeholder="Komentarz..."
+          >
+        </td>
+
+        <td>${ocenyHTML}</td>
+        <td>${srednia}</td>
+        <td>${podsumowanieHTML(polroczna)}</td>
+        <td>${podsumowanieHTML(przewidywana)}</td>
+        <td>${podsumowanieHTML(roczna)}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+
+function zapiszOcenyPodsumowujace() {
+  const klasa = document.getElementById('klasa').value;
+  const typ = document.getElementById('typ-podsumowania').value;
+
+  if (!klasa || !klasy[klasa]) {
+    alert('Najpierw wybierz klasę.');
+    return;
+  }
+
+  const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
+
+  if (!zapisane[klasa]) {
+    zapisane[klasa] = [];
+  }
+
+  let liczbaZapisanych = 0;
+
+  klasy[klasa].forEach((uczen, index) => {
+    const ocena = document.getElementById(
+      `podsumowanie-${index}-ocena`
+    ).value.trim();
+
+    const komentarz = document.getElementById(
+      `podsumowanie-${index}-komentarz`
+    ).value.trim();
+
+    // Puste pole nie zmienia istniejącej oceny ucznia.
+    if (!ocena) return;
+
+    const istniejaca = zapisane[klasa].find(
+      o => o.uczen === uczen && o.typ === typ
+    );
+
+    if (istniejaca) {
+      istniejaca.ocena = ocena;
+      istniejaca.komentarz = komentarz;
+      istniejaca.data = new Date().toLocaleDateString();
+    } else {
+      zapisane[klasa].push({
+        uczen,
+        ocena,
+        typ,
+        komentarz,
+        data: new Date().toLocaleDateString()
+      });
+    }
+
+    liczbaZapisanych++;
+  });
+
+  if (liczbaZapisanych === 0) {
+    alert('Wpisz przynajmniej jedną ocenę.');
+    return;
+  }
+
+  localStorage.setItem('oceny', JSON.stringify(zapisane));
+
+  if (typeof window.pokazTabele === 'function') {
+    window.pokazTabele();
+  }
+
+  // Odświeżamy oznaczenia ocen w tabeli klas.
+  const wiersz = [...document.querySelectorAll('#listaKlasTabela tr')]
+    .find(tr => tr.cells[0]?.textContent.trim() === klasa);
+
+  if (wiersz) {
+    const typy = ['Półroczna', 'Przewidywana', 'Roczna'];
+
+    typy.forEach((rodzaj, i) => {
+      wiersz.cells[i + 1].textContent =
+        zapisane[klasa].some(o => o.typ === rodzaj) ? '✅' : '❌';
+    });
+  }
+
+  alert(`Zapisano oceny: ${typ} (${liczbaZapisanych} uczniów).`);
+  zamknijOcenyPodsumowujace();
+}
+</script>
 
 </body>
 </html>
