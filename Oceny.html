@@ -342,6 +342,44 @@ select#klasa:disabled {
     min-width: 0;
     box-sizing: border-box;
 }
+.grade.wykluczona {
+    opacity: 0.4;
+    text-decoration: line-through;
+    filter: grayscale(40%);
+  }
+  /* ===== ROZPISKA ŚREDNICH ===== */
+  /* ===== ROZPISKA ŚREDNICH (LISTA) ===== */
+  .legenda-box {
+    background: #f9f9f9;
+    padding: 15px 20px;
+    border-radius: 6px;
+    border: 1px solid #d8dde3;
+    margin-top: 20px;
+    max-width: 400px; /* Szerokość dopasowana do czytelnej listy */
+  }
+  .legenda-box h4 {
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    color: #333;
+  }
+  .legenda-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 kolumny, żeby było zwięźle i czytelnie */
+    gap: 6px 15px;
+    font-size: 12px;
+    color: #444;
+  }
+  .legenda-lista li {
+    background: #ffffff;
+    padding: 4px 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
 </style>
 
 </head>
@@ -471,6 +509,31 @@ select#klasa:disabled {
     <option value="typ">Kategoria</option>
     <option value="ocena">Wartość oceny</option>
   </select>
+  
+  <div class="legenda-box">
+    <h4>Przelicznik ocen do średniej:</h4>
+    <ul class="legenda-lista">
+      <li><span>6</span> <strong>6.00</strong></li>
+      <li><span>6-</span> <strong>5.75</strong></li>
+      <li><span>5+</span> <strong>5.50</strong></li>
+      <li><span>5</span> <strong>5.00</strong></li>
+      <li><span>5-</span> <strong>4.75</strong></li>
+      <li><span>4+</span> <strong>4.50</strong></li>
+      <li><span>4</span> <strong>4.00</strong></li>
+      <li><span>4-</span> <strong>3.75</strong></li>
+      <li><span>3+</span> <strong>3.50</strong></li>
+      <li><span>3</span> <strong>3.00</strong></li>
+      <li><span>3-</span> <strong>2.75</strong></li>
+      <li><span>2+</span> <strong>2.50</strong></li>
+      <li><span>2</span> <strong>2.00</strong></li>
+      <li><span>2-</span> <strong>1.75</strong></li>
+      <li><span>1+</span> <strong>1.50</strong></li>
+      <li><span>1</span> <strong>1.00</strong></li>
+      <li><span>+ (sam plus)</span> <strong>+0.05</strong></li>
+      <li><span>- (sam minus)</span> <strong>-0.05</strong></li>
+    </ul>
+  </div>
+  
 </div>
 
     </div> <!-- koniec panelOceny -->
@@ -670,9 +733,47 @@ function stworzOceneKoncowa(klasa, uczen, typ, wartosc) {
     </span>`;
 }
     
-    function pokazTabele() {
+    function przeliczOcene(val) {
+  if (typeof val !== 'string') return null;
+  const str = val.trim();
+  const przeliczniki = {
+    '6': 6.0, '6-': 5.75,
+    '5': 5.0, '5+': 5.5,  '5-': 4.75,
+    '4': 4.0, '4+': 4.5,  '4-': 3.75,
+    '3': 3.0, '3+': 3.5,  '3-': 2.75,
+    '2': 2.0, '2+': 2.5,  '2-': 1.75,
+    '1': 1.0, '1+': 1.5
+  };
+  if (przeliczniki.hasOwnProperty(str)) return przeliczniki[str];
+  const num = parseFloat(str);
+  return !isNaN(num) ? num : null;
+}
+
+window.przełączWliczanieOceny = function(klasa, uczen, idx, e) {
+  if (e) e.preventDefault();
   const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
-  const wybranaKlasa = selectKlasa.value;
+  if (!zapisane[klasa]) return;
+
+  let count = 0;
+  const target = zapisane[klasa].find(o => {
+    if (o.uczen === uczen) {
+      if (count === idx) return true;
+      count++;
+    }
+    return false;
+  });
+
+  if (target) {
+    target.wliczana = !(target.wliczana !== false);
+    localStorage.setItem('oceny', JSON.stringify(zapisane));
+    pokazTabele();
+  }
+}
+
+function pokazTabele() {
+  const tabeleKlasDiv = document.getElementById('tabeleKlas');
+  const zapisane = JSON.parse(localStorage.getItem('oceny') || '{}');
+  const wybranaKlasa = document.getElementById('klasa').value;
   tabeleKlasDiv.innerHTML = '';
 
   if (!zapisane[wybranaKlasa]) return;
@@ -681,16 +782,14 @@ function stworzOceneKoncowa(klasa, uczen, typ, wartosc) {
   table.classList.add('tabela-klasy');
 
   let html = `<thead><tr>
-  <th>Uczeń</th>
-  <th>Oceny</th>
-  <th>Średnia</th>
-  <th>Proponowana</th>
-  <th>(I)</th>
-  <th>(II)</th>
-  <th>(R)</th>
-</tr></thead><tbody>`;
-
-
+    <th>Uczeń</th>
+    <th>Oceny</th>
+    <th>Średnia</th>
+    <th>Proponowana</th>
+    <th>(I)</th>
+    <th>(II)</th>
+    <th>(R)</th>
+  </tr></thead><tbody>`;
 
   klasy[wybranaKlasa].forEach(uczen => {
     let ocenyUcznia = zapisane[wybranaKlasa].filter(o => o.uczen === uczen);
@@ -702,70 +801,91 @@ function stworzOceneKoncowa(klasa, uczen, typ, wartosc) {
     } else if (sortuj === 'typ') {
       ocenyUcznia.sort((a, b) => a.typ.localeCompare(b.typ));
     } else if (sortuj === 'ocena') {
-      const getVal = x => isNaN(parseInt(x.ocena)) ? 0 : parseInt(x.ocena);
+      const getVal = x => {
+        const v = x.ocena.trim();
+        if (v === '+') return 4.0;
+        if (v === '-') return 3.0;
+        return przeliczOcene(v) ?? 0;
+      };
       ocenyUcznia.sort((a, b) => getVal(b) - getVal(a));
     }
 
+    // Pobranie wartości ocen klasyfikacyjnych
     const polroczna = ocenyUcznia.find(o => o.typ === 'Półroczna')?.ocena || '';
     const przewidywana = ocenyUcznia.find(o => o.typ === 'Przewidywana')?.ocena || '';
     const roczna = ocenyUcznia.find(o => o.typ === 'Roczna')?.ocena || '';
 
-    const liczby = ocenyUcznia
-      .filter(o => !isNaN(parseInt(o.ocena)) && !['Przewidywana', 'Roczna', 'Półroczna'].includes(o.typ))
-      .map(o => parseInt(o.ocena));
-    const srednia = liczby.length ? (liczby.reduce((a, b) => a + b, 0) / liczby.length).toFixed(2) : '';
-let proponowana = '';
-if (srednia) {
-  const s = parseFloat(srednia);
-  if (s >= 5.66) proponowana = '6';
-  else if (s >= 4.66) proponowana = '5';
-  else if (s >= 3.66) proponowana = '4';
-  else if (s >= 2.66) proponowana = '3';
-  else if (s >= 1.66) proponowana = '2';
-  else proponowana = '1';
-}
+    // Obliczanie średniej (z uwzględnieniem plusów/minusów i wykluczeń)
+    let standardoweOceny = [];
+    let modyfikatorySredniej = 0;
 
-    const ocenyBiezace = ocenyUcznia.filter(o =>
-  !['Przewidywana', 'Półroczna', 'Roczna'].includes(o.typ)
-);
+    ocenyUcznia.forEach(o => {
+      if (o.wliczana === false) return; // Pomija wykluczone oceny
+      if (['Przewidywana', 'Roczna', 'Półroczna'].includes(o.typ)) return;
 
-const ocenyHTML = ocenyBiezace.map(o => {
-  const idx = ocenyUcznia.indexOf(o);
-  const klasaTypu = `typ-${o.typ.replace(/\s/g, '')}`;
+      const val = o.ocena.trim();
+      if (val === '+') modyfikatorySredniej += 0.05;
+      else if (val === '-') modyfikatorySredniej -= 0.05;
+      else {
+        const num = przeliczOcene(val);
+        if (num !== null) standardoweOceny.push(num);
+      }
+    });
 
-  return `
-    <span class="grade ${klasaTypu}"
-          data-typ="${o.typ}"
-          data-komentarz="${o.komentarz || 'Brak komentarza'}"
-          data-data="${o.data}"
-          style="cursor:pointer;"
-          onclick="edytujOcene('${wybranaKlasa}', '${uczen}', ${idx})">
-      ${o.ocena}${o.typ.toLowerCase() === 'poprawa' ? '*' : ''}
-    </span>`;
-}).join(' ');
+    let srednia = '';
+    if (standardoweOceny.length > 0) {
+      const suma = standardoweOceny.reduce((a, b) => a + b, 0);
+      srednia = ((suma / standardoweOceny.length) + modyfikatorySredniej).toFixed(2);
+    } else if (modyfikatorySredniej !== 0) {
+      srednia = modyfikatorySredniej.toFixed(2);
+    }
 
-   html += `<tr>
-  <td>
-    ${uczen}
-    <button class="btn-plus" onclick="otworzModalJednegoUcznia('${uczen}')">+</button>
-  </td>
-  <td>${ocenyHTML}</td>
-  <td>${srednia}</td>
-  <td>${proponowana}</td>
-  <td>${stworzOceneKoncowa(
-  wybranaKlasa, uczen, 'Półroczna', polroczna
-)}</td>
+    let proponowana = '';
+    if (srednia) {
+      const s = parseFloat(srednia);
+      if (s >= 5.66) proponowana = '6';
+      else if (s >= 4.66) proponowana = '5';
+      else if (s >= 3.66) proponowana = '4';
+      else if (s >= 2.66) proponowana = '3';
+      else if (s >= 1.66) proponowana = '2';
+      else proponowana = '1';
+    }
 
-<td>${stworzOceneKoncowa(
-  wybranaKlasa, uczen, 'Przewidywana', przewidywana
-)}</td>
+    // Wyświetlamy w głównej kolumnie TYLKO oceny bieżące
+    const ocenyBiezace = ocenyUcznia.filter(o => 
+      !['Przewidywana', 'Półroczna', 'Roczna'].includes(o.typ)
+    );
 
-<td>${stworzOceneKoncowa(
-  wybranaKlasa, uczen, 'Roczna', roczna
-)}</td>
-</tr>`;
+    const ocenyHTML = ocenyBiezace.map(o => {
+      const idx = ocenyUcznia.indexOf(o);
+      const klasaTypu = `typ-${o.typ.replace(/\s+/g, '')}`;
+      const isWykluczona = o.wliczana === false;
+      return `
+        <span class="grade ${klasaTypu} ${isWykluczona ? 'wykluczona' : ''}"
+              data-typ="${o.typ}"
+              data-komentarz="${o.komentarz || 'Brak komentarza'}"
+              data-data="${o.data || ''}"
+              data-wliczana="${!isWykluczona}"
+              style="cursor:pointer;"
+              onclick="edytujOcene('${wybranaKlasa}', '${uczen}', ${idx})"
+              oncontextmenu="przełączWliczanieOceny('${wybranaKlasa}', '${uczen}', ${idx}, event)">
+              ${o.ocena}${o.typ.toLowerCase() === 'poprawa' ? '*' : ''}
+        </span>`;
+    }).join(' ');
 
-
+    // Tworzenie wiersza tabeli z kolumnami dla (I), (II) oraz (R) z użyciem stworzOceneKoncowa
+    html += `<tr>
+      <td>
+        ${uczen}
+        <button class="btn-plus" onclick="otworzModalJednegoUcznia('${uczen}')">+</button>
+      </td>
+      <td>${ocenyHTML}</td>
+      <td><strong>${srednia}</strong></td>
+      <td>${proponowana}</td>
+      <td>${stworzOceneKoncowa(wybranaKlasa, uczen, 'Półroczna', polroczna)}</td>
+      <td>${stworzOceneKoncowa(wybranaKlasa, uczen, 'Przewidywana', przewidywana)}</td>
+      <td>${stworzOceneKoncowa(wybranaKlasa, uczen, 'Roczna', roczna)}</td>
+    </tr>`;
   });
 
   html += '</tbody>';
@@ -900,6 +1020,7 @@ window.edytujOcene = function(klasa, uczen, index) {
 
     // Wyświetlamy modal
     document.getElementById('modalEdycjiOceny').style.display = 'flex';
+	document.getElementById('edit-wliczaj').checked = ocenaDoEdycji.wliczana !== false;
 };
 
 // 2. ZAMYKANIE MODALU
@@ -914,6 +1035,7 @@ window.zapiszZmianyOceny = function() {
     const uczen = document.getElementById('edit-uczen').value;
     const index = parseInt(document.getElementById('edit-index').value);
     const nowaWartosc = document.getElementById('edit-wartosc').value;
+	const wliczaj = document.getElementById('edit-wliczaj').checked;
     
     if (!nowaWartosc) return alert('Wpisz wartość oceny!');
     
@@ -934,6 +1056,7 @@ window.zapiszZmianyOceny = function() {
         ocenaWLocalStorage.typ = document.getElementById('edit-typ').value;
         ocenaWLocalStorage.komentarz = document.getElementById('edit-komentarz').value;
         ocenaWLocalStorage.ocena = nowaWartosc;
+		ocenaWLocalStorage.wliczana = wliczaj;
         
         localStorage.setItem('oceny', JSON.stringify(zapisane));
         
@@ -1169,6 +1292,13 @@ window.usunOcene = function() {
     <label>Ocena:</label>
     <input type="text" id="edit-wartosc" style="width: 100%; padding: 8px;">
 
+<div style="margin-top: 15px; display: flex; align-items: center; gap: 8px;">
+        <input type="checkbox" id="edit-wliczaj" style="width: auto; margin: 0;">
+        <label for="edit-wliczaj" style="margin: 0; font-weight: normal; cursor: pointer; display: inline;">
+          Wliczaj tę ocenę do średniej
+        </label>
+      </div>
+
     <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
       <button onclick="zapiszZmianyOceny()" style="background: #4caf50; color: white; margin: 0;">Zapisz zmiany</button>
       <button onclick="usunOcene()" style="background: #c62828; color: white; margin: 0;">Usuń ocenę</button>
@@ -1230,19 +1360,21 @@ function pokazTabelePodsumowania() {
       : '';
 
     const ocenyHTML = biezace.map(o => {
-      const idx = ocenyUcznia.indexOf(o);
-      const klasaTypu = `typ-${o.typ.replace(/\s/g, '')}`;
+  const idx = ocenyUcznia.indexOf(o);
+  const klasaTypu = `typ-${o.typ.replace(/\s/g, '')}`;
+  const isWykluczona = o.wliczana === false;
 
-      return `
-        <span class="grade ${klasaTypu}"
-          data-typ="${o.typ}"
-          data-komentarz="${o.komentarz || 'Brak komentarza'}"
-          data-data="${o.data || ''}"
-          style="cursor:pointer;"
-          onclick="edytujOcene('${klasa}', '${uczen}', ${idx})">
-          ${o.ocena}${o.typ.toLowerCase() === 'poprawa' ? '*' : ''}
-        </span>`;
-    }).join(' ');
+  return `
+    <span class="grade ${klasaTypu} ${isWykluczona ? 'wykluczona' : ''}"
+      data-typ="${o.typ}"
+      data-komentarz="${o.komentarz || 'Brak komentarza'}"
+      data-data="${o.data || ''}"
+      style="cursor:pointer;"
+      onclick="edytujOcene('${klasa}', '${uczen}', ${idx})"
+      oncontextmenu="przełączWliczanieOceny('${klasa}', '${uczen}', ${idx}, event)">
+      ${o.ocena}${o.typ.toLowerCase() === 'poprawa' ? '*' : ''}
+    </span>`;
+}).join(' ');
 
     const podsumowanieHTML = (rekord) => rekord
       ? `<span class="grade typ-${rekord.typ.replace(/\s/g, '')}"
