@@ -388,6 +388,58 @@ footer p {
   background-color: #3f8a4e; /* TUTAJ ZMIEŃ KOLOR (obecnie fiolet Librusa) */
   transition: width 0.5s ease-in-out; /* Płynna animacja */
 }
+/* Kwadratowe oceny — wygląd jak w Oceny.html */
+.attendance-table .grade {
+    display: inline-block;
+    padding: 3px 7px;
+    margin: 2px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: help;
+    white-space: nowrap;
+}
+
+/* Kolory ocen według ich typu */
+.typ-Sprawdzian        { background: #ffccbc; color: black; }
+.typ-Pracaklasowa      { background: #ffe0b2; color: black; }
+.typ-Kartkówka         { background: #fff59d; color: black; }
+.typ-Projekt           { background: #b3e5fc; color: black; }
+.typ-Prezentacja       { background: #d1c4e9; color: black; }
+.typ-Pracanalekcji     { background: #dcedc8; color: black; }
+.typ-Odpowiedźustna    { background: #f8bbd0; color: black; }
+.typ-Zadanie           { background: #c8e6c9; color: black; }
+.typ-Inne              { background: #90caf9; color: black; }
+.typ-Przewidywana      { background: #cfd8dc; color: black; }
+.typ-Roczna            { background: #b0bec5; color: black; }
+.typ-Półroczna         { background: #e0f7fa; color: black; }
+.typ-Poprawa           { background: #ffab91; color: black; }
+.typ-Aktywność         { background: #f0f4c3; color: black; }
+.typ-Pracadomowa       { background: #e6ee9c; color: black; }
+.typ-Pracadodatkowa    { background: #e8f5e9; color: black; }
+.typ-Sprawdzeniezeszytu { background: #fff9c4; color: black; }
+.typ-Nieprzygotowaniedolekcji { background: #ffcdd2; color: black; }
+.typ-Pracawgrupach     { background: #e1f5fe; color: black; }
+.typ-Kartapracy        { background: #f3e5f5; color: black; }
+.typ-Udziałwkonkursie  { background: #ffd54f; color: black; }
+
+/* Dymek z informacjami o ocenie */
+#global-tooltip {
+    position: fixed;
+    background: #2a6f97;
+    color: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    max-width: 320px;
+    z-index: 999999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    white-space: normal;
+}
 </style>
 </head>
 <body>
@@ -935,44 +987,135 @@ function wybierzNastepnyTemat(klasa, zrealizowaneTematy) {
     if (poleTematu) poleTematu.value = tematSelect.value || "";
   });
 
-  function pokazFrekwencje(klasa) {
+  
+function escapeOcenyHtml(wartosc) {
+  return String(wartosc ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function pokazFrekwencje(klasa) {
   const tbody = document.getElementById("tabela-obecnosci-body");
   tbody.innerHTML = "";
 
   if (!uczniowie[klasa]) return;
 
-  const wszystkieOceny = JSON.parse(localStorage.getItem("oceny") || "{}");
+  const wszystkieOceny = JSON.parse(
+    localStorage.getItem("oceny") || "{}"
+  );
   const ocenyKlasy = wszystkieOceny[klasa] || [];
 
   uczniowie[klasa].forEach((uczen, index) => {
-    const ocenyUcznia = ocenyKlasy
-      .filter(o => o.uczen === uczen)
-      .map(o => o.ocena)
-      .join(", ") || "—";
+    const ocenyUcznia = ocenyKlasy.filter(o => o.uczen === uczen);
+
+    const ocenyHTML = ocenyUcznia.map(o => {
+      const typ = o.typ || "Inne";
+      const klasaTypu = "typ-" + typ.replace(/\s/g, "");
+      const wartosc = escapeOcenyHtml(o.ocena);
+      const bezpiecznyTyp = escapeOcenyHtml(typ);
+      const data = escapeOcenyHtml(o.data || "Brak daty");
+      const komentarz = escapeOcenyHtml(
+        o.komentarz || "Brak komentarza"
+      );
+
+      return `
+        <span class="grade ${klasaTypu}"
+          data-typ="${bezpiecznyTyp}"
+          data-data="${data}"
+          data-komentarz="${komentarz}">
+          ${wartosc}${typ.toLowerCase() === "poprawa" ? "*" : ""}
+        </span>
+      `;
+    }).join("");
 
     const tr = document.createElement("tr");
-tr.innerHTML = `
-  <td>${index + 1}</td>
-  <td class="col-name"><strong>${uczen}</strong></td>
-  
-  <td class="col-radio"><input type="radio" name="frekwencja_${index}" value="Obecność" checked></td>
-  <td class="col-radio"><input type="radio" name="frekwencja_${index}" value="Nieobecność nieusprawiedliwiona"></td>
-  <td class="col-radio"><input type="radio" name="frekwencja_${index}" value="Nieobecność usprawiedliwiona"></td>
-  <td class="col-radio"><input type="radio" name="frekwencja_${index}" value="Spóźnienie"></td>
-  
-  <td style="color: blue; font-size: 11px; min-width: 80px;">${ocenyUcznia}</td>
 
-  <td class="col-radio"><input type="radio" name="frekwencja_${index}" value="Zwolnienie"></td>
-  <td class="col-radio"><input type="radio" name="frekwencja_${index}" value="Rekolekcje"></td>
-  <td class="col-radio"><input type="radio" name="frekwencja_${index}" value="Indywidualne"></td>
-  <td class="col-radio"><input type="radio" name="frekwencja_${index}" value="Sanatorium"></td>
-  <td class="col-radio"><input type="radio" name="frekwencja_${index}" value="Wycieczka"></td>
-  <td class="col-radio"><input type="radio" name="frekwencja_${index}" value="Konkurs"></td>
-  <td class="col-radio"><input type="radio" name="frekwencja_${index}" value="Egzamin"></td>
-`;
+    tr.innerHTML = `
+      <td>${index + 1}</td>
+      <td class="col-name"><strong>${escapeOcenyHtml(uczen)}</strong></td>
+
+      <td class="col-radio">
+        <input type="radio" name="frekwencja_${index}" value="Obecność" checked>
+      </td>
+      <td class="col-radio">
+        <input type="radio" name="frekwencja_${index}" value="Nieobecność nieusprawiedliwiona">
+      </td>
+      <td class="col-radio">
+        <input type="radio" name="frekwencja_${index}" value="Nieobecność usprawiedliwiona">
+      </td>
+      <td class="col-radio">
+        <input type="radio" name="frekwencja_${index}" value="Spóźnienie">
+      </td>
+
+      <td style="min-width:80px;">${ocenyHTML || "—"}</td>
+
+      <td class="col-radio">
+        <input type="radio" name="frekwencja_${index}" value="Zwolnienie">
+      </td>
+      <td class="col-radio">
+        <input type="radio" name="frekwencja_${index}" value="Rekolekcje">
+      </td>
+      <td class="col-radio">
+        <input type="radio" name="frekwencja_${index}" value="Indywidualne">
+      </td>
+      <td class="col-radio">
+        <input type="radio" name="frekwencja_${index}" value="Sanatorium">
+      </td>
+      <td class="col-radio">
+        <input type="radio" name="frekwencja_${index}" value="Wycieczka">
+      </td>
+      <td class="col-radio">
+        <input type="radio" name="frekwencja_${index}" value="Konkurs">
+      </td>
+      <td class="col-radio">
+        <input type="radio" name="frekwencja_${index}" value="Egzamin">
+      </td>
+    `;
+
     tbody.appendChild(tr);
   });
 }
+
+// Dymek z informacjami — tylko podgląd, bez edycji ocen
+document.addEventListener("mouseover", e => {
+  const ocena = e.target.closest("#tabela-obecnosci-body .grade");
+  const tooltip = document.getElementById("global-tooltip");
+
+  if (!tooltip) return;
+
+  if (!ocena) {
+    tooltip.style.opacity = 0;
+    return;
+  }
+
+  tooltip.innerHTML = `
+    <strong>Ocena:</strong> ${escapeOcenyHtml(ocena.textContent.trim())}<br>
+    <strong>Typ:</strong> ${escapeOcenyHtml(ocena.dataset.typ)}<br>
+    <strong>Data:</strong> ${escapeOcenyHtml(ocena.dataset.data)}<br>
+    <strong>Komentarz:</strong> ${escapeOcenyHtml(ocena.dataset.komentarz)}
+  `;
+
+  tooltip.style.opacity = 1;
+});
+
+document.addEventListener("mousemove", e => {
+  const tooltip = document.getElementById("global-tooltip");
+  if (!tooltip || tooltip.style.opacity !== "1") return;
+
+  tooltip.style.left = (e.clientX + 15) + "px";
+  tooltip.style.top = (e.clientY + 15) + "px";
+});
+
+document.addEventListener("mouseout", e => {
+  if (e.target.closest("#tabela-obecnosci-body .grade")) {
+    const tooltip = document.getElementById("global-tooltip");
+    if (tooltip) tooltip.style.opacity = 0;
+  }
+});
+
 
 function zapiszLekcje() {
   const data = document.getElementById("data").value;
@@ -1708,7 +1851,7 @@ document.getElementById("data-plan").addEventListener("change", e => {
 });
 </script>
 
-	
+	<div id="global-tooltip"></div>
 	
 	
 	
