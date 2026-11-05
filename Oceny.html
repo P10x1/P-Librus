@@ -380,6 +380,72 @@ select#klasa:disabled {
     display: flex;
     justify-content: space-between;
   }
+  /* ===== POWIADOMIENIA ===== */
+#kontener-powiadomien {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 9999999;
+    pointer-events: none;
+}
+
+.powiadomienie {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #d7dce1;
+    border-left: 5px solid #3f8a4e;
+    border-radius: 8px;
+    padding: 16px 38px 16px 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateX(120%);
+    animation: wysunPowiadomienie 0.35s ease forwards;
+    pointer-events: auto;
+}
+
+@keyframes wysunPowiadomienie {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.powiadomienie-tytul {
+    font-size: 14px;
+    font-weight: bold;
+    color: #176b35;
+    margin-bottom: 6px;
+}
+
+.powiadomienie-tresc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.powiadomienie-zamknij {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    color: #888;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 5px;
+    margin: 0;
+}
+
+.powiadomienie-zamknij:hover {
+    color: #222;
+}
 </style>
 
 </head>
@@ -705,6 +771,12 @@ document.querySelectorAll('.chk-u').forEach(chk => {
   pokazTabele();
 
   alert('Oceny zapisane!');
+  if (oceny.length > 0) {
+    pokazPowiadomienie(
+        "Pomyślnie wpisano oceny seryjne",
+        `${oceny.length} ${odmianaOcen(oceny.length, "seryjna")} (${typ}) dla klasy ${klasa}`
+    );
+}
 }
 function stworzOceneKoncowa(klasa, uczen, typ, wartosc) {
   if (!wartosc) return '';
@@ -944,8 +1016,12 @@ function zapiszOceneJednego() {
   localStorage.setItem('oceny', JSON.stringify(zapisane));
 
   pokazTabele();
-  zamknijModalJednego();
-  alert('Ocena zapisana!');
+zamknijModalJednego();
+
+pokazPowiadomienie(
+    "Pomyślnie wpisano ocenę",
+    `Typ: ${typ} — uczeń: ${uczenDoOceny}`
+);
 }
 window.addEventListener('DOMContentLoaded', () => {
   const globalTooltip = document.getElementById("global-tooltip");
@@ -1053,15 +1129,23 @@ window.zapiszZmianyOceny = function() {
     });
 
     if (ocenaWLocalStorage) {
-        ocenaWLocalStorage.typ = document.getElementById('edit-typ').value;
+	const typ = document.getElementById('edit-typ').value;
+        ocenaWLocalStorage.typ = typ;
+		
         ocenaWLocalStorage.komentarz = document.getElementById('edit-komentarz').value;
         ocenaWLocalStorage.ocena = nowaWartosc;
 		ocenaWLocalStorage.wliczana = wliczaj;
         
         localStorage.setItem('oceny', JSON.stringify(zapisane));
         
-        if (typeof pokazTabele === 'function') pokazTabele(); 
-        window.zamknijModalEdycji();
+        if (typeof pokazTabele === 'function') pokazTabele();
+
+window.zamknijModalEdycji();
+
+pokazPowiadomienie(
+    "Pomyślnie edytowano ocenę",
+    `Typ: ${typ} — uczeń: ${uczen}`
+);
     }
 };
 
@@ -1087,17 +1171,66 @@ window.usunOcene = function() {
     });
 
     if (oryginalnyIndeks !== -1) {
-        // Usuwamy ocenę z tablicy klasy
-        zapisane[klasa].splice(oryginalnyIndeks, 1);
+    const typUsuwanej = zapisane[klasa][oryginalnyIndeks].typ;
+
+    // Usuwamy ocenę z tablicy klasy
+    zapisane[klasa].splice(oryginalnyIndeks, 1);
         
         // Zapisujemy zmiany w localStorage
         localStorage.setItem('oceny', JSON.stringify(zapisane));
         
         // Odświeżamy widok tabeli i zamykamy modal
-        if (typeof pokazTabele === 'function') pokazTabele(); 
-        window.zamknijModalEdycji();
+        if (typeof pokazTabele === 'function') pokazTabele();
+
+window.zamknijModalEdycji();
+
+pokazPowiadomienie(
+    "Pomyślnie usunięto ocenę",
+    `Typ: ${typUsuwanej} — uczeń: ${uczen}`
+);
     }
 };
+function pokazPowiadomienie(tytul, tresc) {
+    const kontener = document.getElementById("kontener-powiadomien");
+
+    const powiadomienie = document.createElement("div");
+    powiadomienie.className = "powiadomienie";
+
+    const naglowek = document.createElement("div");
+    naglowek.className = "powiadomienie-tytul";
+    naglowek.textContent = "✓ " + tytul;
+
+    const opis = document.createElement("div");
+    opis.className = "powiadomienie-tresc";
+    opis.textContent = tresc;
+
+    const przycisk = document.createElement("button");
+    przycisk.className = "powiadomienie-zamknij";
+    przycisk.textContent = "×";
+    przycisk.title = "Zamknij powiadomienie";
+
+    przycisk.addEventListener("click", () => {
+        powiadomienie.remove();
+    });
+
+    powiadomienie.appendChild(naglowek);
+    powiadomienie.appendChild(opis);
+    powiadomienie.appendChild(przycisk);
+
+    kontener.appendChild(powiadomienie);
+}
+
+// Odmiana słowa "ocena" zależnie od liczby
+function odmianaOcen(liczba, rodzaj) {
+    if (liczba === 1) return rodzaj === "seryjna" ? "ocenę seryjną" : "ocenę";
+
+    if (liczba % 10 >= 2 && liczba % 10 <= 4 &&
+        !(liczba % 100 >= 12 && liczba % 100 <= 14)) {
+        return rodzaj === "seryjna" ? "oceny seryjne" : "oceny";
+    }
+
+    return rodzaj === "seryjna" ? "ocen seryjnych" : "ocen";
+}
 </script>
 <footer style="text-align: center; padding: 20px; background-color: #f0f0f0;">
   <div style="margin-bottom: 10px;">
@@ -1229,6 +1362,7 @@ window.usunOcene = function() {
 
 
 <div id="global-tooltip"></div>
+<div id="kontener-powiadomien"></div>
 
 <style>
 #global-tooltip {
@@ -1497,8 +1631,12 @@ function zapiszOcenyPodsumowujace() {
     });
   }
 
-  alert(`Zapisano oceny: ${typ} (${liczbaZapisanych} uczniów).`);
-  zamknijOcenyPodsumowujace();
+  pokazPowiadomienie(
+    "Pomyślnie wpisano oceny",
+    `${liczbaZapisanych} ${odmianaOcen(liczbaZapisanych, "zwykla")} ${typ.toLowerCase()} dla klasy ${klasa}`
+);
+
+zamknijOcenyPodsumowujace();
 }
 </script>
 
