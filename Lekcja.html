@@ -440,6 +440,71 @@ footer p {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
     white-space: normal;
 }
+/* ===== SYSTEM POWIADOMIEŃ ===== */
+#kontener-powiadomien {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 9999999;
+    pointer-events: none;
+}
+
+.powiadomienie {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #d7dce1;
+    border-left: 5px solid #3f8a4e;
+    border-radius: 8px;
+    padding: 16px 38px 16px 18px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateX(120%);
+    animation: wysunPowiadomienie 0.35s ease forwards;
+    pointer-events: auto;
+}
+
+@keyframes wysunPowiadomienie {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.powiadomienie-tytul {
+    font-size: 14px;
+    font-weight: bold;
+    color: #176b35;
+    margin-bottom: 6px;
+}
+
+.powiadomienie-tresc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.powiadomienie-zamknij {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    color: #888;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 5px;
+}
+
+.powiadomienie-zamknij:hover {
+    color: #222;
+}
 </style>
 </head>
 <body>
@@ -1163,8 +1228,25 @@ function zapiszLekcje() {
   const istniejace = JSON.parse(localStorage.getItem(klucz)) || [];
   istniejace.push(nowaLekcja);
   localStorage.setItem(klucz, JSON.stringify(istniejace));
-  
-  alert("Lekcja została zapisana!");
+
+alert("Lekcja została zapisana!");
+
+if (status === "zastepstwo") {
+    pokazPowiadomienie(
+        "Pomyślnie wpisano zastępstwo",
+        `Dla klasy ${klasa} w dniu ${data}`
+    );
+} else if (status === "odwołana") {
+    pokazPowiadomienie(
+        "Pomyślnie odwołano lekcję",
+        `${klasa} w dniu ${data}`
+    );
+} else {
+    pokazPowiadomienie(
+        "Pomyślnie wpisano lekcję",
+        `Dla klasy ${klasa} w dniu ${data}`
+    );
+}
   
   // Odświeżenie widoków
   pokazHistorieLekcji(klasa);
@@ -1431,8 +1513,42 @@ document.getElementById("zast-klasa").addEventListener("change", () => {
 
   pokazFrekwencjeZastepstwo(klasa);
 });
+let timeoutPowiadomienia;
+
 function pokazPowiadomienie(tytul, tresc) {
-  // Puste - nic nie wyskoczy
+    const kontener = document.getElementById("kontener-powiadomien");
+
+    // Tworzenie nowego powiadomienia
+    const powiadomienie = document.createElement("div");
+    powiadomienie.className = "powiadomienie";
+
+    // Tytuł
+    const naglowek = document.createElement("div");
+    naglowek.className = "powiadomienie-tytul";
+    naglowek.textContent = "✓ " + tytul;
+
+    // Treść
+    const opis = document.createElement("div");
+    opis.className = "powiadomienie-tresc";
+    opis.textContent = tresc;
+
+    // Przycisk zamykania
+    const przycisk = document.createElement("button");
+    przycisk.className = "powiadomienie-zamknij";
+    przycisk.textContent = "×";
+    przycisk.title = "Zamknij powiadomienie";
+
+    przycisk.addEventListener("click", () => {
+        powiadomienie.remove();
+    });
+
+    // Dodanie elementów do powiadomienia
+    powiadomienie.appendChild(naglowek);
+    powiadomienie.appendChild(opis);
+    powiadomienie.appendChild(przycisk);
+
+    // Dodanie powiadomienia do kontenera
+    kontener.appendChild(powiadomienie);
 }
 function zaznaczWszystkim(colIndex) {
     const tbody = document.getElementById("tabela-obecnosci-body");
@@ -1798,8 +1914,8 @@ function odwolajLekcje(klasa, data) {
   localStorage.setItem(klucz, JSON.stringify(lekcje));
   pokazPlan(new Date(data));
   pokazPowiadomienie(
-  "Odwołano lekcję",
-  `Klasa ${klasa} (${data}) została odwołana`
+    "Pomyślnie odwołano lekcję",
+    `${klasa} w dniu ${data}`
 );
 }
 
@@ -1825,8 +1941,8 @@ function zastepstwoLekcji(klasa, data) {
   localStorage.setItem(klucz, JSON.stringify(lekcje));
   pokazPlan(new Date(data));
   pokazPowiadomienie(
-  "Zastępstwo 🔄",
-  `Zastępstwo dla ${klasa} (${data}) – ${zastepca}`
+    "Pomyślnie wpisano zastępstwo",
+    `Dla klasy ${klasa} w dniu ${data}`
 );
 }
 
@@ -1852,6 +1968,7 @@ document.getElementById("data-plan").addEventListener("change", e => {
 </script>
 
 	<div id="global-tooltip"></div>
+	<div id="kontener-powiadomien"></div>
 	
 	
 	
