@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="icon" type="image/x-icon" href="favicon.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css">
   <title>P-Librus - Lekcja</title>
   <style>
   
@@ -69,7 +70,9 @@ body {
   color: #333;
   font-size: 13px; /* Lekko mniejszy font, by się zmieściło */
   white-space: nowrap;
+  color: #244B70;
 }
+
 
 /* ===== BOXES ===== */
 
@@ -81,6 +84,106 @@ body {
   margin: 20px;
   padding: 22px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* ===== HISTORIA LEKCJI - KARTY ===== */
+
+#historia-lekcji {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#historia-lekcji > li {
+    list-style: none;
+    background: #ffffff;
+    border: 1px solid #d7dce1;
+    border-radius: 9px;
+    padding: 16px 18px;
+    margin: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+#historia-lekcji > li:hover {
+    border-color: #b8c8d8;
+    box-shadow: 0 3px 9px rgba(0,0,0,0.07);
+}
+
+.historia-pole {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 9px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.historia-etykieta {
+    color: #647384;
+    min-width: 55px;
+    font-weight: 600;
+}
+
+.historia-wartosc {
+    color: #263d53;
+    font-weight: 600;
+}
+
+.historia-status {
+    display: inline-block;
+    margin-top: 3px;
+    padding: 4px 9px;
+    border-radius: 5px;
+    background: #eef2f5;
+    color: #244b70;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.historia-opis {
+    margin-top: 10px;
+    color: #687583;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.historia-przyciski {
+    display: flex;
+    gap: 9px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.historia-przyciski button {
+    padding: 8px 13px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 0;
+}
+
+.historia-btn-edytuj {
+    background: #244b70;
+    color: white;
+    border: 1px solid #244b70;
+}
+
+.historia-btn-edytuj:hover {
+    background: #193a59;
+}
+
+.historia-btn-usun {
+    background: #ffffff;
+    color: #b33b3b;
+    border: 1px solid #d9baba;
+}
+
+.historia-btn-usun:hover {
+    background: #fff3f3;
 }
 
 /* ===== HEADINGS ===== */
@@ -505,6 +608,62 @@ footer p {
 .powiadomienie-zamknij:hover {
     color: #222;
 }
+/* ===== IKONY W MENU ===== */
+
+.menu-header .menu-item a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.menu-header .menu-item a i {
+    font-size: 14px;
+    color: inherit;
+    width: 16px;
+    text-align: center;
+}
+
+/* Piątka w ikonie ocen */
+.ikona-oceny {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ikona-oceny .numer-oceny {
+    position: absolute;
+    font-size: 8px;
+    font-weight: 800;
+    color: #333;
+    background: white;
+    line-height: 1;
+    padding: 1px;
+    border-radius: 2px;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+/* ===== PODSUMOWANIE FREKWENCJI ===== */
+
+.attendance-summary-row td {
+    background: #edf2f7 !important;
+    border-top: 2px solid #b9c8d6 !important;
+    border-bottom: 1px solid #d7dce1 !important;
+    padding: 10px 5px !important;
+    text-align: center;
+    font-weight: 700;
+    color: #244b70;
+    font-size: 13px;
+}
+
+.attendance-summary-row td:nth-child(2) {
+    text-align: left;
+    min-width: 180px;
+    white-space: normal;
+    line-height: 1.4;
+}
 </style>
 </head>
 <body>
@@ -514,27 +673,82 @@ footer p {
 
 
 
-<div class="header">
+
+<header class="header">
   <div class="logo">
     <img src="21 maj 2025, 16_13_32.png" alt="P-Librus logo">
     <span>P-Librus</span>
   </div>
 
   <div class="menu-header">
-    <div class="menu-item"><a href="Lekcja.html" style="background:#eef2f5; font-weight:bold;">Lekcja</a></div>
-    <div class="menu-item"><a href="Oceny.html">Oceny</a></div>
-    <div class="menu-item"><a href="Zachowanie.html">Zachowanie</a></div>
-    <div class="menu-item"><a href="Zastepstwa.html">Zastępstwa</a></div>
-    <div class="menu-item"><a href="Organizacja.html">Organizacja</a></div>
-    <div class="menu-item"><a href="Wiadomosci.html">Wiadomości</a></div>
-    <div class="menu-item"><a href="Ogloszenia.html">Ogłoszenia</a></div>
-    <div class="menu-item"><a href="Terminarz.html">Terminarz</a></div>
+
+    <div class="menu-item">
+      <a href="Lekcja.html" style="background:#eef2f5; font-weight:bold;">
+        <i class="fa-solid fa-bell"></i>
+        Lekcja
+      </a>
+    </div>
+
+    <div class="menu-item">
+      <a href="Oceny.html">
+        <span class="ikona-oceny">
+          <i class="fa-regular fa-clipboard"></i>
+          <span class="numer-oceny">1</span>
+        </span>
+        Oceny
+      </a>
+    </div>
+
+    <div class="menu-item">
+      <a href="Zachowanie.html">
+        <i class="fa-regular fa-clipboard"></i>
+        Zachowanie
+      </a>
+    </div>
+
+    <div class="menu-item">
+      <a href="Zastepstwa.html">
+        <i class="fa-regular fa-calendar-check"></i>
+        Zastępstwa
+      </a>
+    </div>
+
+    <div class="menu-item">
+      <a href="Organizacja.html">
+        <i class="fa-solid fa-folder-tree"></i>
+        Organizacja
+      </a>
+    </div>
+
+    <div class="menu-item">
+      <a href="Wiadomosci.html">
+        <i class="fa-regular fa-envelope"></i>
+        Wiadomości
+      </a>
+    </div>
+
+    <div class="menu-item">
+      <a href="Ogloszenia.html">
+        <i class="fa-solid fa-bullhorn"></i>
+        Ogłoszenia
+      </a>
+    </div>
+
+    <div class="menu-item">
+      <a href="Terminarz.html">
+        <i class="fa-regular fa-calendar-days"></i>
+        Terminarz
+      </a>
+    </div>
+
   </div>
 
   <div class="user-info">
-    Jesteś zalogowany jako: <strong>Piotr Rejmentowski (nauczyciel)</strong>
+    Jesteś zalogowany jako:
+    <strong>Piotr Rejmentowski (nauczyciel)</strong>
   </div>
-</div>
+</header>
+
 <div class="lesson-box">
   <h2>PANEL NAUCZYCIELA LEKCJI</h2>
 
@@ -742,10 +956,10 @@ function pokazPostep(klasa) {
   <thead>
   <tr>
     <th rowspan="2">Nr</th>
-    <th rowspan="2">Nazwisko i imię</th>
-    <th colspan="4" style="background: #f0f4f8;">PODSTAWOWE</th>
+    <th rowspan="2">Imię i naziwsko ucznia</th>
+    <th colspan="4" style="background: #f0f4f8;">STANDARDOWE</th>
     <th rowspan="2">Oceny</th>
-    <th colspan="7" style="background: #fdf2f2;">ZWOLNIENIA</th>
+    <th colspan="7" style="background: #fdf2f2;">ZWOLNIENIA I INNE</th>
   </tr>
   <tr>
     <th class="col-radio" title="Obecność">ob<br><input type="radio" name="mass_sel" onclick="zaznaczWszystkim(0)"></th>
@@ -1054,6 +1268,67 @@ function escapeOcenyHtml(wartosc) {
     .replace(/'/g, "&#39;");
 }
 
+
+function aktualizujPodsumowanieFrekwencji(klasa) {
+  const tbody = document.getElementById("tabela-obecnosci-body");
+  const podsumowanie = document.getElementById("podsumowanie-frekwencji");
+
+  if (!tbody || !podsumowanie) return;
+
+  const statusy = [
+    "Obecność",
+    "Nieobecność nieusprawiedliwiona",
+    "Nieobecność usprawiedliwiona",
+    "Spóźnienie",
+    "Zwolnienie",
+    "Rekolekcje",
+    "Indywidualne",
+    "Sanatorium",
+    "Wycieczka",
+    "Konkurs",
+    "Egzamin"
+  ];
+
+  const liczby = {};
+
+  statusy.forEach(status => {
+    liczby[status] = 0;
+  });
+
+  (uczniowie[klasa] || []).forEach((uczen, index) => {
+    const wybraneRadio = tbody.querySelector(
+      `input[name="frekwencja_${index}"]:checked`
+    );
+
+    if (wybraneRadio && liczby[wybraneRadio.value] !== undefined) {
+      liczby[wybraneRadio.value]++;
+    }
+  });
+
+  podsumowanie.innerHTML = `
+    <td></td>
+
+    <td>
+      Liczba obecności i nieobecności
+    </td>
+
+    <td>${liczby["Obecność"]}</td>
+    <td>${liczby["Nieobecność nieusprawiedliwiona"]}</td>
+    <td>${liczby["Nieobecność usprawiedliwiona"]}</td>
+    <td>${liczby["Spóźnienie"]}</td>
+
+    <td></td>
+
+    <td>${liczby["Zwolnienie"]}</td>
+    <td>${liczby["Rekolekcje"]}</td>
+    <td>${liczby["Indywidualne"]}</td>
+    <td>${liczby["Sanatorium"]}</td>
+    <td>${liczby["Wycieczka"]}</td>
+    <td>${liczby["Konkurs"]}</td>
+    <td>${liczby["Egzamin"]}</td>
+  `;
+}
+
 function pokazFrekwencje(klasa) {
   const tbody = document.getElementById("tabela-obecnosci-body");
   tbody.innerHTML = "";
@@ -1132,8 +1407,25 @@ function pokazFrekwencje(klasa) {
       </td>
     `;
 
-    tbody.appendChild(tr);
+        tbody.appendChild(tr);
   });
+
+  // Wiersz podsumowania frekwencji
+  const wierszPodsumowania = document.createElement("tr");
+  wierszPodsumowania.id = "podsumowanie-frekwencji";
+  wierszPodsumowania.className = "attendance-summary-row";
+
+  tbody.appendChild(wierszPodsumowania);
+
+  // Aktualizacja liczb przy każdej zmianie zaznaczenia
+  tbody.onchange = function(e) {
+    if (e.target.matches('input[type="radio"]')) {
+      aktualizujPodsumowanieFrekwencji(klasa);
+    }
+  };
+
+  // Pierwsze wyliczenie po wyświetleniu tabeli
+  aktualizujPodsumowanieFrekwencji(klasa);
 }
 
 // Dymek z informacjami — tylko podgląd, bez edycji ocen
@@ -1173,6 +1465,7 @@ document.addEventListener("mouseout", e => {
   }
 });
 
+let edytowanaLekcja = null;
 
 function zapiszLekcje() {
   const data = document.getElementById("data").value;
@@ -1183,25 +1476,29 @@ function zapiszLekcje() {
   const status = document.getElementById("status-lekcji").value;
   const zastepca = document.getElementById("zastepca").value;
 
-  // --- POPRAWKA: Pobieranie frekwencji z tabeli ---
   const frekwencja = [];
   const listaUczniow = uczniowie[klasa] || [];
-  
+
   listaUczniow.forEach((uczen, index) => {
-    const wybraneRadio = document.querySelector(`input[name="frekwencja_${index}"]:checked`);
+    const wybraneRadio = document.querySelector(
+      `input[name="frekwencja_${index}"]:checked`
+    );
+
     frekwencja.push({
       uczen: uczen,
       status: wybraneRadio ? wybraneRadio.value : "Brak danych"
     });
   });
-  // -----------------------------------------------
 
   if (!temat) {
     alert("Wpisz temat lekcji.");
     return;
   }
 
-  const info = daneDodatkoweKlas[klasa] || { wychowawca: "—", podrecznik: "—" };
+  const info = daneDodatkoweKlas[klasa] || {
+    wychowawca: "—",
+    podrecznik: "—"
+  };
 
   const nowaLekcja = {
     data: data,
@@ -1216,34 +1513,77 @@ function zapiszLekcje() {
     frekwencja: frekwencja
   };
 
-  const klucz = `lekcje_${klasa}`;
-  const istniejace = JSON.parse(localStorage.getItem(klucz)) || [];
-  istniejace.push(nowaLekcja);
-  localStorage.setItem(klucz, JSON.stringify(istniejace));
+  // ZAPISYWANIE LEKCJI LUB AKTUALIZACJA EDYTOWANEJ
 
-alert("Lekcja została zapisana!");
+  if (edytowanaLekcja) {
+    const staryKlucz = `lekcje_${edytowanaLekcja.klasa}`;
+    const stareLekcje = JSON.parse(
+      localStorage.getItem(staryKlucz)
+    ) || [];
 
-if (status === "zastepstwo") {
+    if (edytowanaLekcja.klasa === klasa) {
+      if (
+        edytowanaLekcja.index >= 0 &&
+        edytowanaLekcja.index < stareLekcje.length
+      ) {
+        stareLekcje[edytowanaLekcja.index] = nowaLekcja;
+      } else {
+        stareLekcje.push(nowaLekcja);
+      }
+
+      localStorage.setItem(staryKlucz, JSON.stringify(stareLekcje));
+
+    } else {
+      stareLekcje.splice(edytowanaLekcja.index, 1);
+      localStorage.setItem(staryKlucz, JSON.stringify(stareLekcje));
+
+      const nowyKlucz = `lekcje_${klasa}`;
+      const noweLekcje = JSON.parse(
+        localStorage.getItem(nowyKlucz)
+      ) || [];
+
+      noweLekcje.push(nowaLekcja);
+      localStorage.setItem(nowyKlucz, JSON.stringify(noweLekcje));
+    }
+
+    edytowanaLekcja = null;
+
     pokazPowiadomienie(
+      "Pomyślnie zaktualizowano lekcję",
+      `Dla klasy ${klasa} w dniu ${data}`
+    );
+
+  } else {
+    const klucz = `lekcje_${klasa}`;
+    const istniejace = JSON.parse(
+      localStorage.getItem(klucz)
+    ) || [];
+
+    istniejace.push(nowaLekcja);
+    localStorage.setItem(klucz, JSON.stringify(istniejace));
+
+    if (status === "zastepstwo") {
+      pokazPowiadomienie(
         "Pomyślnie wpisano zastępstwo",
         `Dla klasy ${klasa} w dniu ${data}`
-    );
-} else if (status === "odwołana") {
-    pokazPowiadomienie(
+      );
+    } else if (status === "odwołana") {
+      pokazPowiadomienie(
         "Pomyślnie odwołano lekcję",
         `${klasa} w dniu ${data}`
-    );
-} else {
-    pokazPowiadomienie(
+      );
+    } else {
+      pokazPowiadomienie(
         "Pomyślnie wpisano lekcję",
         `Dla klasy ${klasa} w dniu ${data}`
-    );
-}
-  
-  // Odświeżenie widoków
+      );
+    }
+  }
+
   pokazHistorieLekcji(klasa);
   pokazPostep(klasa);
 }
+
 
   
  function usunLekcje(index, klasa) {
@@ -1256,23 +1596,44 @@ if (status === "zastepstwo") {
     pokazPostep(klasa);
   }
 }
+
 function edytujLekcje(index, klasa) {
   const klucz = `lekcje_${klasa}`;
   const lekcje = JSON.parse(localStorage.getItem(klucz)) || [];
   const lekcja = lekcje[index];
 
+  if (!lekcja) return;
+
+  // Zapamiętujemy, którą lekcję edytujemy
+  edytowanaLekcja = {
+    klasa: klasa,
+    index: index
+  };
+
   document.getElementById("data").value = lekcja.data;
   document.getElementById("opis").value = lekcja.opis || "";
+
   klasaSelect.value = lekcja.klasa;
+
   updateTematy();
+
   tematSelect.value = lekcja.tematZListy || lekcja.temat;
   document.getElementById("temat-wpisany").value = lekcja.temat || "";
+
+  document.getElementById("status-lekcji").value =
+    lekcja.status || "normalna";
+
+  document.getElementById("zastepca").value =
+    lekcja.zastepca || "";
 
   pokazFrekwencje(klasa);
 
   if (lekcja.frekwencja) {
     lekcja.frekwencja.forEach((f, i) => {
-      const radio = document.querySelectorAll(`input[name="frekwencja_${i}"]`);
+      const radio = document.querySelectorAll(
+        `input[name="frekwencja_${i}"]`
+      );
+
       radio.forEach(r => {
         if (r.value === f.status) {
           r.checked = true;
@@ -1281,51 +1642,109 @@ function edytujLekcje(index, klasa) {
     });
   }
 
-  // Usunięcie starej wersji, przed zapisaniem nowej
-  lekcje.splice(index, 1);
-  localStorage.setItem(klucz, JSON.stringify(lekcje));
-  pokazHistorieLekcji(klasa);
-  pokazPostep(klasa);
+  // Stary wpis pozostaje w historii do momentu zapisania zmian
 }
 
 
-  function pokazHistorieLekcji(klasa) {
-    const ul = document.getElementById("historia-lekcji");
-    ul.innerHTML = "";
-    const klucz = `lekcje_${klasa}`;
-    const lekcje = JSON.parse(localStorage.getItem(klucz)) || [];
 
-    lekcje.forEach((lekcja, index) => {
-  const li = document.createElement("li");
-  li.innerHTML = `
-  <strong>${lekcja.data}:</strong> ${lekcja.temat} 
-  <span style="color:${lekcja.status === 'odwołana' ? 'red' : lekcja.status === 'zastepstwo' ? 'orange' : 'black'};">
-    [${lekcja.status}${lekcja.zastepca ? " – " + lekcja.zastepca : ""}]
-  </span><br>${lekcja.opis || ""}
-`;
+  
+function pokazHistorieLekcji(klasa) {
+  const ul = document.getElementById("historia-lekcji");
+  ul.innerHTML = "";
 
+  const klucz = `lekcje_${klasa}`;
+  const lekcje = JSON.parse(localStorage.getItem(klucz)) || [];
 
-  if (lekcja.frekwencja && lekcja.frekwencja.length) {
-    li.innerHTML += `<br><strong>Frekwencja:</strong><ul>${
-      lekcja.frekwencja.map(f => `<li>${f.uczen}: ${f.status}</li>`).join("")
-    }</ul>`;
-  }
+  // Najnowsze lekcje na górze, bez zmieniania kolejności zapisanych danych
+  const uporzadkowaneLekcje = lekcje
+    .map((lekcja, index) => ({ lekcja, index }))
+    .reverse();
 
-  // Dodaj przyciski Edytuj i Usuń
-  const edytujBtn = document.createElement("button");
-  edytujBtn.textContent = "Edytuj";
-  edytujBtn.onclick = () => edytujLekcje(index, klasa);
+  uporzadkowaneLekcje.forEach(({ lekcja, index }) => {
+    const li = document.createElement("li");
 
-  const usunBtn = document.createElement("button");
-  usunBtn.textContent = "Usuń";
-  usunBtn.onclick = () => usunLekcje(index, klasa);
+    const data = escapeOcenyHtml(lekcja.data || "—");
+    const temat = escapeOcenyHtml(lekcja.temat || "—");
 
-  li.appendChild(edytujBtn);
-  li.appendChild(usunBtn);
-  ul.appendChild(li);
-});
+    const status = lekcja.status === "odwolana" || lekcja.status === "odwołana"
+      ? "Odwołana"
+      : lekcja.status === "zastepstwo"
+      ? "Zastępstwo" + (lekcja.zastepca ? " – " + escapeOcenyHtml(lekcja.zastepca) : "")
+      : "Lekcja standardowa";
 
-  }
+    li.innerHTML = `
+      <div class="historia-pole">
+        <span class="historia-etykieta">Data:</span>
+        <span class="historia-wartosc">${data}</span>
+      </div>
+
+      <div class="historia-pole">
+        <span class="historia-etykieta">Temat:</span>
+        <span class="historia-wartosc">${temat}</span>
+      </div>
+
+      <span class="historia-status">${status}</span>
+    `;
+
+    if (lekcja.opis) {
+      const opis = document.createElement("div");
+      opis.className = "historia-opis";
+      opis.textContent = lekcja.opis;
+      li.appendChild(opis);
+    }
+
+    // Zachowujemy możliwość podejrzenia frekwencji z zapisanej lekcji
+    if (lekcja.frekwencja && lekcja.frekwencja.length) {
+      const szczegoly = document.createElement("details");
+      szczegoly.style.marginTop = "12px";
+
+      const podsumowanie = document.createElement("summary");
+      podsumowanie.textContent = "Zobacz zapisaną frekwencję";
+      podsumowanie.style.cursor = "pointer";
+      podsumowanie.style.color = "#244b70";
+      podsumowanie.style.fontSize = "13px";
+
+      const lista = document.createElement("div");
+      lista.style.marginTop = "8px";
+      lista.style.fontSize = "12px";
+      lista.style.color = "#647384";
+
+      lekcja.frekwencja.forEach(f => {
+        const wiersz = document.createElement("div");
+        wiersz.textContent = `${f.uczen}: ${f.status}`;
+        wiersz.style.padding = "3px 0";
+        lista.appendChild(wiersz);
+      });
+
+      szczegoly.appendChild(podsumowanie);
+      szczegoly.appendChild(lista);
+      li.appendChild(szczegoly);
+    }
+
+    // Przyciski
+    const przyciski = document.createElement("div");
+    przyciski.className = "historia-przyciski";
+
+    const edytujBtn = document.createElement("button");
+    edytujBtn.type = "button";
+    edytujBtn.textContent = "Edytuj tę lekcję";
+    edytujBtn.className = "historia-btn-edytuj";
+    edytujBtn.onclick = () => edytujLekcje(index, klasa);
+
+    const usunBtn = document.createElement("button");
+    usunBtn.type = "button";
+    usunBtn.textContent = "Usuń wpis";
+    usunBtn.className = "historia-btn-usun";
+    usunBtn.onclick = () => usunLekcje(index, klasa);
+
+    przyciski.appendChild(edytujBtn);
+    przyciski.appendChild(usunBtn);
+
+    li.appendChild(przyciski);
+    ul.appendChild(li);
+  });
+}
+
 
   klasaSelect.addEventListener("change", () => {
     updateTematy();
@@ -1542,19 +1961,26 @@ function pokazPowiadomienie(tytul, tresc) {
     // Dodanie powiadomienia do kontenera
     kontener.appendChild(powiadomienie);
 }
+
 function zaznaczWszystkim(colIndex) {
     const tbody = document.getElementById("tabela-obecnosci-body");
     const wiersze = tbody.querySelectorAll("tr");
 
     wiersze.forEach((tr, index) => {
-        // Szukamy wszystkich inputów typu radio w danym wierszu
+        // Pomijamy wiersz podsumowania
+        if (tr.id === "podsumowanie-frekwencji") return;
+
         const radios = tr.querySelectorAll('input[type="radio"]');
-        // Zaznaczamy ten, który odpowiada indeksowi klikniętej kolumny
+
         if (radios[colIndex]) {
             radios[colIndex].checked = true;
         }
     });
+
+    // Natychmiast przeliczamy wszystkie liczby
+    aktualizujPodsumowanieFrekwencji(klasaSelect.value);
 }
+
 function zakonczKlaseInterfejs(klasa) {
   if (confirm(`Czy na pewno chcesz oznaczyć klasę ${klasa} jako zakończoną? Nie będzie można dla niej wpisywać lekcji.`)) {
     let zakonczone = pobierzZakonczoneKlasy();
